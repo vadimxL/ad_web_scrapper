@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 20px;
+  }
+
+  .car-list {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+
+  .car {
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .car:last-child {
+    border-bottom: none;
+  }
+
+  .car-details {
+    flex: 1;
+    padding-left: 10px;
+  }
+
+  .car-price {
+    font-weight: bold;
+    color: #007bff;
+  }
+
+  .car-date {
+    color: #777;
+  }
+</style>
+<title>Human-Friendly Car List</title>
+</head>
+<body>
+  <div class="car-list">
+    {% for car in car_ads %}
+    <div class="car">
+      <div class="car-details">
+        <h3>{{ car.car_model }}</h3>
+          <label>
+              <input type="text" name="test" value={{text}}>
+          </label>
+          <p>Manufacturer: {{ car.manufacturer }}</p>
+        <p>Year: {{ car.year }}</p>
+        <p>Kilometers: {{ car.kilometers }}</p>
+      </div>
+      <div class="car-price">
+        <p>Price: {{ car.price }}</p>
+        <p class="car-date">Updated: {{ car.updated_at }}</p>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</body>
+</html>

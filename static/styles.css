@@ -1,0 +1,16 @@
+.container {
+    display: flex; /* or inline-flex */
+    max-width: 960px;
+}
+
+label {
+    font-family: sans-serif;
+    font-size: 1rem;
+    padding-right: 10px;
+    display: block;
+}
+
+.flex {
+    display: flex;
+    flex-direction: column;
+}
