@@ -25,11 +25,9 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 @app.post("/add")
-def add(req: Request, title: str = Form(...)):
-    # new_todo = models.Todo(title=title)
-    # db.add(new_todo)
-    # db.commit()
-    print(title)
+def add(car_model: str = Form(...), select_manufacturer: str = Form(...)):
+    print("car_model: ", car_model)
+    print("manufacturer: ", select_manufacturer)
     url = app.url_path_for("root")
     return RedirectResponse(url=url, status_code=status.HTTP_303_SEE_OTHER)
 
@@ -41,11 +39,17 @@ async def vehicle_criteria():
 
 # Replace this with your actual data source or logic
 models_data = {
-    "Hyundai": ["Niro", "Santa Fe", "Tucson"],
-    "Kia": ["Optima", "Soul", "Sportage"]
+    "hyundai": ["all", "Niro", "Santa Fe", "Tucson"],
+    "kia": ["all", "Optima", "Soul", "Sportage"],
+    "seat": ["all", "Optima", "Soul", "Sportage"]
 }
 
-manufacturers = ["Hyundai", "Kia"]
+manufacturers = [{"hyundai": "יונדאי"},
+                 {"kia": "קיה"},
+                 {"mazda": "מאזדה"},
+                 {"toyota": "טויוטה"},
+                 {"honda": "הונדה"},
+                 {"seat": "סיאט"}]
 
 
 @app.get("/manufacturers")
@@ -53,8 +57,9 @@ async def get_manufacturers():
     return manufacturers
 
 
-@app.get("/api/models")
+@app.get("/models/{manufacturer}")
 async def get_models(manufacturer: str):
+    print("manufacturer: ", manufacturer)
     if manufacturer in models_data:
         return {"models": models_data[manufacturer]}
     else:
@@ -90,10 +95,6 @@ async def root(request: Request):
     context = {
         "request": request,
         "car_ads": json.load(open("json/car_ads.json", "r")),
+        "manuf_list": manufacturers,
     }
     return templates.TemplateResponse("index.html", context=context)
-
-
-@app.get("/hello/{name}")
-async def say_hello(name: str):
-    return {"message": f"Hello {name}"}
