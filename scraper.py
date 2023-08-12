@@ -3,35 +3,17 @@ import json
 import time
 from requests_cache import CachedSession
 from rich import print
-from mongoengine import connect, Document, StringField, IntField, EmbeddedDocument, EmbeddedDocumentField, ListField
+from mongoengine import connect, StringField, IntField, EmbeddedDocument
 
 from handz import get_pricing_from_handz
-from normalize_json import normalize_json, open_json
+from models import CarAd, PriceHistory
+from normalize_json import normalize_json
 
 manufacturers_dict = {
     "hyundai": "21",
     "kia": "48",
     "seat": "37"
 }
-
-
-class PriceHistory(EmbeddedDocument):
-    price = IntField()
-    date = StringField(max_length=50)  # You might want to use a DateTimeField for date/time fields
-
-
-class CarAd(Document):
-    id = StringField(primary_key=True)
-    manufacturer = StringField(max_length=50)
-    model = StringField(max_length=50)
-    year = IntField()
-    hand = StringField(max_length=50)
-    engine_size = IntField()
-    kilometers = StringField(max_length=50)
-    price = StringField(max_length=50)
-    updated_at = StringField(max_length=50)
-    date_added = StringField(max_length=50)
-    price_history = ListField(EmbeddedDocumentField(PriceHistory))
 
 
 def scrape(parsed_feed_items: list, querystring, session):
@@ -80,21 +62,6 @@ def scrape(parsed_feed_items: list, querystring, session):
 
 
 def yad2_scrape(querystring: dict):
-    try:
-        # Connect to the MongoDB database
-        connections = connect(
-            db="favorites_yad2",
-            host="localhost",
-            port=27018,
-            username="root",
-            password="example",
-            authentication_source="admin"
-        )
-        print(f"Connected to MongoDB: {connections}")
-    except Exception as e:
-        print(f"Connection failed: {e}")
-        exit()
-
     session = CachedSession('yad2_cache', backend='sqlite', expire_after=360 * 5)
 
     page_num = 1
