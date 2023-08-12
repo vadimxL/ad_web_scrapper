@@ -8,10 +8,11 @@ from mongoengine import connect, Document, StringField, IntField, EmbeddedDocume
 from handz import get_pricing_from_handz
 from normalize_json import normalize_json, open_json
 
-HYUNDAI_MANUFACTURER_NUM = 21
-KIA_MANUFACTURER_NUM = 48
-
-session = CachedSession('yad2_cache', backend='sqlite', expire_after=360 * 5)
+manufacturers_dict = {
+    "hyundai": "21",
+    "kia": "48",
+    "seat": "37"
+}
 
 
 class PriceHistory(EmbeddedDocument):
@@ -33,7 +34,7 @@ class CarAd(Document):
     price_history = ListField(EmbeddedDocumentField(PriceHistory))
 
 
-def scrape(parsed_feed_items: list, querystring):
+def scrape(parsed_feed_items: list, querystring, session):
     url = "https://gw.yad2.co.il/feed-search-legacy/vehicles/cars"
 
     payload = ""
@@ -78,12 +79,29 @@ def scrape(parsed_feed_items: list, querystring):
     return scraped_page
 
 
-def main(querystring: dict):
+def yad2_scrape(querystring: dict):
+    try:
+        # Connect to the MongoDB database
+        connections = connect(
+            db="favorites_yad2",
+            host="localhost",
+            port=27018,
+            username="root",
+            password="example",
+            authentication_source="admin"
+        )
+        print(f"Connected to MongoDB: {connections}")
+    except Exception as e:
+        print(f"Connection failed: {e}")
+        exit()
+
+    session = CachedSession('yad2_cache', backend='sqlite', expire_after=360 * 5)
+
     page_num = 1
     querystring['page'] = str(page_num)
     parsed_feed_items = []  # type: list
     # Use a breakpoint in the code line below to debug your script.
-    scraped_page = scrape(parsed_feed_items, querystring)
+    scraped_page = scrape(parsed_feed_items, querystring, session)
     time.sleep(1)
 
     car_ads = scraped_page['data']['feed']['feed_items']
@@ -97,7 +115,7 @@ def main(querystring: dict):
     for i in range(2, last_page + 1):
         print(f'page {i}')
         querystring['page'] = str(i)
-        scrape(parsed_feed_items, querystring)
+        scrape(parsed_feed_items, querystring, session)
         time.sleep(1)
 
     car_ads_to_save = []
@@ -158,30 +176,14 @@ def extract_car_details(feed_item: json):
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    try:
-        # Connect to the MongoDB database
-        connections = connect(
-            db="favorites_yad2",
-            host="localhost",
-            port=27018,
-            username="root",
-            password="example",
-            authentication_source="admin"
-        )
-        print(f"Connected to MongoDB: {connections}")
-    except Exception as e:
-        print(f"Connection failed: {e}")
-        exit()
-
-    session = CachedSession('yad2_cache', backend='sqlite', expire_after=360 * 5)
     hyundai_querystring = {"year": "2020--1", "price": "80000-135000", "km": "500-40000", "hand": "-1-2",
                            "priceOnly": "1",
-                           "imgOnly": "1", "page": "1", "manufacturer": str(HYUNDAI_MANUFACTURER_NUM),
+                           "imgOnly": "1", "page": "1", "manufacturer": manufacturers_dict['hyundai'],
                            "carFamilyType": "10,5", "forceLdLoad": "true"}
 
     kia_querystring = {"year": "2020--1", "priceOnly": "1", "model": "2829,3484,3223,3866",
-                       "imgOnly": "1", "page": "1", "manufacturer": str(KIA_MANUFACTURER_NUM),
+                       "imgOnly": "1", "page": "1", "manufacturer": manufacturers_dict['kia'],
                        "carFamilyType": "10,5", "forceLdLoad": "true"}
-    main(kia_querystring)
+    yad2_scrape(kia_querystring)
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/

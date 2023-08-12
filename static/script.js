@@ -28,5 +28,4 @@ manufSelect.onchange = () => {
 }
 
 window.onload = () => {
-    populateModels(manufSelect.value)
-}
+    populateModels(manufSelect.value)}
