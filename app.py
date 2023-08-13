@@ -39,9 +39,11 @@ def get_manufacturers():
     with open("json/manufacturers.json", "r") as manufs:
         return json.load(manufs)
 
+
 @app.on_event("startup")
 def startup_event():
     database.init_db()
+
 
 @app.get("/models/{manufacturer}")
 async def get_models(manufacturer: str):
@@ -54,8 +56,13 @@ async def get_models(manufacturer: str):
 @app.post("/add")
 def add(req: Request, select_manufacturer: str = Form(...)
         , select_start_year: int = Form(...), select_end_year: int = Form(...)):
+    manuf = {}
+    for m in get_manufacturers():
+        if m["value"] == select_manufacturer:
+            manuf = m
+            break
     attributes_string = f"{select_manufacturer}{select_start_year}{select_end_year}"
-    criteria = models.Criteria(manufacturer=select_manufacturer, year_range=f"{select_start_year}-{select_end_year}")
+    criteria = models.Criteria(manufacturer=manuf, year_range=f"{select_start_year}-{select_end_year}")
     new_task = models.Task(id=hashlib.md5(attributes_string.encode()).hexdigest(), criteria=criteria)
     new_task.save()
     url = app.url_path_for("root")

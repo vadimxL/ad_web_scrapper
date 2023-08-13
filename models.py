@@ -1,7 +1,7 @@
 import datetime
 
 from mongoengine import Document, StringField, IntField, ListField, EmbeddedDocumentField, BooleanField, EmailField, \
-    DateTimeField
+    DateTimeField, DictField
 from mongoengine import StringField, IntField, EmbeddedDocument
 
 
@@ -16,7 +16,7 @@ from mongoengine import StringField, IntField, EmbeddedDocument
 #     complete = Column(Boolean, default=False)
 
 class Criteria(EmbeddedDocument):
-    manufacturer = StringField(max_length=50)
+    manufacturer = DictField()
     model = StringField(max_length=50)
     year_range = StringField(max_length=50)
     hand_range = StringField(max_length=50)
