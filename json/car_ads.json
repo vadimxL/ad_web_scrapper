@@ -1,926 +1,454 @@
 [
     {
-        "id": "mnsc2w5e",
-        "city": "תל אביב יפו",
-        "manufacturer": "mg",
-        "car_model": "ZS",
+        "id": "3308897s",
+        "city": "אורנית",
+        "manufacturer": "kia",
+        "car_model": "נירו הייבריד",
         "year": 2021,
-        "hand": "יד ראשונה",
-        "engine_size": 0,
-        "kilometers": "21,000",
-        "price": "110,000 ₪",
+        "hand": "יד שניה",
+        "engine_size": 1580,
+        "kilometers": "55,000",
+        "price": "118,560 ₪",
         "updated_at": "עודכן היום",
-        "date_added": "2023-07-20 13:29:14",
+        "date_added": "2023-08-04 09:38:57",
         "prices": [
             {
-                "price": 110000,
-                "date": "2023-08-09T11:17:27.555Z"
+                "price": 118560,
+                "date": "2023-08-09T07:16:35.399Z"
             },
             {
-                "price": 117000,
-                "date": "2023-07-20T14:50:46.307Z"
-            },
-            {
-                "price": 120000,
-                "date": "2023-07-20T10:41:26.351Z"
+                "price": 126500,
+                "date": "2023-08-04T06:40:18.176Z"
             }
         ],
-        "dateCreated": "2023-07-20T10:41:26.351Z"
+        "dateCreated": "2023-08-04T06:40:18.176Z"
     },
     {
-        "id": "hdapq7nz",
-        "city": "ביצרון",
-        "manufacturer": "mg",
-        "car_model": "ZS",
+        "id": "c4xfowdm",
+        "city": "מודיעין מכבים רעות",
+        "manufacturer": "kia",
+        "car_model": "נירו הייבריד",
         "year": 2021,
         "hand": "יד ראשונה",
-        "engine_size": 0,
-        "kilometers": "30,000",
-        "price": "115,000 ₪",
+        "engine_size": 1580,
+        "kilometers": "56,000",
+        "price": "122,000 ₪",
         "updated_at": "עודכן היום",
-        "date_added": "2023-07-13 09:53:46",
+        "date_added": "2023-08-14 16:03:16",
         "prices": [
             {
-                "price": 115000,
-                "date": "2023-08-03T05:46:46.611Z"
+                "price": 122000,
+                "date": "2023-08-15T07:21:18.451Z"
             },
             {
-                "price": 117000,
-                "date": "2023-07-19T06:23:09.368Z"
-            },
-            {
-                "price": 120000,
-                "date": "2023-07-14T16:22:24.359Z"
-            },
-            {
-                "price": null,
-                "date": "2023-07-13T07:00:14.903Z"
+                "price": 124000,
+                "date": "2023-08-14T13:04:06.839Z"
             }
         ],
-        "dateCreated": "2023-07-13T07:00:14.903Z"
+        "dateCreated": "2023-08-14T13:04:06.839Z"
     },
     {
-        "id": "iroqv53x",
-        "city": "מעלה אדומים",
-        "manufacturer": "mg",
-        "car_model": "ZS",
+        "id": "w104mgt6",
+        "city": "באר שבע",
+        "manufacturer": "kia",
+        "car_model": "נירו הייבריד",
         "year": 2021,
-        "hand": "יד ראשונה",
-        "engine_size": 0,
-        "kilometers": "40,000",
+        "hand": "יד שניה",
+        "engine_size": 1580,
+        "kilometers": "56,000",
         "price": "124,000 ₪",
         "updated_at": "עודכן היום",
-        "date_added": "2023-08-08 20:54:04",
+        "date_added": "2023-08-14 11:54:37",
         "prices": [
             {
                 "price": 124000,
-                "date": "2023-08-10T13:21:20.318Z"
-            },
-            {
-                "price": null,
-                "date": "2023-08-08T17:56:04.418Z"
+                "date": "2023-08-14T08:57:39.961Z"
             }
         ],
-        "dateCreated": "2023-08-08T17:56:04.418Z"
+        "dateCreated": "2023-08-14T08:57:39.961Z"
     },
     {
-        "id": "2bfzqdig",
-        "city": "פתח תקווה",
-        "manufacturer": "mg",
-        "car_model": "ZS",
-        "year": 2021,
-        "hand": "יד ראשונה",
-        "engine_size": 0,
-        "kilometers": "36,000",
-        "price": "107,000 ₪",
-        "updated_at": "עודכן היום",
-        "date_added": "2023-08-03 18:33:01",
-        "prices": [
-            {
-                "price": 107000,
-                "date": "2023-08-03T15:38:31.919Z"
-            },
-            {
-                "price": 105000,
-                "date": "2023-08-03T15:34:55.345Z"
-            }
-        ],
-        "dateCreated": "2023-08-03T15:34:55.345Z"
-    },
-    {
-        "id": "7t8feh1w",
-        "city": "הוד השרון",
-        "manufacturer": "mg",
-        "car_model": "EHS PHEV",
-        "year": 2021,
-        "hand": "יד ראשונה",
-        "engine_size": 1490,
-        "kilometers": "22,000",
-        "price": "135,000 ₪",
-        "updated_at": "עודכן היום",
-        "date_added": "2023-07-08 16:35:22",
-        "prices": [
-            {
-                "price": 135000,
-                "date": "2023-08-04T13:52:32.173Z"
-            },
-            {
-                "price": null,
-                "date": "2023-07-21T18:15:30.665Z"
-            },
-            {
-                "price": 139000,
-                "date": "2023-07-11T07:30:45.691Z"
-            },
-            {
-                "price": 141000,
-                "date": "2023-07-08T13:37:25.483Z"
-            }
-        ],
-        "dateCreated": "2023-07-08T13:37:25.483Z"
-    },
-    {
-        "id": "6pnkmxxr",
-        "city": "אבן יהודה",
-        "manufacturer": "mg",
-        "car_model": "ZS",
+        "id": "z11nnbm3",
+        "city": "תל אביב יפו",
+        "manufacturer": "kia",
+        "car_model": "נירו הייבריד",
         "year": 2020,
         "hand": "יד ראשונה",
-        "engine_size": 0,
-        "kilometers": "36,000",
-        "price": "118,000 ₪",
+        "engine_size": 1580,
+        "kilometers": "25,500",
+        "price": "116,000 ₪",
         "updated_at": "עודכן היום",
-        "date_added": "2023-08-11 07:59:58",
+        "date_added": "2023-08-14 16:02:23",
         "prices": [
-            {
-                "price": 118000,
-                "date": "2023-08-11T05:00:30.979Z"
-            }
-        ],
-        "dateCreated": "2023-08-11T05:00:30.979Z"
-    },
-    {
-        "id": "6fm56zs9",
-        "city": "נהריה",
-        "manufacturer": "mg",
-        "car_model": "ZS",
-        "year": 2020,
-        "hand": "יד שניה",
-        "engine_size": 999,
-        "kilometers": "13,700",
-        "price": "84,000 ₪",
-        "updated_at": "עודכן היום",
-        "date_added": "2023-08-02 11:34:25",
-        "prices": [
-            {
-                "price": 84000,
-                "date": "2023-08-02T12:47:20.716Z"
-            }
-        ],
-        "dateCreated": "2023-08-02T12:47:20.716Z"
-    },
-    {
-        "id": "u7x7nw9l",
-        "city": "שלומי",
-        "manufacturer": "mg",
-        "car_model": "ZS",
-        "year": 2021,
-        "hand": "יד ראשונה",
-        "engine_size": 0,
-        "kilometers": "21,000",
-        "price": "115,000 ₪",
-        "updated_at": "עודכן היום",
-        "date_added": "2023-07-06 08:23:41",
-        "prices": [
-            {
-                "price": 115000,
-                "date": "2023-08-01T19:30:22.450Z"
-            },
-            {
-                "price": 119000,
-                "date": "2023-07-18T05:53:29.028Z"
-            },
-            {
-                "price": 124000,
-                "date": "2023-07-09T18:45:06.892Z"
-            },
-            {
-                "price": 129000,
-                "date": "2023-07-06T05:24:43.891Z"
-            }
-        ],
-        "dateCreated": "2023-07-06T05:24:43.891Z"
-    },
-    {
-        "id": "s3fz0fdr",
-        "city": "קרית גת",
-        "manufacturer": "mg",
-        "car_model": "ZS",
-        "year": 2021,
-        "hand": "יד ראשונה",
-        "engine_size": 0,
-        "kilometers": "17,000",
-        "price": "115,000 ₪",
-        "updated_at": "עודכן היום",
-        "date_added": "2023-04-01 01:38:09",
-        "prices": [
-            {
-                "price": 115000,
-                "date": "2023-08-11T21:50:45.245Z"
-            },
-            {
-                "price": 117000,
-                "date": "2023-08-09T07:03:37.247Z"
-            },
-            {
-                "price": 118000,
-                "date": "2023-07-01T12:13:50.541Z"
-            },
-            {
-                "price": 125000,
-                "date": "2023-06-30T04:21:20.751Z"
-            },
-            {
-                "price": 127000,
-                "date": "2023-06-08T05:13:51.380Z"
-            },
-            {
-                "price": 130000,
-                "date": "2023-06-03T13:46:10.693Z"
-            },
-            {
-                "price": 123000,
-                "date": "2023-05-19T09:20:30.601Z"
-            },
-            {
-                "price": 125000,
-                "date": "2023-05-10T12:56:20.564Z"
-            },
-            {
-                "price": 137000,
-                "date": "2023-04-22T18:11:46.193Z"
-            },
-            {
-                "price": 145000,
-                "date": "2023-03-31T22:39:31.524Z"
-            }
-        ],
-        "dateCreated": "2023-03-31T22:39:31.524Z"
-    },
-    {
-        "id": "6th8vdvp",
-        "city": "הרצליה",
-        "manufacturer": "mg",
-        "car_model": "ZS",
-        "year": 2020,
-        "hand": "יד שניה",
-        "engine_size": 0,
-        "kilometers": "37,000",
-        "price": "100,000 ₪",
-        "updated_at": "עודכן ב 11/08/2023",
-        "date_added": "2023-05-21 17:13:11",
-        "prices": [
-            {
-                "price": 100000,
-                "date": "2023-06-18T18:50:09.978Z"
-            },
-            {
-                "price": 110000,
-                "date": "2023-05-21T14:16:11.335Z"
-            }
-        ],
-        "dateCreated": "2023-05-21T14:16:11.335Z"
-    },
-    {
-        "id": "5ry8hz7b",
-        "city": "ירושלים",
-        "manufacturer": "mg",
-        "car_model": "ZS",
-        "year": 2021,
-        "hand": "יד ראשונה",
-        "engine_size": 0,
-        "kilometers": "31,000",
-        "price": "115,000 ₪",
-        "updated_at": "עודכן ב 11/08/2023",
-        "date_added": "2023-04-28 07:13:19",
-        "prices": [
-            {
-                "price": 115000,
-                "date": "2023-06-30T21:12:48.160Z"
-            },
-            {
-                "price": 120000,
-                "date": "2023-06-09T02:33:52.184Z"
-            },
-            {
-                "price": 115000,
-                "date": "2023-05-26T08:41:37.387Z"
-            },
-            {
-                "price": 120000,
-                "date": "2023-05-05T17:16:47.138Z"
-            },
-            {
-                "price": 130000,
-                "date": "2023-04-28T07:52:39.592Z"
-            }
-        ],
-        "dateCreated": "2023-04-28T07:52:39.592Z"
-    },
-    {
-        "id": "hj8xzurf",
-        "city": "קרית מלאכי",
-        "manufacturer": "mg",
-        "car_model": "ZS",
-        "year": 2021,
-        "hand": "יד ראשונה",
-        "engine_size": 0,
-        "kilometers": "15,000",
-        "price": "126,000 ₪",
-        "updated_at": "עודכן ב 11/08/2023",
-        "date_added": "2023-07-22 10:11:31",
-        "prices": [
-            {
-                "price": 126000,
-                "date": "2023-08-11T10:04:44.466Z"
-            },
-            {
-                "price": 128000,
-                "date": "2023-08-01T19:39:10.791Z"
-            },
-            {
-                "price": 129000,
-                "date": "2023-07-26T16:18:53.538Z"
-            },
-            {
-                "price": 130000,
-                "date": "2023-07-22T07:12:19.246Z"
-            }
-        ],
-        "dateCreated": "2023-07-22T07:12:19.246Z"
-    },
-    {
-        "id": "5pz2uh8s",
-        "city": "הוד השרון",
-        "manufacturer": "mg",
-        "car_model": "ZS",
-        "year": 2021,
-        "hand": "יד ראשונה",
-        "engine_size": 0,
-        "kilometers": "38,000",
-        "price": "119,000 ₪",
-        "updated_at": "עודכן ב 10/08/2023",
-        "date_added": "2023-07-25 20:18:33",
-        "prices": [
-            {
-                "price": 119000,
-                "date": "2023-07-25T17:22:27.298Z"
-            }
-        ],
-        "dateCreated": "2023-07-25T17:22:27.298Z"
-    },
-    {
-        "id": "7tevlhtb",
-        "city": "פתח תקווה",
-        "manufacturer": "mg",
-        "car_model": "ZS",
-        "year": 2021,
-        "hand": "יד ראשונה",
-        "engine_size": 0,
-        "kilometers": "15,000",
-        "price": "118,000 ₪",
-        "updated_at": "עודכן ב 10/08/2023",
-        "date_added": "2023-06-26 17:11:11",
-        "prices": [
-            {
-                "price": 118000,
-                "date": "2023-07-25T10:08:23.440Z"
-            },
-            {
-                "price": 122000,
-                "date": "2023-06-26T14:34:20.480Z"
-            }
-        ],
-        "dateCreated": "2023-06-26T14:34:20.480Z"
-    },
-    {
-        "id": "43fpoort",
-        "city": "הוד השרון",
-        "manufacturer": "mg",
-        "car_model": "ZS",
-        "year": 2021,
-        "hand": "יד ראשונה",
-        "engine_size": 0,
-        "kilometers": "29,000",
-        "price": "105,000 ₪",
-        "updated_at": "עודכן ב 10/08/2023",
-        "date_added": "2023-08-03 15:36:17",
-        "prices": [
-            {
-                "price": 105000,
-                "date": "2023-08-03T12:37:05.180Z"
-            }
-        ],
-        "dateCreated": "2023-08-03T12:37:05.180Z"
-    },
-    {
-        "id": "3my28rkp",
-        "city": "קרית אונו",
-        "manufacturer": "mg",
-        "car_model": "ZS",
-        "year": 2021,
-        "hand": "יד ראשונה",
-        "engine_size": 0,
-        "kilometers": "33,000",
-        "price": "113,000 ₪",
-        "updated_at": "עודכן ב 10/08/2023",
-        "date_added": "2023-07-30 20:22:26",
-        "prices": [
-            {
-                "price": 113000,
-                "date": "2023-07-30T17:23:45.631Z"
-            }
-        ],
-        "dateCreated": "2023-07-30T17:23:45.631Z"
-    },
-    {
-        "id": "ugrro8zb",
-        "city": "רמלה",
-        "manufacturer": "mg",
-        "car_model": "ZS",
-        "year": 2021,
-        "hand": "יד ראשונה",
-        "engine_size": 0,
-        "kilometers": "40,000",
-        "price": "121,500 ₪",
-        "updated_at": "עודכן ב 10/08/2023",
-        "date_added": "2023-07-21 17:32:47",
-        "prices": [
-            {
-                "date": "2023-08-12T10:10:35.662Z",
-                "price": 121500
-            },
-            {
-                "price": 120000,
-                "date": "2023-08-04T11:01:24.388Z"
-            },
-            {
-                "price": 122500,
-                "date": "2023-07-23T07:27:56.500Z"
-            },
-            {
-                "price": 122000,
-                "date": "2023-07-21T14:36:45.981Z"
-            }
-        ],
-        "dateCreated": "2023-07-21T14:36:45.981Z"
-    },
-    {
-        "id": "tjjynys1",
-        "city": "טבריה",
-        "manufacturer": "mg",
-        "car_model": "ZS",
-        "year": 2020,
-        "hand": "יד שניה",
-        "engine_size": 0,
-        "kilometers": "40,000",
-        "price": "108,000 ₪",
-        "updated_at": "עודכן ב 10/08/2023",
-        "date_added": "2023-06-06 21:47:49",
-        "prices": [
-            {
-                "price": 108000,
-                "date": "2023-06-06T18:49:04.244Z"
-            }
-        ],
-        "dateCreated": "2023-06-06T18:49:04.244Z"
-    },
-    {
-        "id": "6xquptsa",
-        "city": "כרמיאל",
-        "manufacturer": "mg",
-        "car_model": "ZS",
-        "year": 2021,
-        "hand": "יד ראשונה",
-        "engine_size": 0,
-        "kilometers": "30,000",
-        "price": "128,000 ₪",
-        "updated_at": "עודכן ב 10/08/2023",
-        "date_added": "2023-04-16 00:03:09",
-        "prices": [
-            {
-                "price": 128000,
-                "date": "2023-06-18T08:37:47.683Z"
-            },
-            {
-                "price": 129999,
-                "date": "2023-04-17T16:00:46.466Z"
-            },
-            {
-                "price": 139000,
-                "date": "2023-04-15T21:06:55.194Z"
-            }
-        ],
-        "dateCreated": "2023-04-15T21:06:55.194Z"
-    },
-    {
-        "id": "pd7d770n",
-        "city": "חיפה",
-        "manufacturer": "mg",
-        "car_model": "ZS",
-        "year": 2021,
-        "hand": "יד ראשונה",
-        "engine_size": 0,
-        "kilometers": "24,000",
-        "price": "109,999 ₪",
-        "updated_at": "עודכן ב 09/08/2023",
-        "date_added": "2023-05-03 20:23:48",
-        "prices": [
-            {
-                "price": 109999,
-                "date": "2023-08-05T14:06:29.889Z"
-            },
-            {
-                "price": 112999,
-                "date": "2023-06-01T07:54:48.080Z"
-            },
-            {
-                "price": 114250,
-                "date": "2023-05-07T13:17:34.332Z"
-            },
-            {
-                "price": null,
-                "date": "2023-05-07T05:18:31.483Z"
-            },
-            {
-                "price": 115000,
-                "date": "2023-05-03T17:27:49.408Z"
-            }
-        ],
-        "dateCreated": "2023-05-03T17:27:49.408Z"
-    },
-    {
-        "id": "6uqjwwde",
-        "city": "אופקים",
-        "manufacturer": "mg",
-        "car_model": "ZS",
-        "year": 2021,
-        "hand": "יד ראשונה",
-        "engine_size": 0,
-        "kilometers": "17,000",
-        "price": "128,000 ₪",
-        "updated_at": "עודכן ב 09/08/2023",
-        "date_added": "2023-07-21 12:26:22",
-        "prices": [
-            {
-                "price": 128000,
-                "date": "2023-07-27T10:09:21.803Z"
-            },
-            {
-                "price": 130000,
-                "date": "2023-07-21T09:27:58.573Z"
-            }
-        ],
-        "dateCreated": "2023-07-21T09:27:58.573Z"
-    },
-    {
-        "id": "r63rvmw8",
-        "city": "מיתר / כרמית",
-        "manufacturer": "mg",
-        "car_model": "ZS",
-        "year": 2020,
-        "hand": "יד שניה",
-        "engine_size": 999,
-        "kilometers": "33,000",
-        "price": "84,000 ₪",
-        "updated_at": "עודכן ב 09/08/2023",
-        "date_added": "2023-04-06 11:37:28",
-        "prices": [
-            {
-                "price": 84000,
-                "date": "2023-06-25T06:13:13.402Z"
-            },
-            {
-                "price": 88000,
-                "date": "2023-04-09T17:08:43.472Z"
-            }
-        ],
-        "dateCreated": "2023-04-09T17:08:43.472Z"
-    },
-    {
-        "id": "6ny4sdoh",
-        "city": "ירושלים",
-        "manufacturer": "mg",
-        "car_model": "ZS",
-        "year": 2021,
-        "hand": "יד ראשונה",
-        "engine_size": 0,
-        "kilometers": "16,000",
-        "price": "113,000 ₪",
-        "updated_at": "עודכן ב 09/08/2023",
-        "date_added": "2023-06-20 15:11:45",
-        "prices": [
-            {
-                "price": 113000,
-                "date": "2023-06-20T17:31:15.718Z"
-            },
-            {
-                "price": 115000,
-                "date": "2023-06-20T12:14:15.830Z"
-            }
-        ],
-        "dateCreated": "2023-06-20T12:14:15.830Z"
-    },
-    {
-        "id": "pgp32sbj",
-        "city": "חיפה",
-        "manufacturer": "mg",
-        "car_model": "ZS",
-        "year": 2021,
-        "hand": "יד ראשונה",
-        "engine_size": 0,
-        "kilometers": "37,000",
-        "price": "110,000 ₪",
-        "updated_at": "עודכן ב 08/08/2023",
-        "date_added": "2023-08-07 22:24:21",
-        "prices": [
-            {
-                "price": 110000,
-                "date": "2023-08-07T19:26:45.975Z"
-            }
-        ],
-        "dateCreated": "2023-08-07T19:26:45.975Z"
-    },
-    {
-        "id": "fhnytjrf",
-        "city": "ירושלים",
-        "manufacturer": "mg",
-        "car_model": "ZS",
-        "year": 2021,
-        "hand": "יד ראשונה",
-        "engine_size": 0,
-        "kilometers": "34,000",
-        "price": "111,111 ₪",
-        "updated_at": "עודכן ב 07/08/2023",
-        "date_added": "2023-08-02 21:41:15",
-        "prices": [
-            {
-                "price": 111111,
-                "date": "2023-08-07T05:06:40.653Z"
-            },
-            {
-                "price": 115000,
-                "date": "2023-08-02T20:19:11.189Z"
-            }
-        ],
-        "dateCreated": "2023-08-02T20:19:11.189Z"
-    },
-    {
-        "id": "2eaqonrr",
-        "city": "רחובות",
-        "manufacturer": "mg",
-        "car_model": "ZS",
-        "year": 2020,
-        "hand": "יד שניה",
-        "engine_size": 0,
-        "kilometers": "39,500",
-        "price": "114,000 ₪",
-        "updated_at": "עודכן ב 06/08/2023",
-        "date_added": "2023-07-30 14:44:20",
-        "prices": [
-            {
-                "price": 114000,
-                "date": "2023-08-03T11:14:26.228Z"
-            },
             {
                 "price": 116000,
-                "date": "2023-07-30T11:45:56.739Z"
+                "date": "2023-08-14T13:02:53.648Z"
             }
         ],
-        "dateCreated": "2023-07-30T11:45:56.739Z"
+        "dateCreated": "2023-08-14T13:02:53.648Z"
     },
     {
-        "id": "pcy0rsx0",
-        "city": "חדרה",
-        "manufacturer": "mg",
-        "car_model": "ZS",
-        "year": 2020,
-        "hand": "יד ראשונה",
-        "engine_size": 0,
-        "kilometers": "40,000",
-        "price": "119,000 ₪",
-        "updated_at": "עודכן ב 03/08/2023",
-        "date_added": "2023-07-18 14:22:03",
-        "prices": [
-            {
-                "price": 119000,
-                "date": "2023-07-24T07:39:10.976Z"
-            },
-            {
-                "price": 123000,
-                "date": "2023-07-18T11:46:23.933Z"
-            },
-            {
-                "price": null,
-                "date": "2023-07-18T11:25:40.850Z"
-            }
-        ],
-        "dateCreated": "2023-07-18T11:25:40.850Z"
-    },
-    {
-        "id": "tkrsktx7",
-        "city": "חריש",
-        "manufacturer": "mg",
-        "car_model": "ZS",
+        "id": "rga1nszl",
+        "city": "ביתר עילית",
+        "manufacturer": "kia",
+        "car_model": "נירו PHEV",
         "year": 2021,
-        "hand": "יד ראשונה",
-        "engine_size": 0,
-        "kilometers": "39,000",
-        "price": "120,000 ₪",
-        "updated_at": "עודכן ב 03/08/2023",
-        "date_added": "2023-07-02 19:17:58",
-        "prices": [
-            {
-                "price": 120000,
-                "date": "2023-07-05T15:41:10.915Z"
-            },
-            {
-                "price": null,
-                "date": "2023-07-02T16:19:11.464Z"
-            }
-        ],
-        "dateCreated": "2023-07-02T16:19:11.464Z"
-    },
-    {
-        "id": "h07i0es0",
-        "city": "בית שמש",
-        "manufacturer": "mg",
-        "car_model": "ZS",
-        "year": 2021,
-        "hand": "יד ראשונה",
-        "engine_size": 0,
-        "kilometers": "40,000",
-        "price": "110,000 ₪",
-        "updated_at": "עודכן ב 31/07/2023",
-        "date_added": "2023-03-15 11:22:51",
-        "prices": [
-            {
-                "price": 110000,
-                "date": "2023-03-31T01:54:09.550Z"
-            },
-            {
-                "price": 116000,
-                "date": "2023-03-26T08:43:00.143Z"
-            },
-            {
-                "price": 120000,
-                "date": "2023-03-24T04:14:41.151Z"
-            },
-            {
-                "price": 125000,
-                "date": "2023-03-23T05:16:56.586Z"
-            },
-            {
-                "price": 130000,
-                "date": "2023-03-15T09:29:13.328Z"
-            }
-        ],
-        "dateCreated": "2023-03-15T09:29:13.328Z"
-    },
-    {
-        "id": "br4p1yej",
-        "city": "שדרות",
-        "manufacturer": "mg",
-        "car_model": "ZS",
-        "year": 2021,
-        "hand": "יד ראשונה",
-        "engine_size": 0,
-        "kilometers": "31,000",
-        "price": "115,000 ₪",
-        "updated_at": "עודכן ב 29/07/2023",
-        "date_added": "2023-07-29 23:39:29",
-        "prices": [
-            {
-                "price": 115000,
-                "date": "2023-07-29T20:41:08.585Z"
-            }
-        ],
-        "dateCreated": "2023-07-29T20:41:08.585Z"
-    },
-    {
-        "id": "15m71l9m",
-        "city": "רחובות",
-        "manufacturer": "mg",
-        "car_model": "ZS",
-        "year": 2021,
-        "hand": "יד ראשונה",
-        "engine_size": 0,
-        "kilometers": "25,000",
+        "hand": "יד שניה",
+        "engine_size": 1580,
+        "kilometers": "48,500",
         "price": "132,000 ₪",
-        "updated_at": "עודכן ב 29/07/2023",
-        "date_added": "2023-06-21 14:39:21",
+        "updated_at": "עודכן היום",
+        "date_added": "2023-08-08 13:31:50",
         "prices": [
             {
                 "price": 132000,
-                "date": "2023-06-21T11:40:49.202Z"
+                "date": "2023-08-13T19:05:04.164Z"
+            },
+            {
+                "price": 133000,
+                "date": "2023-08-10T09:20:36.822Z"
+            },
+            {
+                "price": 135000,
+                "date": "2023-08-08T10:33:49.097Z"
             }
         ],
-        "dateCreated": "2023-06-21T11:40:49.202Z"
+        "dateCreated": "2023-08-08T10:33:49.097Z"
     },
     {
-        "id": "kamtjsey",
-        "city": "אורנית",
-        "manufacturer": "mg",
-        "car_model": "ZS",
+        "id": "zlnlg1hp",
+        "city": "חיפה",
+        "manufacturer": "kia",
+        "car_model": "נירו PHEV",
         "year": 2021,
         "hand": "יד ראשונה",
-        "engine_size": 0,
-        "kilometers": "40,000",
-        "price": "130,000 ₪",
-        "updated_at": "עודכן ב 29/07/2023",
-        "date_added": "2023-07-29 12:00:51",
+        "engine_size": 1580,
+        "kilometers": "57,000",
+        "price": "128,500 ₪",
+        "updated_at": "עודכן ב 14/08/2023",
+        "date_added": "2023-08-11 19:52:38",
         "prices": [
             {
-                "price": 130000,
-                "date": "2023-07-29T09:02:49.264Z"
+                "price": 128500,
+                "date": "2023-08-11T18:55:37.759Z"
             }
         ],
-        "dateCreated": "2023-07-29T09:02:49.264Z"
+        "dateCreated": "2023-08-11T18:55:37.759Z"
     },
     {
-        "id": "lag8lb5g",
-        "city": "אריאל",
-        "manufacturer": "mg",
-        "car_model": "ZS",
-        "year": 2021,
-        "hand": "יד שניה",
-        "engine_size": 0,
-        "kilometers": "31,000",
-        "price": "115,000 ₪",
-        "updated_at": "עודכן ב 24/07/2023",
-        "date_added": "2023-07-24 14:45:14",
-        "prices": [
-            {
-                "price": 115000,
-                "date": "2023-07-24T11:46:14.141Z"
-            }
-        ],
-        "dateCreated": "2023-07-24T11:46:14.141Z"
-    },
-    {
-        "id": "ode7hvq6",
-        "city": "קרית ביאליק",
-        "manufacturer": "mg",
-        "car_model": "ZS",
+        "id": "m0szaoyk",
+        "city": "חריש",
+        "manufacturer": "kia",
+        "car_model": "נירו הייבריד",
         "year": 2020,
         "hand": "יד ראשונה",
-        "engine_size": 999,
-        "kilometers": "22,000",
-        "price": "88,500 ₪",
-        "updated_at": "עודכן ב 05/07/2023",
-        "date_added": "2023-07-05 20:11:27",
-        "prices": [
-            {
-                "price": 88500,
-                "date": "2023-07-05T17:15:28.772Z"
-            }
-        ],
-        "dateCreated": "2023-07-05T17:15:28.772Z"
-    },
-    {
-        "id": "4ne8msny",
-        "city": "זכרון יעקב",
-        "manufacturer": "mg",
-        "car_model": "ZS",
-        "year": 2020,
-        "hand": "יד שניה",
-        "engine_size": 0,
-        "kilometers": "30,000",
+        "engine_size": 1580,
+        "kilometers": "37,000",
         "price": "117,000 ₪",
-        "updated_at": "עודכן ב 03/07/2023",
-        "date_added": "2023-05-28 11:00:28",
+        "updated_at": "עודכן ב 14/08/2023",
+        "date_added": "2023-08-14 19:55:12",
         "prices": [
             {
                 "price": 117000,
-                "date": "2023-06-07T15:08:11.470Z"
+                "date": "2023-08-14T16:58:11.425Z"
+            }
+        ],
+        "dateCreated": "2023-08-14T16:58:11.425Z"
+    },
+    {
+        "id": "mi6ppfnc",
+        "city": "עפולה",
+        "manufacturer": "kia",
+        "car_model": "נירו PHEV",
+        "year": 2020,
+        "hand": "יד שניה",
+        "engine_size": 1580,
+        "kilometers": "58,726",
+        "price": "117,000 ₪",
+        "updated_at": "עודכן ב 14/08/2023",
+        "date_added": "2023-08-03 21:36:13",
+        "prices": [
+            {
+                "price": 117000,
+                "date": "2023-08-13T16:45:46.616Z"
             },
             {
                 "price": 120000,
-                "date": "2023-05-30T13:44:51.515Z"
-            },
-            {
-                "price": 119000,
-                "date": "2023-05-29T14:22:44.775Z"
-            },
-            {
-                "price": 125000,
-                "date": "2023-05-28T09:22:08.202Z"
+                "date": "2023-08-04T10:30:20.056Z"
             },
             {
                 "price": null,
-                "date": "2023-05-28T08:01:06.802Z"
+                "date": "2023-08-03T18:38:06.223Z"
             }
         ],
-        "dateCreated": "2023-05-28T08:01:06.802Z"
+        "dateCreated": "2023-08-03T18:38:06.223Z"
+    },
+    {
+        "id": "vj42hdrp",
+        "city": "ירושלים",
+        "manufacturer": "kia",
+        "car_model": "נירו PHEV",
+        "year": 2021,
+        "hand": "יד ראשונה",
+        "engine_size": 1580,
+        "kilometers": "36,000",
+        "price": "125,600 ₪",
+        "updated_at": "עודכן ב 13/08/2023",
+        "date_added": "2023-08-06 17:16:27",
+        "prices": [
+            {
+                "price": 125600,
+                "date": "2023-08-06T14:17:23.829Z"
+            }
+        ],
+        "dateCreated": "2023-08-06T14:17:23.829Z"
+    },
+    {
+        "id": "7ej3uqmk",
+        "city": "ראש העין",
+        "manufacturer": "kia",
+        "car_model": "נירו הייבריד",
+        "year": 2021,
+        "hand": "יד ראשונה",
+        "engine_size": 1580,
+        "kilometers": "44,000",
+        "price": "124,900 ₪",
+        "updated_at": "עודכן ב 13/08/2023",
+        "date_added": "2023-08-13 15:06:32",
+        "prices": [
+            {
+                "price": 124900,
+                "date": "2023-08-13T12:07:49.653Z"
+            }
+        ],
+        "dateCreated": "2023-08-13T12:07:49.653Z"
+    },
+    {
+        "id": "bx3o861n",
+        "city": "בני ברק",
+        "manufacturer": "kia",
+        "car_model": "נירו PHEV",
+        "year": 2021,
+        "hand": "יד שניה",
+        "engine_size": 1580,
+        "kilometers": "54,000",
+        "price": "130,000 ₪",
+        "updated_at": "עודכן ב 12/08/2023",
+        "date_added": "2023-06-09 17:30:47",
+        "prices": [
+            {
+                "price": 130000,
+                "date": "2023-07-31T07:13:19.524Z"
+            },
+            {
+                "price": 132000,
+                "date": "2023-06-09T14:31:46.226Z"
+            }
+        ],
+        "dateCreated": "2023-06-09T14:31:46.226Z"
+    },
+    {
+        "id": "cahg5ad5",
+        "city": "כוכב מיכאל",
+        "manufacturer": "kia",
+        "car_model": "נירו PHEV",
+        "year": 2020,
+        "hand": "יד ראשונה",
+        "engine_size": 1580,
+        "kilometers": "33,849",
+        "price": "133,620 ₪",
+        "updated_at": "עודכן ב 11/08/2023",
+        "date_added": "2023-07-02 11:21:34",
+        "prices": [
+            {
+                "price": 133620,
+                "date": "2023-08-11T14:15:57.156Z"
+            },
+            {
+                "price": 135800,
+                "date": "2023-07-19T18:40:26.732Z"
+            },
+            {
+                "price": 145170,
+                "date": "2023-07-03T04:41:49.636Z"
+            },
+            {
+                "price": 161300,
+                "date": "2023-07-02T08:49:00.309Z"
+            }
+        ],
+        "dateCreated": "2023-07-02T08:49:00.309Z"
+    },
+    {
+        "id": "ayty77vp",
+        "city": "משמר איילון",
+        "manufacturer": "kia",
+        "car_model": "נירו הייבריד",
+        "year": 2021,
+        "hand": "יד ראשונה",
+        "engine_size": 1580,
+        "kilometers": "57,800",
+        "price": "123,000 ₪",
+        "updated_at": "עודכן ב 11/08/2023",
+        "date_added": "2023-08-09 11:59:15",
+        "prices": [
+            {
+                "price": 123000,
+                "date": "2023-08-11T13:59:03.425Z"
+            },
+            {
+                "price": 120000,
+                "date": "2023-08-10T12:23:39.649Z"
+            },
+            {
+                "price": 130000,
+                "date": "2023-08-09T09:01:39.967Z"
+            }
+        ],
+        "dateCreated": "2023-08-09T09:01:39.967Z"
+    },
+    {
+        "id": "iviv2pm5",
+        "city": "נתניה",
+        "manufacturer": "kia",
+        "car_model": "נירו הייבריד",
+        "year": 2020,
+        "hand": "יד שניה",
+        "engine_size": 1580,
+        "kilometers": "50,000",
+        "price": "115,000 ₪",
+        "updated_at": "עודכן ב 08/08/2023",
+        "date_added": "2023-06-09 16:05:31",
+        "prices": [
+            {
+                "price": 115000,
+                "date": "2023-06-09T13:06:28.957Z"
+            }
+        ],
+        "dateCreated": "2023-06-09T13:06:28.957Z"
+    },
+    {
+        "id": "wyzpnvkq",
+        "city": "נווה מבטח",
+        "manufacturer": "kia",
+        "car_model": "נירו הייבריד",
+        "year": 2021,
+        "hand": "יד ראשונה",
+        "engine_size": 1580,
+        "kilometers": "58,000",
+        "price": "125,000 ₪",
+        "updated_at": "עודכן ב 31/07/2023",
+        "date_added": "2023-07-30 20:49:11",
+        "prices": [
+            {
+                "price": 125000,
+                "date": "2023-07-31T09:00:14.139Z"
+            }
+        ],
+        "dateCreated": "2023-07-31T09:00:14.139Z"
+    },
+    {
+        "id": "qj9fffly",
+        "city": "ירושלים",
+        "manufacturer": "kia",
+        "car_model": "נירו הייבריד",
+        "year": 2021,
+        "hand": "יד ראשונה",
+        "engine_size": 1580,
+        "kilometers": "48,000",
+        "price": "123,000 ₪",
+        "updated_at": "עודכן ב 30/07/2023",
+        "date_added": "2023-07-28 15:04:44",
+        "prices": [
+            {
+                "price": 123000,
+                "date": "2023-07-30T08:14:03.143Z"
+            },
+            {
+                "price": null,
+                "date": "2023-07-29T05:17:03.085Z"
+            }
+        ],
+        "dateCreated": "2023-07-29T05:17:03.085Z"
+    },
+    {
+        "id": "jfntvdyq",
+        "city": "באר יעקב",
+        "manufacturer": "kia",
+        "car_model": "נירו הייבריד",
+        "year": 2020,
+        "hand": "יד ראשונה",
+        "engine_size": 1580,
+        "kilometers": "46,600",
+        "price": "120,000 ₪",
+        "updated_at": "עודכן ב 25/07/2023",
+        "date_added": "2023-07-19 10:28:34",
+        "prices": [
+            {
+                "price": 120000,
+                "date": "2023-07-25T10:47:55.584Z"
+            },
+            {
+                "price": 122000,
+                "date": "2023-07-19T07:29:30.688Z"
+            }
+        ],
+        "dateCreated": "2023-07-19T07:29:30.688Z"
+    },
+    {
+        "id": "fcs1dhuu",
+        "city": "תל אביב יפו",
+        "manufacturer": "kia",
+        "car_model": "נירו PHEV",
+        "year": 2021,
+        "hand": "יד ראשונה",
+        "engine_size": 1580,
+        "kilometers": "43,500",
+        "price": "129,000 ₪",
+        "updated_at": "עודכן ב 19/07/2023",
+        "date_added": "2023-06-23 12:11:16",
+        "prices": [
+            {
+                "price": 129000,
+                "date": "2023-07-04T10:36:09.066Z"
+            },
+            {
+                "price": 130000,
+                "date": "2023-06-23T09:14:15.676Z"
+            }
+        ],
+        "dateCreated": "2023-06-23T09:14:15.676Z"
+    },
+    {
+        "id": "f8zhvvw5",
+        "city": "פרדס חנה כרכור",
+        "manufacturer": "kia",
+        "car_model": "נירו הייבריד",
+        "year": 2020,
+        "hand": "יד שניה",
+        "engine_size": 1580,
+        "kilometers": "45,000",
+        "price": "120,000 ₪",
+        "updated_at": "עודכן ב 09/07/2023",
+        "date_added": "2023-03-29 10:40:37",
+        "prices": [
+            {
+                "price": 120000,
+                "date": "2023-07-05T09:23:18.546Z"
+            },
+            {
+                "price": 121000,
+                "date": "2023-05-30T06:33:56.860Z"
+            },
+            {
+                "price": 125000,
+                "date": "2023-03-29T08:31:30.508Z"
+            },
+            {
+                "price": null,
+                "date": "2023-03-29T07:45:12.274Z"
+            }
+        ],
+        "dateCreated": "2023-03-29T07:45:12.274Z"
     }
 ]

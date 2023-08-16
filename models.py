@@ -18,10 +18,14 @@ from mongoengine import StringField, IntField, EmbeddedDocument
 class Criteria(EmbeddedDocument):
     manufacturer = DictField()
     model = StringField(max_length=50)
-    year_range = StringField(max_length=50)
-    hand_range = StringField(max_length=50)
-    km_range = StringField(max_length=50)
-    price_range = StringField(max_length=50)
+    year_start = IntField(max_length=50)
+    year_end = IntField(max_length=50)
+    hand_min = IntField(max_length=50)
+    hand_max = IntField(max_length=50)
+    km_min = IntField(max_length=50)
+    km_max = IntField(max_length=50)
+    price_min = IntField(max_length=50)
+    price_max = IntField(max_length=50)
 
 
 class Task(Document):

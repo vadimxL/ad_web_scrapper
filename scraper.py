@@ -1,4 +1,5 @@
 # This is a sample Python script.
+import database
 import json
 import time
 from requests_cache import CachedSession
@@ -101,7 +102,6 @@ def yad2_scrape(querystring: dict):
     with open('json/car_ads.json', 'w', encoding='utf-8') as f1:
         json.dump(car_ads_to_save, f1, indent=4, ensure_ascii=False)
     normalize_json(car_ads_to_save, 'json/car_ads_normalized')
-    save_to_database(car_ads_to_save)
     return car_ads_to_save
 
 
@@ -148,9 +148,10 @@ if __name__ == '__main__':
                            "imgOnly": "1", "page": "1", "manufacturer": manufacturers_dict['hyundai'],
                            "carFamilyType": "10,5", "forceLdLoad": "true"}
 
-    kia_querystring = {"year": "2020--1", "priceOnly": "1", "model": "2829,3484,3223,3866",
+    kia_querystring = {"year": "2020--1", "price": "-1-135000", "km": "500-60000", "hand": "-1-2",
+                       "priceOnly": "1", "model": "2829,3484,3223,3866",
                        "imgOnly": "1", "page": "1", "manufacturer": manufacturers_dict['kia'],
                        "carFamilyType": "10,5", "forceLdLoad": "true"}
-    yad2_scrape(kia_querystring)
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    car_ads_to_save = yad2_scrape(kia_querystring)
+    database.init_db()
+    save_to_database(car_ads_to_save)
