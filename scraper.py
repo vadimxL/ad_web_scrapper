@@ -1,11 +1,12 @@
 # This is a sample Python script.
+import re
+from datetime import timedelta
+
 import database
 import json
 import time
 from requests_cache import CachedSession
 from rich import print
-from mongoengine import connect, StringField, IntField, EmbeddedDocument
-
 from handz import get_pricing_from_handz
 from models import CarAd, PriceHistory
 from normalize_json import normalize_json
@@ -39,12 +40,8 @@ def scrape(parsed_feed_items: list, querystring, session):
 
     r = session.get(url, data=payload, headers=headers, params=querystring)
 
-    print(
-        r.from_cache,
-        r.created_at,
-        r.expires,
-        r.is_expired,
-    )
+    print(f'{r.from_cache=}, created at={r.created_at.strftime("%m/%d/%Y, %H:%M:%S")}, '
+          f'expires at={r.expires.strftime("%m/%d/%Y, %H:%M:%S")}, {r.is_expired=}')
 
     scraped_page = r.json()
     feed_items = scraped_page['data']['feed']['feed_items']
@@ -59,19 +56,48 @@ def scrape(parsed_feed_items: list, querystring, session):
         car_details = dict(sorted(feed_item.items()))
         parsed_feed_items.append(car_details)
 
+    if not r.from_cache:
+        print(f'Not from cache, sleeping for 1 second')
+        time.sleep(1)
+
     return scraped_page
 
 
+def handle_handz_results(parsed_feed: list, token, split_size=500) -> list:
+    # Assuming parsed_feed_items is a list
+
+    # Check if parsed_feed_items has more than 500 items
+    if len(parsed_feed) > split_size:
+        chunk_size = split_size
+        num_chunks = len(parsed_feed) // chunk_size + (len(parsed_feed) % chunk_size > 0)
+
+        # Initialize an empty list to store results
+        handz_result = []
+
+        # Split parsed_feed_items into chunks and process each chunk
+        for i in range(num_chunks):
+            start_idx = i * chunk_size
+            end_idx = min((i + 1) * chunk_size, len(parsed_feed))
+            chunk = parsed_feed[start_idx:end_idx]
+
+            # Process the chunk using get_pricing_from_handz
+            chunk_result = get_pricing_from_handz(chunk, token)
+            handz_result.extend(chunk_result['data']['entities'])
+    else:
+        # If parsed_feed_items has 500 or fewer items, process all at once
+        handz_result = get_pricing_from_handz(parsed_feed, token)['data']['entities']
+
+    return handz_result
+
+
 def yad2_scrape(querystring: dict):
-    session = CachedSession('yad2_cache', backend='sqlite', expire_after=360 * 5)
+    session = CachedSession('yad2_cache', backend='sqlite', expire_after=timedelta(hours=5))
 
     page_num = 1
     querystring['page'] = str(page_num)
     parsed_feed_items = []  # type: list
     # Use a breakpoint in the code line below to debug your script.
     scraped_page = scrape(parsed_feed_items, querystring, session)
-    time.sleep(1)
-
     car_ads = scraped_page['data']['feed']['feed_items']
 
     with open('json/first_page.json', 'w', encoding='utf-8') as f1:
@@ -84,25 +110,24 @@ def yad2_scrape(querystring: dict):
         print(f'page {i}')
         querystring['page'] = str(i)
         scrape(parsed_feed_items, querystring, session)
-        time.sleep(1)
 
-    car_ads_to_save = []
+    car_ads_to_save_ = []
     # save_to_database(parsed_feed_items)
     for car_details in parsed_feed_items:
-        car_ads_to_save.append(extract_car_details(car_details))
+        car_ads_to_save_.append(extract_car_details(car_details))
 
-    handz_result = get_pricing_from_handz(parsed_feed_items, "62e8c1a08efe2d1fad068684")
+    handz_result = handle_handz_results(parsed_feed_items, token="62e8c1a08efe2d1fad068684", split_size=300)
 
-    for res in handz_result['data']['entities']:
-        result_filter = next(filter(lambda x: x['id'] == res['id'], car_ads_to_save), None)
+    for res in handz_result:
+        result_filter = next(filter(lambda x: x['id'] == res['id'], car_ads_to_save_), None)
         if result_filter:
             result_filter['prices'] = res['prices']
             result_filter['dateCreated'] = res['dateCreated']
 
     with open('json/car_ads.json', 'w', encoding='utf-8') as f1:
-        json.dump(car_ads_to_save, f1, indent=4, ensure_ascii=False)
-    normalize_json(car_ads_to_save, 'json/car_ads_normalized')
-    return car_ads_to_save
+        json.dump(car_ads_to_save_, f1, indent=4, ensure_ascii=False)
+    normalize_json(car_ads_to_save_, 'json/car_ads_normalized')
+    return car_ads_to_save_
 
 
 def save_to_database(car_ads: list):
@@ -123,17 +148,24 @@ def save_to_database(car_ads: list):
 
 
 def extract_car_details(feed_item: json):
+    date_pattern = r"\d{2}/\d{2}/\d{4}"
+    match = re.search(date_pattern, feed_item['updated_at'])
+    # Extract the matched date
+    extracted_date = feed_item['updated_at']
+    if match:
+        extracted_date = match.group()
+
     car_details = {
         'id': feed_item['id'],
         'city': feed_item.get('city', 'N/A'),
-        'manufacturer': feed_item['manufacturer_eng'],
+        'manufacturer': feed_item.get('manufacturer_eng', 'N/A'),
         'car_model': feed_item['model'],
         'year': feed_item['year'],
         'hand': feed_item['Hand_text'],
         'engine_size': feed_item.get('EngineVal_text', 0),
         'kilometers': feed_item['kilometers'],
         'price': feed_item['price'],
-        'updated_at': feed_item['updated_at'],
+        'updated_at': extracted_date,
         'date_added': feed_item['date_added']
         # 'description': feed_item['search_text']
     }
@@ -152,6 +184,11 @@ if __name__ == '__main__':
                        "priceOnly": "1", "model": "2829,3484,3223,3866",
                        "imgOnly": "1", "page": "1", "manufacturer": manufacturers_dict['kia'],
                        "carFamilyType": "10,5", "forceLdLoad": "true"}
-    car_ads_to_save = yad2_scrape(kia_querystring)
+
+    suv_querystring = {"year": "2020--1", "price": "-1-135000", "km": "500-60000", "hand": "-1-2",
+                       "priceOnly": "1", "imgOnly": "1", "page": "1",
+                       "carFamilyType": "10,5", "forceLdLoad": "true"}
+
+    car_ads_to_save = yad2_scrape(suv_querystring)
     database.init_db()
     save_to_database(car_ads_to_save)

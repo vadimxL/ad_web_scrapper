@@ -29,11 +29,15 @@ def get_pricing_from_handz(listings, token):
         't': token
     }
     # Make the POST request
-    response = requests.post("https://api.handz.co.il/v2.0/entities/vehicles/auth",
-                             headers={'Content-Type': 'application/json'}, data=json.dumps(data))
-    #
-    # Parse the response as JSON and return it
-    return response.json()
+    r = {'error': 'Failed to get pricing from Handz'}
+    try:
+        response = requests.post("https://api.handz.co.il/v2.0/entities/vehicles/auth",
+                                 headers={'Content-Type': 'application/json'}, data=json.dumps(data))
+        r = response.json()
+    except Exception as e:
+        print(e)
+    finally:
+        return r
 
 
 if __name__ == '__main__':
