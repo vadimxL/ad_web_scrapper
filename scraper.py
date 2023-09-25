@@ -1,4 +1,6 @@
 # This is a sample Python script.
+from datetime import datetime
+
 import database
 import json
 import time
@@ -99,9 +101,11 @@ def yad2_scrape(querystring: dict):
             result_filter['prices'] = res['prices']
             result_filter['dateCreated'] = res['dateCreated']
 
-    with open('json/car_ads.json', 'w', encoding='utf-8') as f1:
+    filename_json = 'json/car_ads_' + datetime.now().strftime("%Y_%m_%d_%H") + '.json'
+    filename_csv = 'json/car_ads_' + datetime.now().strftime("%Y_%m_%d_%H")
+    with open(filename_json, 'w', encoding='utf-8') as f1:
         json.dump(car_ads_to_save, f1, indent=4, ensure_ascii=False)
-    normalize_json(car_ads_to_save, 'json/car_ads_normalized')
+    normalize_json(car_ads_to_save, filename_csv)
     return car_ads_to_save
 
 
@@ -152,6 +156,12 @@ if __name__ == '__main__':
                        "priceOnly": "1", "model": "2829,3484,3223,3866",
                        "imgOnly": "1", "page": "1", "manufacturer": manufacturers_dict['kia'],
                        "carFamilyType": "10,5", "forceLdLoad": "true"}
-    car_ads_to_save = yad2_scrape(kia_querystring)
-    database.init_db()
-    save_to_database(car_ads_to_save)
+
+    querystring = {"year": "2020--1", "price": "-1-150000", "km": "500-70000", "hand": "-1-2",
+                   "priceOnly": "1", "model": "2829,3484,3223,3866",
+                   "imgOnly": "1", "page": "1", "forceLdLoad": "true",
+                   "engineval": "1200--1", "familyGroup": "4X4", "Order": "1"}
+
+    car_ads_to_save = yad2_scrape(querystring)
+    # database.init_db()
+    # save_to_database(car_ads_to_save)
