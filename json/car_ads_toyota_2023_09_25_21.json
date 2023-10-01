@@ -1,0 +1,1082 @@
+[
+    {
+        "id": "7jpdf525",
+        "city": "צור הדסה",
+        "manufacturer": "toyota",
+        "car_model": "C-HR",
+        "year": 2018,
+        "hand": "יד ראשונה",
+        "engine_size": 1798,
+        "kilometers": "85,000",
+        "price": "98,000 ₪",
+        "updated_at": "עודכן היום",
+        "date_added": "2023-09-21 18:56:41",
+        "prices": [
+            {
+                "price": 98000,
+                "date": "2023-09-21T16:27:20.155Z"
+            }
+        ],
+        "dateCreated": "2023-09-21T16:27:20.155Z"
+    },
+    {
+        "id": "ectoglga",
+        "city": "כפר סבא",
+        "manufacturer": "toyota",
+        "car_model": "C-HR",
+        "year": 2021,
+        "hand": "יד שניה",
+        "engine_size": 1798,
+        "kilometers": "45,300",
+        "price": "127,000 ₪",
+        "updated_at": "עודכן היום",
+        "date_added": "2023-09-11 22:00:04",
+        "prices": [
+            {
+                "price": 127000,
+                "date": "2023-09-12T06:07:15.786Z"
+            }
+        ],
+        "dateCreated": "2023-09-12T06:07:15.786Z"
+    },
+    {
+        "id": "gs9admxj",
+        "city": "עראבה",
+        "manufacturer": "toyota",
+        "car_model": "C-HR",
+        "year": 2017,
+        "hand": "יד ראשונה",
+        "engine_size": 1798,
+        "kilometers": "110,000",
+        "price": "98,000 ₪",
+        "updated_at": "עודכן היום",
+        "date_added": "2023-09-10 12:26:34",
+        "prices": [
+            {
+                "price": 98000,
+                "date": "2023-09-10T09:30:57.535Z"
+            }
+        ],
+        "dateCreated": "2023-09-10T09:30:57.535Z"
+    },
+    {
+        "id": "xid5wepg",
+        "city": "חיפה",
+        "manufacturer": "toyota",
+        "car_model": "C-HR",
+        "year": 2017,
+        "hand": "יד שניה",
+        "engine_size": 1798,
+        "kilometers": "62,000",
+        "price": "98,000 ₪",
+        "updated_at": "עודכן היום",
+        "date_added": "2023-07-16 11:51:33",
+        "prices": [
+            {
+                "price": 98000,
+                "date": "2023-08-16T12:33:36.195Z"
+            },
+            {
+                "price": null,
+                "date": "2023-07-16T08:54:20.506Z"
+            }
+        ],
+        "dateCreated": "2023-07-16T08:54:20.506Z"
+    },
+    {
+        "id": "nktlp4h0",
+        "city": "מיתר / כרמית",
+        "manufacturer": "toyota",
+        "car_model": "C-HR",
+        "year": 2017,
+        "hand": "יד שניה",
+        "engine_size": 1798,
+        "kilometers": "95,000",
+        "price": "93,540 ₪",
+        "updated_at": "עודכן היום",
+        "date_added": "2023-08-12 21:43:33",
+        "prices": [
+            {
+                "price": 93540,
+                "date": "2023-09-18T10:29:04.542Z"
+            },
+            {
+                "price": 92000,
+                "date": "2023-08-31T16:31:05.851Z"
+            },
+            {
+                "price": 98750,
+                "date": "2023-08-29T06:20:58.629Z"
+            },
+            {
+                "price": 93750,
+                "date": "2023-08-24T22:10:50.792Z"
+            },
+            {
+                "price": 95000,
+                "date": "2023-08-16T11:21:47.427Z"
+            },
+            {
+                "price": 96500,
+                "date": "2023-08-13T08:31:07.559Z"
+            }
+        ],
+        "dateCreated": "2023-08-13T08:31:07.559Z"
+    },
+    {
+        "id": "iv8z6dat",
+        "city": "כרמיאל",
+        "manufacturer": "toyota",
+        "car_model": "C-HR",
+        "year": 2019,
+        "hand": "יד ראשונה",
+        "engine_size": 1798,
+        "kilometers": "60,000",
+        "price": "112,000 ₪",
+        "updated_at": "עודכן ב 25/09/2023",
+        "date_added": "2023-09-21 17:44:01",
+        "prices": [
+            {
+                "price": 112000,
+                "date": "2023-09-21T14:48:32.803Z"
+            }
+        ],
+        "dateCreated": "2023-09-21T14:48:32.803Z"
+    },
+    {
+        "id": "rpbwon3x",
+        "city": "חדרה",
+        "manufacturer": "toyota",
+        "car_model": "C-HR",
+        "year": 2019,
+        "hand": "יד שניה",
+        "engine_size": 1798,
+        "kilometers": "69,000",
+        "price": "112,000 ₪",
+        "updated_at": "עודכן ב 25/09/2023",
+        "date_added": "2023-09-05 17:42:37",
+        "prices": [
+            {
+                "price": 112000,
+                "date": "2023-09-20T13:21:59.765Z"
+            },
+            {
+                "price": 115000,
+                "date": "2023-09-10T13:16:57.423Z"
+            },
+            {
+                "price": 117000,
+                "date": "2023-09-05T14:44:13.800Z"
+            }
+        ],
+        "dateCreated": "2023-09-05T14:44:13.800Z"
+    },
+    {
+        "id": "k7wmhpo3",
+        "city": "רחובות",
+        "manufacturer": "toyota",
+        "car_model": "C-HR",
+        "year": 2018,
+        "hand": "יד ראשונה",
+        "engine_size": 1798,
+        "kilometers": "100,000",
+        "price": "106,000 ₪",
+        "updated_at": "עודכן ב 25/09/2023",
+        "date_added": "2023-08-11 10:47:32",
+        "prices": [
+            {
+                "price": 106000,
+                "date": "2023-09-04T14:20:45.566Z"
+            },
+            {
+                "price": 108000,
+                "date": "2023-08-11T07:51:00.154Z"
+            }
+        ],
+        "dateCreated": "2023-08-11T07:51:00.154Z"
+    },
+    {
+        "id": "5nmvxjbm",
+        "city": "חורפיש",
+        "manufacturer": "toyota",
+        "car_model": "C-HR",
+        "year": 2017,
+        "hand": "יד שניה",
+        "engine_size": 1798,
+        "kilometers": "180,000",
+        "price": "90,000 ₪",
+        "updated_at": "עודכן ב 25/09/2023",
+        "date_added": "2023-09-12 16:11:56",
+        "prices": [
+            {
+                "price": 90000,
+                "date": "2023-09-12T13:14:26.045Z"
+            }
+        ],
+        "dateCreated": "2023-09-12T13:14:26.045Z"
+    },
+    {
+        "id": "vu97oyu3",
+        "city": "טירה",
+        "manufacturer": "toyota",
+        "car_model": "C-HR",
+        "year": 2017,
+        "hand": "יד ראשונה",
+        "engine_size": 1197,
+        "kilometers": "63,400",
+        "price": "85,000 ₪",
+        "updated_at": "עודכן ב 25/09/2023",
+        "date_added": "2023-09-08 15:57:20",
+        "prices": [
+            {
+                "price": 85000,
+                "date": "2023-09-08T13:08:29.296Z"
+            }
+        ],
+        "dateCreated": "2023-09-08T13:08:29.296Z"
+    },
+    {
+        "id": "lz1wcdyc",
+        "city": "באר שבע",
+        "manufacturer": "toyota",
+        "car_model": "C-HR",
+        "year": 2017,
+        "hand": "יד ראשונה",
+        "engine_size": 1197,
+        "kilometers": "99,040",
+        "price": "95,000 ₪",
+        "updated_at": "עודכן ב 25/09/2023",
+        "date_added": "2023-09-05 12:52:10",
+        "prices": [
+            {
+                "price": 95000,
+                "date": "2023-09-12T17:10:32.179Z"
+            },
+            {
+                "price": 800000,
+                "date": "2023-09-07T12:11:04.670Z"
+            },
+            {
+                "price": 900000,
+                "date": "2023-09-05T09:54:23.537Z"
+            }
+        ],
+        "dateCreated": "2023-09-05T09:54:23.537Z"
+    },
+    {
+        "id": "l8thomq1",
+        "city": "קרית שמונה",
+        "manufacturer": "toyota",
+        "car_model": "C-HR",
+        "year": 2022,
+        "hand": "יד ראשונה",
+        "engine_size": 1798,
+        "kilometers": "8,000",
+        "price": "136,000 ₪",
+        "updated_at": "עודכן היום",
+        "date_added": "2023-09-23 22:50:12",
+        "prices": [
+            {
+                "price": 136000,
+                "date": "2023-09-23T19:51:41.660Z"
+            }
+        ],
+        "dateCreated": "2023-09-23T19:51:41.660Z"
+    },
+    {
+        "id": "0r645cq6",
+        "city": "עראבה",
+        "manufacturer": "toyota",
+        "car_model": "C-HR",
+        "year": 2018,
+        "hand": "יד שניה",
+        "engine_size": 1798,
+        "kilometers": "150,000",
+        "price": "95,000 ₪",
+        "updated_at": "עודכן היום",
+        "date_added": "2023-09-25 19:17:43",
+        "prices": [
+            {
+                "price": 95000,
+                "date": "2023-09-25T21:05:32.937Z"
+            }
+        ],
+        "dateCreated": "2023-09-25T21:05:32.937Z"
+    },
+    {
+        "id": "ewxrbq2f",
+        "city": "שדרות",
+        "manufacturer": "toyota",
+        "car_model": "C-HR",
+        "year": 2017,
+        "hand": "יד שלישית",
+        "engine_size": 1798,
+        "kilometers": "99,000",
+        "price": "93,000 ₪",
+        "updated_at": "עודכן היום",
+        "date_added": "2023-08-19 13:17:19",
+        "prices": [
+            {
+                "price": 93000,
+                "date": "2023-09-14T07:11:52.765Z"
+            },
+            {
+                "price": 95000,
+                "date": "2023-08-22T15:09:16.444Z"
+            },
+            {
+                "price": 96000,
+                "date": "2023-08-20T05:38:21.183Z"
+            },
+            {
+                "price": 97000,
+                "date": "2023-08-19T10:18:43.231Z"
+            }
+        ],
+        "dateCreated": "2023-08-19T10:18:43.231Z"
+    },
+    {
+        "id": "l9c92cmj",
+        "city": "שלומי",
+        "manufacturer": "toyota",
+        "car_model": "C-HR",
+        "year": 2019,
+        "hand": "יד שניה",
+        "engine_size": 1798,
+        "kilometers": "107,500",
+        "price": "100,000 ₪",
+        "updated_at": "עודכן היום",
+        "date_added": "2023-06-12 22:15:53",
+        "prices": [
+            {
+                "price": 100000,
+                "date": "2023-07-18T16:25:37.411Z"
+            },
+            {
+                "price": 96000,
+                "date": "2023-07-13T15:36:36.694Z"
+            },
+            {
+                "price": 98000,
+                "date": "2023-07-10T08:10:56.147Z"
+            },
+            {
+                "price": 100000,
+                "date": "2023-07-07T15:54:00.326Z"
+            },
+            {
+                "price": 102000,
+                "date": "2023-06-29T05:35:42.807Z"
+            },
+            {
+                "price": 104000,
+                "date": "2023-06-26T11:04:17.288Z"
+            },
+            {
+                "price": 106000,
+                "date": "2023-06-14T05:49:40.950Z"
+            },
+            {
+                "price": 110000,
+                "date": "2023-06-12T19:32:57.709Z"
+            }
+        ],
+        "dateCreated": "2023-06-12T19:32:57.709Z"
+    },
+    {
+        "id": "yw4ur4vf",
+        "city": "כפר חנניה",
+        "manufacturer": "toyota",
+        "car_model": "C-HR",
+        "year": 2018,
+        "hand": "יד שניה",
+        "engine_size": 1798,
+        "kilometers": "60,000",
+        "price": "100,000 ₪",
+        "updated_at": "עודכן ב 25/09/2023",
+        "date_added": "2023-09-10 12:45:47",
+        "prices": [
+            {
+                "price": 100000,
+                "date": "2023-09-10T10:41:40.762Z"
+            },
+            {
+                "price": 7000,
+                "date": "2023-09-10T09:46:54.401Z"
+            }
+        ],
+        "dateCreated": "2023-09-10T09:46:54.401Z"
+    },
+    {
+        "id": "mgv4n3r3",
+        "city": "קרית ביאליק",
+        "manufacturer": "toyota",
+        "car_model": "C-HR",
+        "year": 2018,
+        "hand": "יד שניה",
+        "engine_size": 1798,
+        "kilometers": "52,000",
+        "price": "119,000 ₪",
+        "updated_at": "עודכן ב 25/09/2023",
+        "date_added": "2023-09-25 23:47:13",
+        "prices": [
+            {
+                "price": 119000,
+                "date": "2023-09-25T20:49:29.412Z"
+            }
+        ],
+        "dateCreated": "2023-09-25T20:49:29.412Z"
+    },
+    {
+        "id": "ma1arrvr",
+        "city": "כרמיאל",
+        "manufacturer": "toyota",
+        "car_model": "C-HR",
+        "year": 2017,
+        "hand": "יד שניה",
+        "engine_size": 1798,
+        "kilometers": "30,000",
+        "price": "102,000 ₪",
+        "updated_at": "עודכן ב 25/09/2023",
+        "date_added": "2023-09-18 12:10:43",
+        "prices": [
+            {
+                "price": 102000,
+                "date": "2023-09-18T09:11:58.364Z"
+            }
+        ],
+        "dateCreated": "2023-09-18T09:11:58.364Z"
+    },
+    {
+        "id": "ylcpiclk",
+        "city": "בני עי\"ש",
+        "manufacturer": "toyota",
+        "car_model": "C-HR",
+        "year": 2018,
+        "hand": "יד ראשונה",
+        "engine_size": 1798,
+        "kilometers": "105,000",
+        "price": "110,000 ₪",
+        "updated_at": "עודכן ב 25/09/2023",
+        "date_added": "2023-09-22 19:52:34",
+        "prices": [
+            {
+                "price": 110000,
+                "date": "2023-09-22T16:54:55.521Z"
+            }
+        ],
+        "dateCreated": "2023-09-22T16:54:55.521Z"
+    },
+    {
+        "id": "u419gsir",
+        "city": "רמלה",
+        "manufacturer": "toyota",
+        "car_model": "C-HR",
+        "year": 2018,
+        "hand": "יד שניה",
+        "engine_size": 1798,
+        "kilometers": "75,000",
+        "price": "94,000 ₪",
+        "updated_at": "עודכן ב 25/09/2023",
+        "date_added": "2023-02-01 15:10:57",
+        "prices": [
+            {
+                "price": 94000,
+                "date": "2023-09-12T05:42:16.790Z"
+            },
+            {
+                "price": 98000,
+                "date": "2023-09-10T16:58:29.547Z"
+            },
+            {
+                "price": 99990,
+                "date": "2023-08-15T17:36:13.178Z"
+            },
+            {
+                "price": 100500,
+                "date": "2023-08-04T14:02:43.035Z"
+            },
+            {
+                "price": 101000,
+                "date": "2023-06-20T06:29:04.192Z"
+            },
+            {
+                "price": 103000,
+                "date": "2023-06-07T11:35:57.393Z"
+            },
+            {
+                "price": 108000,
+                "date": "2023-05-31T12:56:35.004Z"
+            },
+            {
+                "price": 109000,
+                "date": "2023-05-23T06:41:47.346Z"
+            },
+            {
+                "price": 110000,
+                "date": "2023-05-10T10:03:55.057Z"
+            },
+            {
+                "price": 113000,
+                "date": "2023-05-06T13:57:35.422Z"
+            },
+            {
+                "price": 115000,
+                "date": "2023-05-01T09:30:49.249Z"
+            },
+            {
+                "price": null,
+                "date": "2023-04-19T15:16:04.473Z"
+            },
+            {
+                "price": 117000,
+                "date": "2023-04-09T10:21:07.776Z"
+            },
+            {
+                "price": null,
+                "date": "2023-04-06T19:55:23.850Z"
+            },
+            {
+                "price": 117000,
+                "date": "2023-03-26T14:05:20.234Z"
+            },
+            {
+                "price": null,
+                "date": "2023-03-19T16:07:11.709Z"
+            },
+            {
+                "price": 117000,
+                "date": "2023-03-16T10:04:47.193Z"
+            },
+            {
+                "price": 118000,
+                "date": "2023-02-14T09:52:01.094Z"
+            },
+            {
+                "price": 120000,
+                "date": "2023-02-07T09:19:19.676Z"
+            },
+            {
+                "price": 125000,
+                "date": "2023-02-01T13:18:59.168Z"
+            }
+        ],
+        "dateCreated": "2023-02-01T13:18:59.168Z"
+    },
+    {
+        "id": "bpuzh81b",
+        "city": "שדרות",
+        "manufacturer": "toyota",
+        "car_model": "C-HR",
+        "year": 2017,
+        "hand": "יד שניה",
+        "engine_size": 1798,
+        "kilometers": "155,000",
+        "price": "88,000 ₪",
+        "updated_at": "עודכן ב 25/09/2023",
+        "date_added": "2023-09-08 15:35:26",
+        "prices": [
+            {
+                "price": 88000,
+                "date": "2023-09-15T03:25:33.421Z"
+            },
+            {
+                "price": 90000,
+                "date": "2023-09-08T12:37:29.234Z"
+            }
+        ],
+        "dateCreated": "2023-09-08T12:37:29.234Z"
+    },
+    {
+        "id": "i7h03p5k",
+        "city": "ירושלים",
+        "manufacturer": "toyota",
+        "car_model": "C-HR",
+        "year": 2017,
+        "hand": "יד ראשונה",
+        "engine_size": 1798,
+        "kilometers": "35,000",
+        "price": "96,000 ₪",
+        "updated_at": "עודכן ב 25/09/2023",
+        "date_added": "2023-08-30 17:55:20",
+        "prices": [
+            {
+                "price": 96000,
+                "date": "2023-08-30T14:57:02.084Z"
+            }
+        ],
+        "dateCreated": "2023-08-30T14:57:02.084Z"
+    },
+    {
+        "id": "0i5q7est",
+        "city": "חדרה",
+        "manufacturer": "toyota",
+        "car_model": "C-HR",
+        "year": 2019,
+        "hand": "יד שניה",
+        "engine_size": 1798,
+        "kilometers": "87,000",
+        "price": "110,000 ₪",
+        "updated_at": "עודכן ב 25/09/2023",
+        "date_added": "2023-09-18 09:41:12",
+        "prices": [
+            {
+                "price": 110000,
+                "date": "2023-09-18T06:42:23.067Z"
+            }
+        ],
+        "dateCreated": "2023-09-18T06:42:23.067Z"
+    },
+    {
+        "id": "fc3cugfd",
+        "city": "רמת גן",
+        "manufacturer": "toyota",
+        "car_model": "C-HR",
+        "year": 2020,
+        "hand": "יד שניה",
+        "engine_size": 1798,
+        "kilometers": "34,000",
+        "price": "150,000 ₪",
+        "updated_at": "עודכן ב 25/09/2023",
+        "date_added": "2023-09-25 21:25:19",
+        "prices": [
+            {
+                "price": 150000,
+                "date": "2023-09-25T21:18:54.731Z"
+            }
+        ],
+        "dateCreated": "2023-09-25T21:18:54.731Z"
+    },
+    {
+        "id": "k6eiqo3w",
+        "city": "ירושלים",
+        "manufacturer": "toyota",
+        "car_model": "C-HR",
+        "year": 2018,
+        "hand": "יד ראשונה",
+        "engine_size": 1798,
+        "kilometers": "42,300",
+        "price": "128,000 ₪",
+        "updated_at": "עודכן ב 25/09/2023",
+        "date_added": "2023-09-20 19:35:32",
+        "prices": [
+            {
+                "price": 128000,
+                "date": "2023-09-20T16:37:07.763Z"
+            }
+        ],
+        "dateCreated": "2023-09-20T16:37:07.763Z"
+    },
+    {
+        "id": "ed2q0coh",
+        "city": "נשר",
+        "manufacturer": "toyota",
+        "car_model": "C-HR",
+        "year": 2018,
+        "hand": "יד שניה",
+        "engine_size": 1798,
+        "kilometers": "115,000",
+        "price": "92,000 ₪",
+        "updated_at": "עודכן ב 25/09/2023",
+        "date_added": "2023-03-10 16:46:55",
+        "prices": [
+            {
+                "price": 92000,
+                "date": "2023-09-25T18:26:10.848Z"
+            },
+            {
+                "price": 95000,
+                "date": "2023-08-16T14:41:15.589Z"
+            },
+            {
+                "price": 98000,
+                "date": "2023-06-11T14:37:01.819Z"
+            },
+            {
+                "price": 99000,
+                "date": "2023-06-02T10:46:18.614Z"
+            },
+            {
+                "price": 100000,
+                "date": "2023-04-19T04:32:08.815Z"
+            },
+            {
+                "price": 105000,
+                "date": "2023-04-02T19:06:37.288Z"
+            },
+            {
+                "price": 107000,
+                "date": "2023-03-24T12:12:32.611Z"
+            },
+            {
+                "price": 108000,
+                "date": "2023-03-23T20:11:47.193Z"
+            },
+            {
+                "price": 109000,
+                "date": "2023-03-16T14:20:30.391Z"
+            },
+            {
+                "price": 110000,
+                "date": "2023-03-10T14:56:24.801Z"
+            }
+        ],
+        "dateCreated": "2023-03-10T14:56:24.801Z"
+    },
+    {
+        "id": "yd3io9nd",
+        "city": "בת ים",
+        "manufacturer": "toyota",
+        "car_model": "C-HR",
+        "year": 2020,
+        "hand": "יד ראשונה",
+        "engine_size": 1798,
+        "kilometers": "38,000",
+        "price": "132,000 ₪",
+        "updated_at": "עודכן ב 25/09/2023",
+        "date_added": "2023-09-18 21:33:41",
+        "prices": [
+            {
+                "price": 132000,
+                "date": "2023-09-18T18:34:32.893Z"
+            }
+        ],
+        "dateCreated": "2023-09-18T18:34:32.893Z"
+    },
+    {
+        "id": "i7il7nht",
+        "city": "טבריה",
+        "manufacturer": "toyota",
+        "car_model": "C-HR",
+        "year": 2017,
+        "hand": "יד ראשונה",
+        "engine_size": 1798,
+        "kilometers": "107,000",
+        "price": "99,500 ₪",
+        "updated_at": "עודכן ב 25/09/2023",
+        "date_added": "2023-07-11 19:19:09",
+        "prices": [
+            {
+                "price": 99500,
+                "date": "2023-08-24T12:28:51.387Z"
+            },
+            {
+                "price": 105000,
+                "date": "2023-07-11T16:20:56.801Z"
+            }
+        ],
+        "dateCreated": "2023-07-11T16:20:56.801Z"
+    },
+    {
+        "id": "a91gdqsz",
+        "city": "מגשימים",
+        "manufacturer": "toyota",
+        "car_model": "C-HR",
+        "year": 2017,
+        "hand": "יד שניה",
+        "engine_size": 1798,
+        "kilometers": "55,000",
+        "price": "101,000 ₪",
+        "updated_at": "עודכן ב 25/09/2023",
+        "date_added": "2023-08-04 07:56:25",
+        "prices": [
+            {
+                "price": 101000,
+                "date": "2023-09-24T04:37:55.647Z"
+            },
+            {
+                "price": 102900,
+                "date": "2023-08-24T06:13:09.713Z"
+            },
+            {
+                "price": 105000,
+                "date": "2023-08-04T04:57:18.567Z"
+            }
+        ],
+        "dateCreated": "2023-08-04T04:57:18.567Z"
+    },
+    {
+        "id": "2inm8fn9",
+        "city": "באר יעקב",
+        "manufacturer": "toyota",
+        "car_model": "C-HR",
+        "year": 2019,
+        "hand": "יד ראשונה",
+        "engine_size": 1798,
+        "kilometers": "61,000",
+        "price": "99,000 ₪",
+        "updated_at": "עודכן ב 25/09/2023",
+        "date_added": "2023-08-05 22:26:36",
+        "prices": [
+            {
+                "price": 99000,
+                "date": "2023-09-15T04:25:33.654Z"
+            },
+            {
+                "price": 105000,
+                "date": "2023-09-04T11:48:35.762Z"
+            },
+            {
+                "price": 110000,
+                "date": "2023-08-05T19:28:23.715Z"
+            }
+        ],
+        "dateCreated": "2023-08-05T19:28:23.715Z"
+    },
+    {
+        "id": "zxmhn464",
+        "city": "באר שבע",
+        "manufacturer": "toyota",
+        "car_model": "C-HR",
+        "year": 2018,
+        "hand": "יד שלישית",
+        "engine_size": 1798,
+        "kilometers": "163,000",
+        "price": "110,000 ₪",
+        "updated_at": "עודכן ב 25/09/2023",
+        "date_added": "2023-07-20 11:57:50",
+        "prices": [
+            {
+                "price": 110000,
+                "date": "2023-07-20T11:24:52.895Z"
+            }
+        ],
+        "dateCreated": "2023-07-20T11:24:52.895Z"
+    },
+    {
+        "id": "h2708v3d",
+        "city": "ראש העין",
+        "manufacturer": "toyota",
+        "car_model": "C-HR",
+        "year": 2018,
+        "hand": "יד שניה",
+        "engine_size": 1798,
+        "kilometers": "53,000",
+        "price": "95,000 ₪",
+        "updated_at": "עודכן ב 25/09/2023",
+        "date_added": "2023-04-23 00:35:47",
+        "prices": [
+            {
+                "price": 95000,
+                "date": "2023-09-23T16:48:35.884Z"
+            },
+            {
+                "price": 102000,
+                "date": "2023-08-18T06:21:11.123Z"
+            },
+            {
+                "price": 104000,
+                "date": "2023-08-14T21:41:03.296Z"
+            },
+            {
+                "price": 106000,
+                "date": "2023-07-13T11:05:17.667Z"
+            },
+            {
+                "price": 105500,
+                "date": "2023-06-23T10:17:28.079Z"
+            },
+            {
+                "price": 106000,
+                "date": "2023-06-20T14:23:35.096Z"
+            },
+            {
+                "price": 108000,
+                "date": "2023-06-17T19:58:35.788Z"
+            },
+            {
+                "price": 109000,
+                "date": "2023-06-11T14:32:49.512Z"
+            },
+            {
+                "price": null,
+                "date": "2023-05-29T16:29:15.723Z"
+            },
+            {
+                "price": 110460,
+                "date": "2023-05-08T17:57:28.824Z"
+            },
+            {
+                "price": 115000,
+                "date": "2023-05-06T20:38:42.923Z"
+            },
+            {
+                "price": 117000,
+                "date": "2023-05-01T05:47:58.093Z"
+            },
+            {
+                "price": 119000,
+                "date": "2023-04-30T19:51:29.086Z"
+            },
+            {
+                "price": 116000,
+                "date": "2023-04-28T10:59:34.585Z"
+            },
+            {
+                "price": 118000,
+                "date": "2023-04-27T12:57:32.283Z"
+            },
+            {
+                "price": 120000,
+                "date": "2023-04-26T20:16:40.412Z"
+            },
+            {
+                "price": 123000,
+                "date": "2023-04-23T04:14:08.984Z"
+            },
+            {
+                "price": null,
+                "date": "2023-04-22T22:16:45.769Z"
+            }
+        ],
+        "dateCreated": "2023-04-22T22:16:45.769Z"
+    },
+    {
+        "id": "6uwpyx53",
+        "city": "נתניה",
+        "manufacturer": "toyota",
+        "car_model": "C-HR",
+        "year": 2017,
+        "hand": "יד ראשונה",
+        "engine_size": 1798,
+        "kilometers": "158,000",
+        "price": "89,500 ₪",
+        "updated_at": "עודכן ב 25/09/2023",
+        "date_added": "2023-09-19 14:45:26",
+        "prices": [
+            {
+                "price": 89500,
+                "date": "2023-09-19T11:47:28.159Z"
+            }
+        ],
+        "dateCreated": "2023-09-19T11:47:28.159Z"
+    },
+    {
+        "id": "xcqh3lg9",
+        "city": "אשדוד",
+        "manufacturer": "toyota",
+        "car_model": "C-HR",
+        "year": 2022,
+        "hand": "יד ראשונה",
+        "engine_size": 1798,
+        "kilometers": "8,000",
+        "price": "137,800 ₪",
+        "updated_at": "עודכן ב 25/09/2023",
+        "date_added": "2023-09-22 16:05:03",
+        "prices": [
+            {
+                "price": 137800,
+                "date": "2023-09-24T14:51:50.025Z"
+            },
+            {
+                "price": 138000,
+                "date": "2023-09-22T15:05:25.421Z"
+            }
+        ],
+        "dateCreated": "2023-09-22T15:05:25.421Z"
+    },
+    {
+        "id": "4vpdi560",
+        "city": "ראשון לציון",
+        "manufacturer": "toyota",
+        "car_model": "C-HR",
+        "year": 2017,
+        "hand": "יד שניה",
+        "engine_size": 1798,
+        "kilometers": "90,000",
+        "price": "94,000 ₪",
+        "updated_at": "עודכן ב 25/09/2023",
+        "date_added": "2023-04-21 10:53:30",
+        "prices": [
+            {
+                "price": 94000,
+                "date": "2023-09-25T17:27:11.904Z"
+            },
+            {
+                "price": 97000,
+                "date": "2023-09-09T19:30:49.446Z"
+            },
+            {
+                "price": 98000,
+                "date": "2023-08-27T23:20:37.019Z"
+            },
+            {
+                "price": 101000,
+                "date": "2023-08-17T12:36:21.921Z"
+            },
+            {
+                "price": 96000,
+                "date": "2023-08-13T03:02:51.063Z"
+            },
+            {
+                "price": 92000,
+                "date": "2023-07-30T09:59:36.543Z"
+            },
+            {
+                "price": 96999,
+                "date": "2023-07-27T09:07:13.956Z"
+            },
+            {
+                "price": 95999,
+                "date": "2023-07-24T15:10:11.715Z"
+            },
+            {
+                "price": 94999,
+                "date": "2023-07-20T14:06:49.013Z"
+            },
+            {
+                "price": 97999,
+                "date": "2023-07-17T03:08:08.647Z"
+            },
+            {
+                "price": 99999,
+                "date": "2023-07-09T10:01:33.454Z"
+            },
+            {
+                "price": 103000,
+                "date": "2023-06-28T18:52:50.195Z"
+            },
+            {
+                "price": 105000,
+                "date": "2023-06-07T08:51:19.026Z"
+            },
+            {
+                "price": 107000,
+                "date": "2023-04-21T08:39:28.666Z"
+            }
+        ],
+        "dateCreated": "2023-04-21T08:39:28.666Z"
+    },
+    {
+        "id": "st1xn24c",
+        "city": "טבריה",
+        "manufacturer": "toyota",
+        "car_model": "C-HR",
+        "year": 2019,
+        "hand": "יד שניה",
+        "engine_size": 1798,
+        "kilometers": "43,000",
+        "price": "104,000 ₪",
+        "updated_at": "עודכן ב 25/09/2023",
+        "date_added": "2023-01-26 21:30:15",
+        "prices": [
+            {
+                "price": 104000,
+                "date": "2023-08-22T18:50:01.995Z"
+            },
+            {
+                "price": 105000,
+                "date": "2023-08-19T12:17:08.481Z"
+            },
+            {
+                "price": null,
+                "date": "2023-02-06T18:21:37.035Z"
+            },
+            {
+                "price": 114000,
+                "date": "2023-01-26T19:32:29.958Z"
+            }
+        ],
+        "dateCreated": "2023-01-26T19:32:29.958Z"
+    }
+]

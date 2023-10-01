@@ -1,5 +1,5 @@
 # This is a sample Python script.
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import database
 import json
@@ -9,7 +9,6 @@ from rich import print
 from mongoengine import connect, StringField, IntField, EmbeddedDocument
 
 from handz import get_pricing_from_handz
-from models import CarAd, PriceHistory
 from normalize_json import normalize_json
 
 manufacturers_dict = {
@@ -64,13 +63,13 @@ def scrape(parsed_feed_items: list, querystring, session):
     return r
 
 
-def yad2_scrape(querystring: dict):
-    session = CachedSession('yad2_cache', backend='sqlite', expire_after=360 * 5)
-
-    page_num = 1
-    querystring['page'] = str(page_num)
+def get_first_page(querystring: dict):
+    session = CachedSession('yad2_first_page_cache', backend='sqlite',
+                            expire_after=timedelta(hours=3))
+    querystring['page'] = str(1)
     parsed_feed_items = []  # type: list
     # Use a breakpoint in the code line below to debug your script.
+    scraped_page = scrape(parsed_feed_items, querystring, session)
     result = scrape(parsed_feed_items, querystring, session)
     scraped_page = parsed_feed_items[0]
     if not result.from_cache:
@@ -82,10 +81,28 @@ def yad2_scrape(querystring: dict):
     with open('json/first_page.json', 'w', encoding='utf-8') as f1:
         json.dump(car_ads, f1, indent=4, ensure_ascii=False)
 
-    print(f"Total items to be scraped: {scraped_page['data']['pagination']['total_items']}")
-    last_page = scraped_page['data']['pagination']['last_page']
-    print(f"Last page: {last_page}")
-    for i in range(2, last_page + 1):
+    return scraped_page
+
+
+def get_number_of_pages(querystring: dict):
+    first_page = get_first_page(querystring)
+    # print(f"Total items to be scraped: {first_page['data']['pagination']['total_items']}")
+    return first_page['data']['pagination']['last_page']
+    # print(f"Last page: {last_page}")
+
+
+def get_total_items(querystring: dict):
+    first_page = get_first_page(querystring)
+    # print(f"Total items to be scraped: {first_page['data']['pagination']['total_items']}")
+    return first_page['data']['pagination']['total_items']
+    # last_page = scraped_page['data']['pagination']['last_page']
+    # print(f"Last page: {last_page}")
+
+
+def yad2_scrape(querystring: dict, last_page: int = 1):
+    parsed_feed_items = []  # type: list
+    session = CachedSession('yad2_cache', backend='sqlite', expire_after=timedelta(hours=3))
+    for i in range(1, last_page + 1):
         print(f'page {i}')
         querystring['page'] = str(i)
         scrape(parsed_feed_items, querystring, session)
@@ -106,29 +123,15 @@ def yad2_scrape(querystring: dict):
             result_filter['prices'] = res['prices']
             result_filter['dateCreated'] = res['dateCreated']
 
-    filename_json = 'json/car_ads_' + datetime.now().strftime("%Y_%m_%d_%H") + '.json'
-    filename_csv = 'json/car_ads_' + datetime.now().strftime("%Y_%m_%d_%H")
+    manufacturer = car_ads_to_save[0]['manufacturer']
+    filename_json = f'json/car_ads_{manufacturer}_' + datetime.now().strftime("%Y_%m_%d_%H") + '.json'
+    filename_csv = f'json/car_ads_{manufacturer}_' + datetime.now().strftime("%Y_%m_%d_%H")
     with open(filename_json, 'w', encoding='utf-8') as f1:
         json.dump(car_ads_to_save, f1, indent=4, ensure_ascii=False)
     normalize_json(car_ads_to_save, filename_csv)
     return car_ads_to_save
 
 
-def save_to_database(car_ads: list):
-    for car_details in car_ads:
-        car_ad = CarAd(id=car_details['id'])
-        car_ad.manufacturer = car_details['manufacturer']
-        car_ad.model = car_details['car_model']
-        car_ad.year = car_details['year']
-        car_ad.hand = car_details['hand']
-        car_ad.engine_size = car_details['engine_size']
-        car_ad.kilometers = car_details['kilometers']
-        car_ad.price = car_details['price']
-        car_ad.updated_at = car_details['updated_at']
-        car_ad.date_added = car_details['date_added']
-        for date_price in car_details['prices']:
-            car_ad.price_history.append(PriceHistory(price=date_price['price'], date=date_price['date']))
-        car_ad.save()
 
 
 def extract_car_details(feed_item: json):
@@ -161,16 +164,19 @@ def main():
                        "imgOnly": "1", "page": "1", "manufacturer": manufacturers_dict['kia'],
                        "carFamilyType": "10,5", "forceLdLoad": "true"}
 
-    querystring = {"year": "2020--1", "price": "-1-150000", "km": "500-70000", "hand": "-1-2",
-                   "priceOnly": "1", "model": "2829,3484,3223,3866",
-                   "imgOnly": "1", "page": "1", "forceLdLoad": "true",
-                   "engineval": "1200--1", "familyGroup": "4X4", "Order": "1"}
+    kia_niro_querystring = {"year": "2020--1", "price": "-1-150000", "km": "500-70000", "hand": "-1-2",
+                            "priceOnly": "1", "model": "2829,3484,3223,3866",
+                            "imgOnly": "1", "page": "1", "forceLdLoad": "true",
+                            "engineval": "1200--1", "familyGroup": "4X4", "Order": "1"}
 
-    car_ads_to_save = yad2_scrape(querystring)
+    toyota_chr_query = {"model": "2847", "manufacturer": "19",
+                        "page": "1", "forceLdLoad": "true",
+                        "Order": "1"}
+
+    total_items_to_scrape = get_total_items(kia_niro_querystring)
+    print(f"Total items to be scraped: {total_items_to_scrape}")
+    last_page = get_number_of_pages(kia_niro_querystring)
+    print(f"Last page: {last_page}")
+    car_ads_to_save = yad2_scrape(toyota_chr_query, last_page=last_page)
     # database.init_db()
     # save_to_database(car_ads_to_save)
-
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    main()
