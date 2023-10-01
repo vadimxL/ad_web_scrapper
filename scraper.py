@@ -61,7 +61,7 @@ def scrape(parsed_feed_items: list, querystring, session):
         car_details = dict(sorted(feed_item.items()))
         parsed_feed_items.append(car_details)
 
-    return scraped_page
+    return r
 
 
 def yad2_scrape(querystring: dict):
@@ -71,8 +71,11 @@ def yad2_scrape(querystring: dict):
     querystring['page'] = str(page_num)
     parsed_feed_items = []  # type: list
     # Use a breakpoint in the code line below to debug your script.
-    scraped_page = scrape(parsed_feed_items, querystring, session)
-    time.sleep(1)
+    result = scrape(parsed_feed_items, querystring, session)
+    scraped_page = parsed_feed_items[0]
+    if not result.from_cache:
+        print(f'Not from cache, sleeping for 1 second')
+        time.sleep(1)
 
     car_ads = scraped_page['data']['feed']['feed_items']
 
@@ -86,7 +89,9 @@ def yad2_scrape(querystring: dict):
         print(f'page {i}')
         querystring['page'] = str(i)
         scrape(parsed_feed_items, querystring, session)
-        time.sleep(1)
+        if not result.from_cache:
+            print(f'Not from cache, sleeping for 1 second')
+            time.sleep(1)
 
     car_ads_to_save = []
     # save_to_database(parsed_feed_items)
@@ -145,8 +150,7 @@ def extract_car_details(feed_item: json):
     return car_details
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
+def main():
     hyundai_querystring = {"year": "2020--1", "price": "80000-135000", "km": "500-40000", "hand": "-1-2",
                            "priceOnly": "1",
                            "imgOnly": "1", "page": "1", "manufacturer": manufacturers_dict['hyundai'],
@@ -165,3 +169,8 @@ if __name__ == '__main__':
     car_ads_to_save = yad2_scrape(querystring)
     # database.init_db()
     # save_to_database(car_ads_to_save)
+
+
+# Press the green button in the gutter to run the script.
+if __name__ == '__main__':
+    main()
