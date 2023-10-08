@@ -68,6 +68,9 @@ def get_first_page(querystring: dict):
         print(f'Not from cache, sleeping for 1 second')
         time.sleep(1)
 
+    with open('json/first_page.json', 'w', encoding='utf-8') as f1:
+        json.dump(response.json(), f1, indent=4, ensure_ascii=False)
+
     return response.json()
 
 
@@ -100,13 +103,13 @@ def yad2_scrape(querystring: dict, last_page: int = 1):
             time.sleep(1)
 
     for item in parsed_feed_items:
-        if item['type'] != 'ad':
-            # print(f"Skipping item {car_details['type']} because it's not an ad")
-            continue
-
-        if item['feed_source'] != 'private':
-            # print(f"Skipping item {car_details['feed_source']} because it's not a private ad")
-            continue
+        # if item['type'] != 'ad':
+        #     # print(f"Skipping item {car_details['type']} because it's not an ad")
+        #     continue
+        #
+        # if item['feed_source'] != 'private':
+        #     # print(f"Skipping item {car_details['feed_source']} because it's not a private ad")
+        #     continue
 
         if 'id' not in item:
             print(f"Skipping item {item} because it's not an ad")
@@ -118,10 +121,6 @@ def yad2_scrape(querystring: dict, last_page: int = 1):
     handz_result = get_pricing_from_handz(filtered_feed_items, "62e8c1a08efe2d1fad068684")
 
     for res in handz_result['data']['entities']:
-        if 'id' not in res:
-            print(f"Skipping item {res} because it's not an ad")
-            continue
-
         result_filter = next(filter(lambda x: x['id'] == res['id'], car_ads_to_save), None)
         if result_filter:
             result_filter['prices'] = res['prices']
@@ -171,18 +170,19 @@ def main():
                             "imgOnly": "1", "page": "1", "forceLdLoad": "true",
                             "engineval": "1200--1", "familyGroup": "4X4", "Order": "1"}
 
-    kia_niro_new_querystring = {"year": "2020--1", "model": "2829,3484,3223,3866",
-                                "manufacturer": manufacturers_dict['kia']}
+    kia_niro_new_querystring = {"manufacturer": "48", "model": "3223,3484,2829,3866", "year": "2020--1"}
 
     toyota_chr_query = {"model": "2847", "manufacturer": "19",
                         "page": "1", "forceLdLoad": "true",
                         "Order": "1"}
 
-    total_items_to_scrape = get_total_items(kia_niro_new_querystring)
+    querystring = kia_niro_new_querystring
+
+    total_items_to_scrape = get_total_items(querystring)
     print(f"Total items to be scraped: {total_items_to_scrape}")
-    last_page = get_number_of_pages(kia_niro_querystring)
+    last_page = get_number_of_pages(querystring)
     print(f"Last page: {last_page}")
-    car_ads_to_save = yad2_scrape(kia_niro_querystring, last_page=last_page)
+    car_ads_to_save = yad2_scrape(querystring, last_page=last_page)
     # database.init_db()
     # save_to_database(car_ads_to_save)
 
