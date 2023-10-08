@@ -103,16 +103,7 @@ def yad2_scrape(querystring: dict, last_page: int = 1):
             time.sleep(1)
 
     for item in parsed_feed_items:
-        # if item['type'] != 'ad':
-        #     # print(f"Skipping item {car_details['type']} because it's not an ad")
-        #     continue
-        #
-        # if item['feed_source'] != 'private':
-        #     # print(f"Skipping item {car_details['feed_source']} because it's not a private ad")
-        #     continue
-
         if 'id' not in item:
-            print(f"Skipping item {item} because it's not an ad")
             continue
 
         filtered_feed_items.append(item)
