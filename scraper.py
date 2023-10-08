@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 import database
 import json
 import time
-from requests_cache import CachedSession
+from requests_cache import CachedSession, CachedResponse
 from rich import print
 from mongoengine import connect, StringField, IntField, EmbeddedDocument
 
@@ -18,7 +18,7 @@ manufacturers_dict = {
 }
 
 
-def scrape(parsed_feed_items: list, querystring, session):
+def scrape(parsed_feed_items: list, querystring, session) -> CachedResponse:
     url = "https://gw.yad2.co.il/feed-search-legacy/vehicles/cars"
 
     payload = ""
@@ -50,12 +50,6 @@ def scrape(parsed_feed_items: list, querystring, session):
     scraped_page = r.json()
     feed_items = scraped_page['data']['feed']['feed_items']
     for feed_item in feed_items:
-        if feed_item['type'] != 'ad':
-            continue
-
-        if feed_item['feed_source'] != 'private':
-            continue
-
         # car_details = extract_car_details(feed_item)
         car_details = dict(sorted(feed_item.items()))
         parsed_feed_items.append(car_details)
@@ -69,19 +63,12 @@ def get_first_page(querystring: dict):
     querystring['page'] = str(1)
     parsed_feed_items = []  # type: list
     # Use a breakpoint in the code line below to debug your script.
-    scraped_page = scrape(parsed_feed_items, querystring, session)
-    result = scrape(parsed_feed_items, querystring, session)
-    scraped_page = parsed_feed_items[0]
-    if not result.from_cache:
+    response = scrape(parsed_feed_items, querystring, session)
+    if not response.from_cache:
         print(f'Not from cache, sleeping for 1 second')
         time.sleep(1)
 
-    car_ads = scraped_page['data']['feed']['feed_items']
-
-    with open('json/first_page.json', 'w', encoding='utf-8') as f1:
-        json.dump(car_ads, f1, indent=4, ensure_ascii=False)
-
-    return scraped_page
+    return response.json()
 
 
 def get_number_of_pages(querystring: dict):
@@ -101,23 +88,40 @@ def get_total_items(querystring: dict):
 
 def yad2_scrape(querystring: dict, last_page: int = 1):
     parsed_feed_items = []  # type: list
+    filtered_feed_items = []  # type: list
+    car_ads_to_save = []
     session = CachedSession('yad2_cache', backend='sqlite', expire_after=timedelta(hours=3))
     for i in range(1, last_page + 1):
         print(f'page {i}')
         querystring['page'] = str(i)
-        scrape(parsed_feed_items, querystring, session)
+        result = scrape(parsed_feed_items, querystring, session)
         if not result.from_cache:
             print(f'Not from cache, sleeping for 1 second')
             time.sleep(1)
 
-    car_ads_to_save = []
-    # save_to_database(parsed_feed_items)
-    for car_details in parsed_feed_items:
-        car_ads_to_save.append(extract_car_details(car_details))
+    for item in parsed_feed_items:
+        if item['type'] != 'ad':
+            # print(f"Skipping item {car_details['type']} because it's not an ad")
+            continue
 
-    handz_result = get_pricing_from_handz(parsed_feed_items, "62e8c1a08efe2d1fad068684")
+        if item['feed_source'] != 'private':
+            # print(f"Skipping item {car_details['feed_source']} because it's not a private ad")
+            continue
+
+        if 'id' not in item:
+            print(f"Skipping item {item} because it's not an ad")
+            continue
+
+        filtered_feed_items.append(item)
+        car_ads_to_save.append(extract_car_details(item))
+
+    handz_result = get_pricing_from_handz(filtered_feed_items, "62e8c1a08efe2d1fad068684")
 
     for res in handz_result['data']['entities']:
+        if 'id' not in res:
+            print(f"Skipping item {res} because it's not an ad")
+            continue
+
         result_filter = next(filter(lambda x: x['id'] == res['id'], car_ads_to_save), None)
         if result_filter:
             result_filter['prices'] = res['prices']
@@ -130,8 +134,6 @@ def yad2_scrape(querystring: dict, last_page: int = 1):
         json.dump(car_ads_to_save, f1, indent=4, ensure_ascii=False)
     normalize_json(car_ads_to_save, filename_csv)
     return car_ads_to_save
-
-
 
 
 def extract_car_details(feed_item: json):
@@ -169,14 +171,21 @@ def main():
                             "imgOnly": "1", "page": "1", "forceLdLoad": "true",
                             "engineval": "1200--1", "familyGroup": "4X4", "Order": "1"}
 
+    kia_niro_new_querystring = {"year": "2020--1", "model": "2829,3484,3223,3866",
+                                "manufacturer": manufacturers_dict['kia']}
+
     toyota_chr_query = {"model": "2847", "manufacturer": "19",
                         "page": "1", "forceLdLoad": "true",
                         "Order": "1"}
 
-    total_items_to_scrape = get_total_items(kia_niro_querystring)
+    total_items_to_scrape = get_total_items(kia_niro_new_querystring)
     print(f"Total items to be scraped: {total_items_to_scrape}")
     last_page = get_number_of_pages(kia_niro_querystring)
     print(f"Last page: {last_page}")
-    car_ads_to_save = yad2_scrape(toyota_chr_query, last_page=last_page)
+    car_ads_to_save = yad2_scrape(kia_niro_querystring, last_page=last_page)
     # database.init_db()
     # save_to_database(car_ads_to_save)
+
+
+if __name__ == '__main__':
+    main()
