@@ -89,7 +89,7 @@ def get_total_items(querystring: dict):
     # print(f"Last page: {last_page}")
 
 
-def yad2_scrape(querystring: dict, last_page: int = 1):
+def yad2_scrape(querystring: dict, feed_sources, last_page: int = 1):
     parsed_feed_items = []  # type: list
     filtered_feed_items = []  # type: list
     car_ads_to_save = []
@@ -103,7 +103,15 @@ def yad2_scrape(querystring: dict, last_page: int = 1):
             time.sleep(1)
 
     for item in parsed_feed_items:
+        # if item['type'] != 'ad':
+        #     # print(f"Skipping item {car_details['type']} because it's not an ad")
+        #     continue
+        #
         if 'id' not in item:
+            continue
+
+        if item['feed_source'] not in feed_sources:
+            # print(f"Skipping item {car_details['feed_source']} because it's not a private ad")
             continue
 
         filtered_feed_items.append(item)
@@ -118,8 +126,8 @@ def yad2_scrape(querystring: dict, last_page: int = 1):
             result_filter['dateCreated'] = res['dateCreated']
 
     manufacturer = car_ads_to_save[0]['manufacturer']
-    filename_json = f'json/car_ads_{manufacturer}_' + datetime.now().strftime("%Y_%m_%d_%H") + '.json'
-    filename_csv = f'json/car_ads_{manufacturer}_' + datetime.now().strftime("%Y_%m_%d_%H")
+    filename_json = f'json/car_ads_{manufacturer}_{"_".join(feed_sources)}_' + datetime.now().strftime("%Y_%m_%d_%H") + '.json'
+    filename_csv = f'json/car_ads_{manufacturer}_{"_".join(feed_sources)}_' + datetime.now().strftime("%Y_%m_%d_%H")
     with open(filename_json, 'w', encoding='utf-8') as f1:
         json.dump(car_ads_to_save, f1, indent=4, ensure_ascii=False)
     normalize_json(car_ads_to_save, filename_csv)
@@ -129,12 +137,13 @@ def yad2_scrape(querystring: dict, last_page: int = 1):
 def extract_car_details(feed_item: json):
     car_details = {
         'id': feed_item['id'],
+        'feed_source': feed_item['feed_source'],
         'city': feed_item.get('city', 'N/A'),
         'manufacturer': feed_item['manufacturer_eng'],
-        'car_model': feed_item['model'],
+        'car_model': f"{feed_item['model']} {feed_item.get('row_2', 'N/A')}",
         'year': feed_item['year'],
         'hand': feed_item['Hand_text'],
-        'engine_size': feed_item.get('EngineVal_text', 0),
+        # 'engine_size': feed_item.get('EngineVal_text', 0),
         'kilometers': feed_item['kilometers'],
         'price': feed_item['price'],
         'updated_at': feed_item['updated_at'],
@@ -146,6 +155,10 @@ def extract_car_details(feed_item: json):
 
 
 def main():
+    FEED_SOURCES_PRIVATE = ['private']
+    FEED_SOURCES_COMMERCIAL = ['commercial', 'xml']
+    FEED_SOURCES_ALL = ['xml', 'commercial', 'private']
+
     hyundai_querystring = {"year": "2020--1", "price": "80000-135000", "km": "500-40000", "hand": "-1-2",
                            "priceOnly": "1",
                            "imgOnly": "1", "page": "1", "manufacturer": manufacturers_dict['hyundai'],
@@ -156,24 +169,22 @@ def main():
                        "imgOnly": "1", "page": "1", "manufacturer": manufacturers_dict['kia'],
                        "carFamilyType": "10,5", "forceLdLoad": "true"}
 
-    kia_niro_querystring = {"year": "2020--1", "price": "-1-150000", "km": "500-70000", "hand": "-1-2",
-                            "priceOnly": "1", "model": "2829,3484,3223,3866",
-                            "imgOnly": "1", "page": "1", "forceLdLoad": "true",
-                            "engineval": "1200--1", "familyGroup": "4X4", "Order": "1"}
+    kia_niro_new_querystring = {"manufacturer": "48", "model": "3484,2829,3866", "year": "2020--1",
+                                "km": "-1-105000"}
 
-    kia_niro_new_querystring = {"manufacturer": "48", "model": "3223,3484,2829,3866", "year": "2020--1"}
+    kia_niro_2019_2024 = {"manufacturer": "48", "model": "3484,2829,3866", "year": "2019--1"}
 
     toyota_chr_query = {"model": "2847", "manufacturer": "19",
                         "page": "1", "forceLdLoad": "true",
-                        "Order": "1"}
+                        "Order": "1", "km": "-1-105000", "year": "2020--1"}
 
-    querystring = kia_niro_new_querystring
+    querystring = kia_niro_2019_2024
 
     total_items_to_scrape = get_total_items(querystring)
     print(f"Total items to be scraped: {total_items_to_scrape}")
     last_page = get_number_of_pages(querystring)
     print(f"Last page: {last_page}")
-    car_ads_to_save = yad2_scrape(querystring, last_page=last_page)
+    car_ads_to_save = yad2_scrape(querystring, feed_sources=FEED_SOURCES_PRIVATE, last_page=last_page)
     # database.init_db()
     # save_to_database(car_ads_to_save)
 
