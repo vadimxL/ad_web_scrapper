@@ -1,21 +1,13 @@
 version: '3.3'
 services:
-  convexum-pybuilder:
-    image: cvxm.jfrog.io/cvxm-dockerhub/devops/convexum-pybuilder:focal
-    container_name: "pybuilder"
+  mongo-yad2-price-monitor:
+    image: mongo
+    container_name: "mongo-yad2-price-monitor"
     restart: always
     entrypoint: ["tail", "-f", "/dev/null"]
     working_dir: $PWD
-    volumes:
-      - type: bind
-        source: $PWD
-        target: $PWD
-        read_only: false
-      - type: bind
-        source: $HOME/.ssh
-        target: /root/.ssh
-        read_only: true
-      - type: bind
-        source: $HOME/.pip
-        target: /root/.pip
-        read_only: true
+    ports:
+      - "27018:27017"  # Map container port 27017 to host port 27018
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
