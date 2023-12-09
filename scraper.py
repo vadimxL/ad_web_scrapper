@@ -1,6 +1,6 @@
 # This is a sample Python script.
 from datetime import datetime, timedelta
-
+import re
 import database
 import json
 import time
@@ -126,7 +126,8 @@ def yad2_scrape(querystring: dict, feed_sources, last_page: int = 1):
             result_filter['dateCreated'] = res['dateCreated']
 
     manufacturer = car_ads_to_save[0]['manufacturer']
-    filename_json = f'json/car_ads_{manufacturer}_{"_".join(feed_sources)}_' + datetime.now().strftime("%Y_%m_%d_%H") + '.json'
+    filename_json = f'json/car_ads_{manufacturer}_{"_".join(feed_sources)}_' + datetime.now().strftime(
+        "%Y_%m_%d_%H") + '.json'
     filename_csv = f'json/car_ads_{manufacturer}_{"_".join(feed_sources)}_' + datetime.now().strftime("%Y_%m_%d_%H")
     with open(filename_json, 'w', encoding='utf-8') as f1:
         json.dump(car_ads_to_save, f1, indent=4, ensure_ascii=False)
@@ -135,14 +136,36 @@ def yad2_scrape(querystring: dict, feed_sources, last_page: int = 1):
 
 
 def extract_car_details(feed_item: json):
+    horsepower_value = 'N/A'
+    row2_without_hp = 'N/A'
+    row2 = feed_item.get('row_2', 'N/A')
+
+    # Split the text by lines and process each line
+    match = re.search(r'\((.*?)\)', row2)
+    if match:
+        horsepower_value = match.group(1)
+        horsepower_value = re.search(r'\d+', horsepower_value).group(0)
+        row2_without_hp = re.sub(r'\([^)]*\)', '', row2)
+
+    hand = feed_item.get('Hand_text', 'N/A')
+    if "ראשונה" in hand:
+        hand = 1
+    elif "שניה" in hand:
+        hand = 2
+    elif "שלישית" in hand:
+        hand = 3
+    elif "רביעית" in hand:
+        hand = 4
+
     car_details = {
         'id': feed_item['id'],
         'feed_source': feed_item['feed_source'],
         'city': feed_item.get('city', 'N/A'),
         'manufacturer': feed_item.get('manufacturer_eng', 'N/A'),
-        'car_model': f"{feed_item['model']} {feed_item.get('row_2', 'N/A')}",
+        'car_model': f"{feed_item['model']} {row2_without_hp}",
+        'hp': horsepower_value,
         'year': feed_item['year'],
-        'hand': feed_item['Hand_text'],
+        'hand': hand,
         # 'engine_size': feed_item.get('EngineVal_text', 0),
         'kilometers': feed_item['kilometers'],
         'price': feed_item['price'],
