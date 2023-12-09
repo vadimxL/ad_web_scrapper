@@ -139,7 +139,7 @@ def extract_car_details(feed_item: json):
         'id': feed_item['id'],
         'feed_source': feed_item['feed_source'],
         'city': feed_item.get('city', 'N/A'),
-        'manufacturer': feed_item['manufacturer_eng'],
+        'manufacturer': feed_item.get('manufacturer_eng', 'N/A'),
         'car_model': f"{feed_item['model']} {feed_item.get('row_2', 'N/A')}",
         'year': feed_item['year'],
         'hand': feed_item['Hand_text'],
@@ -178,7 +178,13 @@ def main():
                         "page": "1", "forceLdLoad": "true",
                         "Order": "1", "km": "-1-105000", "year": "2020--1"}
 
-    querystring = kia_niro_2019_2024
+    # https://www.yad2.co.il/vehicles/cars?carFamilyType=2,3,4,5,8,9,10&year=2020-2024&price=95000-135000&km=1000-40000&engineval=1400--1&priceOnly=1&imgOnly=1
+    # construct query from url
+    my_query = {"carFamilyType": "2,3,4,5,8,9,10", "year": "2020-2024", "price": "95000-135000", "km": "1000-40000",
+                "engineval": "1400--1", "priceOnly": "1", "imgOnly": "1"}
+
+    # querystring = kia_niro_2019_2024
+    querystring = my_query
 
     total_items_to_scrape = get_total_items(querystring)
     print(f"Total items to be scraped: {total_items_to_scrape}")
