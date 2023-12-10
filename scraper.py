@@ -1,4 +1,5 @@
 # This is a sample Python script.
+import copy
 from datetime import datetime, timedelta
 import re
 
@@ -93,6 +94,26 @@ def get_total_items(querystring: dict):
     # print(f"Last page: {last_page}")
 
 
+def convert_to_human_readable_date(date: str):
+    date_obj = datetime.strptime(date, "%Y-%m-%dT%H:%M:%S.%fZ")
+    # Format the date as day-month year hour:minute
+    return date_obj.strftime("%d/%m/%Y %H:%M")
+
+
+def convert_list_to_human_readable_date(items: list):
+    # Example of items:
+    # prices = [
+    #     {
+    #         "price": 119500,
+    #         "date": "2023-12-06T08:35:46.531Z"
+    #     },
+    #     # ... (other prices)
+    # ]
+    for item in items:
+        date_str = item['date']
+        item['date'] = convert_to_human_readable_date(date_str)
+
+
 def yad2_scrape(querystring: dict, feed_sources, last_page: int = 1):
     parsed_feed_items = []  # type: list
     filtered_feed_items = []  # type: list
@@ -127,8 +148,8 @@ def yad2_scrape(querystring: dict, feed_sources, last_page: int = 1):
         result_filter = next(filter(lambda x: x['id'] == res['id'], car_ads_to_save), None)
         if result_filter:
             result_filter['prices'] = res['prices']
-            result_filter['dateCreated'] = res['dateCreated']
-
+            convert_list_to_human_readable_date(result_filter['prices'])
+            result_filter['date_created'] = convert_to_human_readable_date(res['dateCreated'])
     # Assuming car_ads_to_save is a list of dictionaries
     manufacturers = set(ad['manufacturer'] for ad in car_ads_to_save)
     if len(manufacturers) == 1:
@@ -142,9 +163,21 @@ def yad2_scrape(querystring: dict, feed_sources, last_page: int = 1):
     with open(filename_json, 'w', encoding='utf-8') as f1:
         json.dump(car_ads_to_save, f1, indent=4, ensure_ascii=False)
 
-    df = pd.json_normalize(car_ads_to_save, ['prices'],
-                           ['id', 'manufacturer', 'car_model', 'year', 'hand',
+    df_history = pd.json_normalize(car_ads_to_save, ['prices'],
+                           ['id','city', 'manufacturer_he', 'car_model', 'year', 'hand',
                             'kilometers', 'current_price', 'updated_at', 'date_added'])
+
+    with open(filename_csv + "_history" + ".csv", 'w') as f:
+        df_history.to_csv(f, index=False, header=True, encoding='utf-8-sig')
+
+    # Make a shallow copy of car_ads_to_save
+    tmp = copy.deepcopy(car_ads_to_save)
+
+    # Remove the 'prices' key from each dictionary in the copied list
+    for ad in tmp:
+        ad.pop('prices', None)
+
+    df = pd.json_normalize(tmp)
 
     with open(filename_csv + ".csv", 'w') as f:
         df.to_csv(f, index=False, header=True, encoding='utf-8-sig')
@@ -153,7 +186,7 @@ def yad2_scrape(querystring: dict, feed_sources, last_page: int = 1):
 
 
 def extract_car_details(feed_item: json):
-    horsepower_value = 'N/A'
+    horsepower_value = 0
     row2_without_hp = 'N/A'
     row2 = feed_item.get('row_2', 'N/A')
 
@@ -174,9 +207,18 @@ def extract_car_details(feed_item: json):
     elif "רביעית" in hand:
         hand = 4
 
+    # Fix the date format
+    parsed_date = datetime.strptime(feed_item['date_added'], "%Y-%m-%d %H:%M:%S")
+    formatted_date = parsed_date.strftime("%d/%m/%Y %H:%M")
+
+    # Get the numeric value of the price
+    # Remove currency symbol and commas
+    price_numeric = int(feed_item['price'].replace('₪', '').replace(',', '').strip())
+
+    mileage_numeric = int(feed_item['kilometers'].replace(',', '').strip())
+
     car_details = {
         'id': feed_item['id'],
-        'feed_source': feed_item['feed_source'],
         'city': feed_item.get('city', 'N/A'),
         'manufacturer_he': feed_item.get('manufacturer', 'N/A'),
         'car_model': f"{feed_item['model']} {row2_without_hp}",
@@ -184,11 +226,12 @@ def extract_car_details(feed_item: json):
         'year': feed_item['year'],
         'hand': hand,
         # 'engine_size': feed_item.get('EngineVal_text', 0),
-        'kilometers': feed_item['kilometers'],
-        'current_price': feed_item['price'],
-        'updated_at': feed_item['updated_at'],
-        'date_added': feed_item['date_added'],
+        'kilometers': mileage_numeric,
+        'current_price': price_numeric,
+        'date_added': formatted_date,
+        'feed_source': feed_item['feed_source'],
         'manufacturer': feed_item.get('manufacturer_eng', 'N/A'),
+        'updated_at': feed_item['updated_at'],
         # 'description': feed_item['search_text']
     }
 
@@ -208,7 +251,9 @@ def main():
     FEED_SOURCES_COMMERCIAL = ['commercial', 'xml']
     FEED_SOURCES_ALL = ['xml', 'commercial', 'private']
 
-    url = "https://www.yad2.co.il/vehicles/cars?carFamilyType=2,3,4,5,8,9,10&year=2020-2024&price=95000-135000&km=1000-40000&engineval=1400--1&priceOnly=1&imgOnly=1"
+    # url = "https://www.yad2.co.il/vehicles/cars?carFamilyType=2,3,4,5,8,9,10&year=2020-2024&price=95000-135000&km=1000-40000&engineval=1400--1&priceOnly=1&imgOnly=1"
+
+    url = "https://www.yad2.co.il/vehicles/cars?carFamilyType=2,3,4,5,8,9,10&hand=-1-2&year=2020-2024&price=50000-135000&km=-1-60000&engineval=1400--1&priceOnly=1&imgOnly=1"
 
     querystring = url_to_querystring(url)
 
