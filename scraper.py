@@ -1,6 +1,9 @@
 # This is a sample Python script.
 from datetime import datetime, timedelta
 import re
+
+import pandas as pd
+
 import database
 import json
 import time
@@ -9,13 +12,14 @@ from rich import print
 from mongoengine import connect, StringField, IntField, EmbeddedDocument
 
 from handz import get_pricing_from_handz
-from normalize_json import normalize_json
 
 manufacturers_dict = {
     "hyundai": "21",
     "kia": "48",
     "seat": "37"
 }
+
+secs_to_sleep = 0.5
 
 
 def scrape(parsed_feed_items: list, querystring, session) -> CachedResponse:
@@ -40,12 +44,12 @@ def scrape(parsed_feed_items: list, querystring, session) -> CachedResponse:
 
     r = session.get(url, data=payload, headers=headers, params=querystring)
 
-    print(
-        r.from_cache,
-        r.created_at,
-        r.expires,
-        r.is_expired,
-    )
+    # print(
+    #     r.from_cache,
+    #     r.created_at,
+    #     r.expires,
+    #     r.is_expired,
+    # )
 
     scraped_page = r.json()
     feed_items = scraped_page['data']['feed']['feed_items']
@@ -65,8 +69,8 @@ def get_first_page(querystring: dict):
     # Use a breakpoint in the code line below to debug your script.
     response = scrape(parsed_feed_items, querystring, session)
     if not response.from_cache:
-        print(f'Not from cache, sleeping for 1 second')
-        time.sleep(1)
+        print(f'Not from cache, sleeping for {secs_to_sleep} second')
+        time.sleep(secs_to_sleep)
 
     with open('json/first_page.json', 'w', encoding='utf-8') as f1:
         json.dump(response.json(), f1, indent=4, ensure_ascii=False)
@@ -95,12 +99,12 @@ def yad2_scrape(querystring: dict, feed_sources, last_page: int = 1):
     car_ads_to_save = []
     session = CachedSession('yad2_cache', backend='sqlite', expire_after=timedelta(hours=3))
     for i in range(1, last_page + 1):
-        print(f'page {i}')
+        print(f'scraping page {i}')
         querystring['page'] = str(i)
         result = scrape(parsed_feed_items, querystring, session)
         if not result.from_cache:
-            print(f'Not from cache, sleeping for 1 second')
-            time.sleep(1)
+            print(f'Not from cache, sleeping for {secs_to_sleep} second')
+            time.sleep(secs_to_sleep)
 
     for item in parsed_feed_items:
         # if item['type'] != 'ad':
@@ -125,13 +129,26 @@ def yad2_scrape(querystring: dict, feed_sources, last_page: int = 1):
             result_filter['prices'] = res['prices']
             result_filter['dateCreated'] = res['dateCreated']
 
-    manufacturer = car_ads_to_save[0]['manufacturer']
+    # Assuming car_ads_to_save is a list of dictionaries
+    manufacturers = set(ad['manufacturer'] for ad in car_ads_to_save)
+    if len(manufacturers) == 1:
+        manufacturer = manufacturers.pop()
+    else:
+        manufacturer = "multiple"
+
     filename_json = f'json/car_ads_{manufacturer}_{"_".join(feed_sources)}_' + datetime.now().strftime(
         "%Y_%m_%d_%H") + '.json'
     filename_csv = f'json/car_ads_{manufacturer}_{"_".join(feed_sources)}_' + datetime.now().strftime("%Y_%m_%d_%H")
     with open(filename_json, 'w', encoding='utf-8') as f1:
         json.dump(car_ads_to_save, f1, indent=4, ensure_ascii=False)
-    normalize_json(car_ads_to_save, filename_csv)
+
+    df = pd.json_normalize(car_ads_to_save, ['prices'],
+                           ['id', 'manufacturer', 'car_model', 'year', 'hand',
+                            'kilometers', 'current_price', 'updated_at', 'date_added'])
+
+    with open(filename_csv + ".csv", 'w') as f:
+        df.to_csv(f, index=False, header=True, encoding='utf-8-sig')
+
     return car_ads_to_save
 
 
@@ -161,20 +178,29 @@ def extract_car_details(feed_item: json):
         'id': feed_item['id'],
         'feed_source': feed_item['feed_source'],
         'city': feed_item.get('city', 'N/A'),
-        'manufacturer': feed_item.get('manufacturer_eng', 'N/A'),
+        'manufacturer_he': feed_item.get('manufacturer', 'N/A'),
         'car_model': f"{feed_item['model']} {row2_without_hp}",
         'hp': horsepower_value,
         'year': feed_item['year'],
         'hand': hand,
         # 'engine_size': feed_item.get('EngineVal_text', 0),
         'kilometers': feed_item['kilometers'],
-        'price': feed_item['price'],
+        'current_price': feed_item['price'],
         'updated_at': feed_item['updated_at'],
-        'date_added': feed_item['date_added']
+        'date_added': feed_item['date_added'],
+        'manufacturer': feed_item.get('manufacturer_eng', 'N/A'),
         # 'description': feed_item['search_text']
     }
 
     return car_details
+
+
+def url_to_querystring(url: str):
+    querystring = {}
+    for param in url.split('?')[1].split('&'):
+        key, value = param.split('=')
+        querystring[key] = value
+    return querystring
 
 
 def main():
@@ -182,32 +208,9 @@ def main():
     FEED_SOURCES_COMMERCIAL = ['commercial', 'xml']
     FEED_SOURCES_ALL = ['xml', 'commercial', 'private']
 
-    hyundai_querystring = {"year": "2020--1", "price": "80000-135000", "km": "500-40000", "hand": "-1-2",
-                           "priceOnly": "1",
-                           "imgOnly": "1", "page": "1", "manufacturer": manufacturers_dict['hyundai'],
-                           "carFamilyType": "10,5", "forceLdLoad": "true"}
+    url = "https://www.yad2.co.il/vehicles/cars?carFamilyType=2,3,4,5,8,9,10&year=2020-2024&price=95000-135000&km=1000-40000&engineval=1400--1&priceOnly=1&imgOnly=1"
 
-    kia_querystring = {"year": "2020--1", "price": "-1-135000", "km": "500-60000", "hand": "-1-2",
-                       "priceOnly": "1", "model": "2829,3484,3223,3866",
-                       "imgOnly": "1", "page": "1", "manufacturer": manufacturers_dict['kia'],
-                       "carFamilyType": "10,5", "forceLdLoad": "true"}
-
-    kia_niro_new_querystring = {"manufacturer": "48", "model": "3484,2829,3866", "year": "2020--1",
-                                "km": "-1-105000"}
-
-    kia_niro_2019_2024 = {"manufacturer": "48", "model": "3484,2829,3866", "year": "2019--1"}
-
-    toyota_chr_query = {"model": "2847", "manufacturer": "19",
-                        "page": "1", "forceLdLoad": "true",
-                        "Order": "1", "km": "-1-105000", "year": "2020--1"}
-
-    # https://www.yad2.co.il/vehicles/cars?carFamilyType=2,3,4,5,8,9,10&year=2020-2024&price=95000-135000&km=1000-40000&engineval=1400--1&priceOnly=1&imgOnly=1
-    # construct query from url
-    my_query = {"carFamilyType": "2,3,4,5,8,9,10", "year": "2020-2024", "price": "95000-135000", "km": "1000-40000",
-                "engineval": "1400--1", "priceOnly": "1", "imgOnly": "1"}
-
-    # querystring = kia_niro_2019_2024
-    querystring = my_query
+    querystring = url_to_querystring(url)
 
     total_items_to_scrape = get_total_items(querystring)
     print(f"Total items to be scraped: {total_items_to_scrape}")
