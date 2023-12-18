@@ -63,8 +63,8 @@ def scrape(parsed_feed_items: list, querystring, session) -> CachedResponse:
 
 
 def get_first_page(querystring: dict):
-    session = CachedSession('yad2_first_page_cache', backend='sqlite',
-                            expire_after=timedelta(hours=3))
+    cache_name = 'yad2_first_page_cache'
+    session = get_cached_session(cache_name)
     querystring['page'] = str(1)
     parsed_feed_items = []  # type: list
     # Use a breakpoint in the code line below to debug your script.
@@ -118,12 +118,13 @@ def yad2_scrape(querystring: dict, feed_sources, last_page: int = 1):
     parsed_feed_items = []  # type: list
     filtered_feed_items = []  # type: list
     car_ads_to_save = []
-    session = CachedSession('yad2_cache', backend='sqlite', expire_after=timedelta(hours=3))
+    cache_name = 'yad2_cache'
+    session = get_cached_session(cache_name)
     for i in range(1, last_page + 1):
-        print(f'scraping page {i}')
         querystring['page'] = str(i)
         result = scrape(parsed_feed_items, querystring, session)
         if not result.from_cache:
+            print(f'scraping page {i}')
             print(f'Not from cache, sleeping for {secs_to_sleep} second')
             time.sleep(secs_to_sleep)
 
@@ -163,12 +164,12 @@ def yad2_scrape(querystring: dict, feed_sources, last_page: int = 1):
     with open(filename_json, 'w', encoding='utf-8') as f1:
         json.dump(car_ads_to_save, f1, indent=4, ensure_ascii=False)
 
-    df_history = pd.json_normalize(car_ads_to_save, ['prices'],
-                           ['id','city', 'manufacturer_he', 'car_model', 'year', 'hand',
-                            'kilometers', 'current_price', 'updated_at', 'date_added'])
-
-    with open(filename_csv + "_history" + ".csv", 'w') as f:
-        df_history.to_csv(f, index=False, header=True, encoding='utf-8-sig')
+    # df_history = pd.json_normalize(car_ads_to_save, ['prices'],
+    #                        ['id','city', 'manufacturer_he', 'car_model', 'year', 'hand',
+    #                         'kilometers', 'current_price', 'updated_at', 'date_added'])
+    #
+    # with open(filename_csv + "_history" + ".csv", 'w') as f:
+    #     df_history.to_csv(f, index=False, header=True, encoding='utf-8-sig')
 
     # Make a shallow copy of car_ads_to_save
     tmp = copy.deepcopy(car_ads_to_save)
@@ -183,6 +184,12 @@ def yad2_scrape(querystring: dict, feed_sources, last_page: int = 1):
         df.to_csv(f, index=False, header=True, encoding='utf-8-sig')
 
     return car_ads_to_save
+
+
+def get_cached_session(cache_name):
+    EXPIRE_AFTER = timedelta(hours=3)
+    session = CachedSession(cache_name, backend='sqlite', expire_after=EXPIRE_AFTER)
+    return session
 
 
 def extract_car_details(feed_item: json):
@@ -217,6 +224,18 @@ def extract_car_details(feed_item: json):
 
     mileage_numeric = int(feed_item['kilometers'].replace(',', '').strip())
 
+    blind_spot = None
+    # Search for the string in the list
+    for item in feed_item['advanced_info']['items'][2]['values']:
+        if "שטח" in item and "מת" in item:
+            blind_spot = item
+
+    smart_cruise_control = None
+    # Search for the string in the list
+    for item in feed_item['advanced_info']['items'][2]['values']:
+        if "שיוט" in item and "אדפטיבית" in item:
+            smart_cruise_control = item
+
     car_details = {
         'id': feed_item['id'],
         'city': feed_item.get('city', 'N/A'),
@@ -234,6 +253,14 @@ def extract_car_details(feed_item: json):
         'updated_at': feed_item['updated_at'],
         # 'description': feed_item['search_text']
     }
+
+    if blind_spot:
+        car_details['blind_spot'] = blind_spot
+
+    if smart_cruise_control:
+        car_details['smart_cruise_control'] = smart_cruise_control
+
+    # car_details['advanced_features'] = feed_item['advanced_info']['items'][2]['values']
 
     return car_details
 
@@ -253,7 +280,9 @@ def main():
 
     # url = "https://www.yad2.co.il/vehicles/cars?carFamilyType=2,3,4,5,8,9,10&year=2020-2024&price=95000-135000&km=1000-40000&engineval=1400--1&priceOnly=1&imgOnly=1"
 
-    url = "https://www.yad2.co.il/vehicles/cars?carFamilyType=2,3,4,5,8,9,10&hand=-1-2&year=2020-2024&price=50000-135000&km=-1-60000&engineval=1400--1&priceOnly=1&imgOnly=1"
+    url = "https://www.yad2.co.il/vehicles/cars?carFamilyType=2,3,4,5,8,9,10&hand=-1-2&year=2020-2024&price=80000-135000&km=-1-60000&engineval=1400--1&priceOnly=1&imgOnly=1"
+
+    # url = "https://www.yad2.co.il/vehicles/cars?carFamilyType=2,3,4,5,8,9,10&manufacturer=36&year=2020-2024&price=80000-135000&km=1000-40000&priceOnly=1&imgOnly=1"
 
     querystring = url_to_querystring(url)
 
