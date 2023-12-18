@@ -1,17 +1,10 @@
-# This is a sample Python script.
-import copy
 from datetime import datetime, timedelta
 import re
-
 import pandas as pd
-
-import database
 import json
 import time
 from requests_cache import CachedSession, CachedResponse
 from rich import print
-from mongoengine import connect, StringField, IntField, EmbeddedDocument
-
 from handz import get_pricing_from_handz
 
 manufacturers_dict = {
@@ -152,7 +145,7 @@ def yad2_scrape(querystring: dict, feed_sources, last_page: int = 1):
             convert_list_to_human_readable_date(result_filter['prices'])
             result_filter['date_created'] = convert_to_human_readable_date(res['dateCreated'])
     # Assuming car_ads_to_save is a list of dictionaries
-    manufacturers = set(ad['manufacturer'] for ad in car_ads_to_save)
+    manufacturers = set(ad['manuf_en'] for ad in car_ads_to_save)
     if len(manufacturers) == 1:
         manufacturer = manufacturers.pop()
     else:
@@ -166,7 +159,7 @@ def yad2_scrape(querystring: dict, feed_sources, last_page: int = 1):
 
     df = pd.json_normalize(car_ads_to_save)
     with open(filename_csv + ".csv", 'w') as f:
-        df.to_csv(f, index=False, header=True, encoding='utf-8-sig')
+        df.to_excel(filename_csv + ".xlsx")
 
     return car_ads_to_save
 
@@ -209,41 +202,25 @@ def extract_car_details(feed_item: json):
 
     mileage_numeric = int(feed_item['kilometers'].replace(',', '').strip())
 
-    blind_spot = None
+    blind_spot = 'N/A'
     # Search for the string in the list
     for item in feed_item['advanced_info']['items'][2]['values']:
         if "שטח" in item and "מת" in item:
             blind_spot = item
 
-    smart_cruise_control = None
+    smart_cruise_control = 'N/A'
     # Search for the string in the list
     for item in feed_item['advanced_info']['items'][2]['values']:
         if "שיוט" in item and "אדפטיבית" in item:
             smart_cruise_control = item
 
-    car_details = {
-        'id': feed_item['id'],
-        'city': feed_item.get('city', 'N/A'),
-        'manufacturer_he': feed_item.get('manufacturer', 'N/A'),
-        'car_model': f"{feed_item['model']} {row2_without_hp}",
-        'hp': horsepower_value,
-        'year': feed_item['year'],
-        'hand': hand,
-        # 'engine_size': feed_item.get('EngineVal_text', 0),
-        'kilometers': mileage_numeric,
-        'current_price': price_numeric,
-        'date_added': formatted_date,
-        'feed_source': feed_item['feed_source'],
-        'manufacturer': feed_item.get('manufacturer_eng', 'N/A'),
-        'updated_at': feed_item['updated_at'],
-        # 'description': feed_item['search_text']
-    }
-
-    if blind_spot:
-        car_details['blind_spot'] = blind_spot
-
-    if smart_cruise_control:
-        car_details['smart_cruise_control'] = smart_cruise_control
+    car_details = {'id': feed_item['id'], 'city': feed_item.get('city', 'N/A'),
+                   'manufacturer_he': feed_item.get('manufacturer', 'N/A'),
+                   'car_model': f"{feed_item['model']} {row2_without_hp}", 'hp': horsepower_value,
+                   'year': feed_item['year'], 'hand': hand, 'kilometers': mileage_numeric,
+                   'current_price': price_numeric, 'date_added': formatted_date, 'blind_spot': blind_spot,
+                   'smart_cruise_control': smart_cruise_control, 'feed_source': feed_item['feed_source'],
+                   'updated_at': feed_item['updated_at'], 'manuf_en': feed_item.get('manufacturer_eng', 'N/A')}
 
     # car_details['advanced_features'] = feed_item['advanced_info']['items'][2]['values']
 
