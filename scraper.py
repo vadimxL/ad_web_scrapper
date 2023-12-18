@@ -144,6 +144,11 @@ def yad2_scrape(querystring: dict, feed_sources, last_page: int = 1):
             result_filter['prices'] = res['prices']
             convert_list_to_human_readable_date(result_filter['prices'])
             result_filter['date_created'] = convert_to_human_readable_date(res['dateCreated'])
+
+    return car_ads_to_save
+
+
+def dump_to_json(car_ads_to_save: list, feed_sources: list):
     # Assuming car_ads_to_save is a list of dictionaries
     manufacturers = set(ad['manuf_en'] for ad in car_ads_to_save)
     if len(manufacturers) == 1:
@@ -151,17 +156,14 @@ def yad2_scrape(querystring: dict, feed_sources, last_page: int = 1):
     else:
         manufacturer = "multiple"
 
-    filename_json = f'json/car_ads_{manufacturer}_{"_".join(feed_sources)}_' + datetime.now().strftime(
-        "%Y_%m_%d_%H") + '.json'
-    filename_csv = f'json/car_ads_{manufacturer}_{"_".join(feed_sources)}_' + datetime.now().strftime("%Y_%m_%d_%H")
+    # time_now = datetime.now().strftime("%Y_%m_%d_%H")
+    time_now = datetime.now().strftime("%d_%m_%Y_%H_%M_%S")
+    filename_json = f'json/car_ads_{manufacturer}_{"_".join(feed_sources)}_' + time_now + '.json'
     with open(filename_json, 'w', encoding='utf-8') as f1:
         json.dump(car_ads_to_save, f1, indent=4, ensure_ascii=False)
 
     df = pd.json_normalize(car_ads_to_save)
-    with open(filename_csv + ".csv", 'w') as f:
-        df.to_excel(filename_csv + ".xlsx")
-
-    return car_ads_to_save
+    df.to_excel(f'json/car_ads_{manufacturer}_{"_".join(feed_sources)}_' + time_now + ".xlsx")
 
 
 def get_cached_session(cache_name):
@@ -239,20 +241,14 @@ def main():
     FEED_SOURCES_PRIVATE = ['private']
     FEED_SOURCES_COMMERCIAL = ['commercial', 'xml']
     FEED_SOURCES_ALL = ['xml', 'commercial', 'private']
-
-    # url = "https://www.yad2.co.il/vehicles/cars?carFamilyType=2,3,4,5,8,9,10&year=2020-2024&price=95000-135000&km=1000-40000&engineval=1400--1&priceOnly=1&imgOnly=1"
-
     url = "https://www.yad2.co.il/vehicles/cars?carFamilyType=2,3,4,5,8,9,10&hand=-1-2&year=2020-2024&price=80000-135000&km=-1-60000&engineval=1400--1&priceOnly=1&imgOnly=1"
-
-    # url = "https://www.yad2.co.il/vehicles/cars?carFamilyType=2,3,4,5,8,9,10&manufacturer=36&year=2020-2024&price=80000-135000&km=1000-40000&priceOnly=1&imgOnly=1"
-
     querystring = url_to_querystring(url)
-
     total_items_to_scrape = get_total_items(querystring)
     print(f"Total items to be scraped: {total_items_to_scrape}")
     last_page = get_number_of_pages(querystring)
-    print(f"Last page: {last_page}")
+    # print(f"Last page: {last_page}")
     car_ads_to_save = yad2_scrape(querystring, feed_sources=FEED_SOURCES_PRIVATE, last_page=last_page)
+    dump_to_json(car_ads_to_save, FEED_SOURCES_PRIVATE)
     # database.init_db()
     # save_to_database(car_ads_to_save)
 
