@@ -164,22 +164,7 @@ def yad2_scrape(querystring: dict, feed_sources, last_page: int = 1):
     with open(filename_json, 'w', encoding='utf-8') as f1:
         json.dump(car_ads_to_save, f1, indent=4, ensure_ascii=False)
 
-    # df_history = pd.json_normalize(car_ads_to_save, ['prices'],
-    #                        ['id','city', 'manufacturer_he', 'car_model', 'year', 'hand',
-    #                         'kilometers', 'current_price', 'updated_at', 'date_added'])
-    #
-    # with open(filename_csv + "_history" + ".csv", 'w') as f:
-    #     df_history.to_csv(f, index=False, header=True, encoding='utf-8-sig')
-
-    # Make a shallow copy of car_ads_to_save
-    tmp = copy.deepcopy(car_ads_to_save)
-
-    # Remove the 'prices' key from each dictionary in the copied list
-    for ad in tmp:
-        ad.pop('prices', None)
-
-    df = pd.json_normalize(tmp)
-
+    df = pd.json_normalize(car_ads_to_save)
     with open(filename_csv + ".csv", 'w') as f:
         df.to_csv(f, index=False, header=True, encoding='utf-8-sig')
 
@@ -216,7 +201,7 @@ def extract_car_details(feed_item: json):
 
     # Fix the date format
     parsed_date = datetime.strptime(feed_item['date_added'], "%Y-%m-%d %H:%M:%S")
-    formatted_date = parsed_date.strftime("%d/%m/%Y %H:%M")
+    formatted_date = parsed_date.strftime("%d/%m/%Y")
 
     # Get the numeric value of the price
     # Remove currency symbol and commas
