@@ -1,11 +1,16 @@
 from datetime import datetime, timedelta
 import re
-import pandas as pd
+from firebase_admin import db
+import firebase_db
 import json
 import time
 from requests_cache import CachedSession, CachedResponse
 from rich import print
 from handz import get_pricing_from_handz
+
+FEED_SOURCES_PRIVATE = ['private']
+FEED_SOURCES_COMMERCIAL = ['commercial', 'xml']
+FEED_SOURCES_ALL = ['xml', 'commercial', 'private']
 
 manufacturers_dict = {
     "hyundai": "21",
@@ -106,6 +111,16 @@ def convert_list_to_human_readable_date(items: list):
         date_str = item['date']
         item['date'] = convert_to_human_readable_date(date_str)
 
+    # Sort the list by date
+    # sorted_data = sorted(items, key=lambda x: x['date'], reverse=True)
+    sorted_data = items
+
+    # Extract date (without hour) and price into a list of tuples
+    data = [(datetime.strptime(entry['date'], '%d/%m/%Y %H:%M').strftime('%d/%m/%Y'), entry['price']) for
+            entry in sorted_data]
+
+    return [f"{date}, {price}" for date, price in data]
+
 
 def yad2_scrape(querystring: dict, feed_sources, last_page: int = 1):
     parsed_feed_items = []  # type: list
@@ -142,32 +157,14 @@ def yad2_scrape(querystring: dict, feed_sources, last_page: int = 1):
         result_filter = next(filter(lambda x: x['id'] == res['id'], car_ads_to_save), None)
         if result_filter:
             result_filter['prices'] = res['prices']
-            convert_list_to_human_readable_date(result_filter['prices'])
+            result_filter['prices'] = convert_list_to_human_readable_date(result_filter['prices'])
             result_filter['date_created'] = convert_to_human_readable_date(res['dateCreated'])
 
-    return car_ads_to_save
-
-
-def dump_to_json(car_ads_to_save: list, feed_sources: list):
-    # Assuming car_ads_to_save is a list of dictionaries
-    manufacturers = set(ad['manuf_en'] for ad in car_ads_to_save)
-    if len(manufacturers) == 1:
-        manufacturer = manufacturers.pop()
-    else:
-        manufacturer = "multiple"
-
-    # time_now = datetime.now().strftime("%Y_%m_%d_%H")
-    time_now = datetime.now().strftime("%d_%m_%Y_%H_%M_%S")
-    filename_json = f'json/car_ads_{manufacturer}_{"_".join(feed_sources)}_' + time_now + '.json'
-    with open(filename_json, 'w', encoding='utf-8') as f1:
-        json.dump(car_ads_to_save, f1, indent=4, ensure_ascii=False)
-
-    df = pd.json_normalize(car_ads_to_save)
-    df.to_excel(f'json/car_ads_{manufacturer}_{"_".join(feed_sources)}_' + time_now + ".xlsx")
+    return car_ads_to_save, filtered_feed_items
 
 
 def get_cached_session(cache_name):
-    EXPIRE_AFTER = timedelta(hours=3)
+    EXPIRE_AFTER = timedelta(hours=24)
     session = CachedSession(cache_name, backend='sqlite', expire_after=EXPIRE_AFTER)
     return session
 
@@ -196,11 +193,21 @@ def extract_car_details(feed_item: json):
 
     # Fix the date format
     parsed_date = datetime.strptime(feed_item['date_added'], "%Y-%m-%d %H:%M:%S")
-    formatted_date = parsed_date.strftime("%d/%m/%Y")
+
+    def excel_date(date1):
+        temp = datetime(1899, 12, 30)  # Note, not 31st Dec but 30th!
+        delta = date1 - temp
+        return float(delta.days) + (float(delta.seconds) / 86400)
+
+    date_added_epoch = int(excel_date(parsed_date))
+    formatted_date = parsed_date.strftime("%-d/%-m/%Y")
 
     # Get the numeric value of the price
     # Remove currency symbol and commas
-    price_numeric = int(feed_item['price'].replace('₪', '').replace(',', '').strip())
+    if 'לא צוין' in feed_item['price']:
+        price_numeric = 0
+    else:
+        price_numeric = int(feed_item['price'].replace('₪', '').replace(',', '').strip())
 
     mileage_numeric = int(feed_item['kilometers'].replace(',', '').strip())
 
@@ -220,7 +227,8 @@ def extract_car_details(feed_item: json):
                    'manufacturer_he': feed_item.get('manufacturer', 'N/A'),
                    'car_model': f"{feed_item['model']} {row2_without_hp}", 'hp': horsepower_value,
                    'year': feed_item['year'], 'hand': hand, 'kilometers': mileage_numeric,
-                   'current_price': price_numeric, 'date_added': formatted_date, 'blind_spot': blind_spot,
+                   'current_price': price_numeric, 'date_added_epoch': date_added_epoch, 'date_added': formatted_date,
+                   'blind_spot': blind_spot,
                    'smart_cruise_control': smart_cruise_control, 'feed_source': feed_item['feed_source'],
                    'updated_at': feed_item['updated_at'], 'manuf_en': feed_item.get('manufacturer_eng', 'N/A')}
 
@@ -237,18 +245,44 @@ def url_to_querystring(url: str):
     return querystring
 
 
+def upsert_car_ad(ad_id, new_data, ref, data: dict):
+    if data and data.get(ad_id):
+        car_ad = data[ad_id]
+        is_changed = False
+        for key, value in car_ad.items():
+            # print which data is changed
+            if value != new_data[key]:
+                print(f"Document {ad_id} has changed: {key} changed from {value} to {new_data[key]}")
+                is_changed = True
+        if is_changed:
+            ref.update({ad_id: new_data})
+            print(f"Document {ad_id} updated successfully!")
+    else:
+        ref.update({ad_id: new_data})
+        print(f"Document {ad_id} created successfully!")
+
 def main():
-    FEED_SOURCES_PRIVATE = ['private']
-    FEED_SOURCES_COMMERCIAL = ['commercial', 'xml']
-    FEED_SOURCES_ALL = ['xml', 'commercial', 'private']
-    url = "https://www.yad2.co.il/vehicles/cars?carFamilyType=2,3,4,5,8,9,10&hand=-1-2&year=2020-2024&price=80000-135000&km=-1-60000&engineval=1400--1&priceOnly=1&imgOnly=1"
+    url_kia_niro_from_2019 = "https://www.yad2.co.il/vehicles/cars?manufacturer=48&model=3866,2829,3484&year=2019--1&km=-1-80000"
+    # url = "https://www.yad2.co.il/vehicles/cars?carFamilyType=2,3,4,5,8,9,10&hand=-1-2&year=2020-2024&price=80000-135000&km=-1-40000&engineval=1400--1&priceOnly=1&imgOnly=1"
+    url = url_kia_niro_from_2019
     querystring = url_to_querystring(url)
     total_items_to_scrape = get_total_items(querystring)
     print(f"Total items to be scraped: {total_items_to_scrape}")
     last_page = get_number_of_pages(querystring)
     # print(f"Last page: {last_page}")
-    car_ads_to_save = yad2_scrape(querystring, feed_sources=FEED_SOURCES_PRIVATE, last_page=last_page)
-    dump_to_json(car_ads_to_save, FEED_SOURCES_PRIVATE)
+    feed_sources = FEED_SOURCES_PRIVATE
+    car_ads_to_save, feed_items = yad2_scrape(querystring, feed_sources=feed_sources, last_page=last_page)
+    # dump_to_json(car_ads_to_save, feed_sources)
+    # dump_to_excel(car_ads_to_save, feed_sources)
+    firebase_db.init_firebase_db()
+    data = db.reference('/car_ads/').get()
+    if data is None:
+        # a dict of dicts in form {car_ad_id: car_ad}
+        print("No data in database, creating new data")
+        db.reference('/car_ads/').set({car_ad['id']: car_ad for car_ad in car_ads_to_save})
+    for car_ad in car_ads_to_save:
+        upsert_car_ad(car_ad['id'], car_ad, db.reference('/car_ads/'), data)
+
     # database.init_db()
     # save_to_database(car_ads_to_save)
 
