@@ -54,15 +54,7 @@ def scrape(parsed_feed_items: list, querystring, session) -> CachedResponse:
 
     print(f"Called from {inspect.stack()[1].function}")
 
-    print(querystring)
-
-    print(
-        r.from_cache,
-        r.created_at,
-        r.expires,
-        r.is_expired,
-    )
-
+    print(f'from cache: {r.from_cache}, created_at: {r.created_at}, expires: {r.expires.strftime()}, is_expired: {r.is_expired}')
     scraped_page = r.json()
     feed_items = scraped_page['data']['feed']['feed_items']
     for feed_item in feed_items:
@@ -91,12 +83,10 @@ def get_first_page(querystring: dict) -> dict:
 
 
 def get_number_of_pages(first_page):
-    # first_page = get_first_page(querystring)
     return first_page['data']['pagination']['last_page']
 
 
 def get_total_items(first_page):
-    # first_page = get_first_page(querystring)
     return first_page['data']['pagination']['total_items']
 
 
