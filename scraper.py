@@ -1,3 +1,4 @@
+import inspect
 from datetime import datetime, timedelta
 import re
 from firebase_admin import db
@@ -7,6 +8,14 @@ import time
 from requests_cache import CachedSession, CachedResponse
 from rich import print
 from handz import get_pricing_from_handz
+
+import logging
+logging.basicConfig(filename='example.log', encoding='utf-8', level=logging.DEBUG)
+logging.debug('This message should go to the log file')
+logging.info('So should this')
+logging.warning('And this, too')
+logging.error('And non-ASCII stuff, too, like Øresund and Malmö')
+
 
 FEED_SOURCES_PRIVATE = ['private']
 FEED_SOURCES_COMMERCIAL = ['commercial', 'xml']
@@ -43,12 +52,16 @@ def scrape(parsed_feed_items: list, querystring, session) -> CachedResponse:
 
     r = session.get(url, data=payload, headers=headers, params=querystring)
 
-    # print(
-    #     r.from_cache,
-    #     r.created_at,
-    #     r.expires,
-    #     r.is_expired,
-    # )
+    print(f"Called from {inspect.stack()[1].function}")
+
+    print(querystring)
+
+    print(
+        r.from_cache,
+        r.created_at,
+        r.expires,
+        r.is_expired,
+    )
 
     scraped_page = r.json()
     feed_items = scraped_page['data']['feed']['feed_items']
@@ -60,7 +73,7 @@ def scrape(parsed_feed_items: list, querystring, session) -> CachedResponse:
     return r
 
 
-def get_first_page(querystring: dict):
+def get_first_page(querystring: dict) -> dict:
     cache_name = 'yad2_first_page_cache'
     session = get_cached_session(cache_name)
     querystring['page'] = str(1)
@@ -71,25 +84,20 @@ def get_first_page(querystring: dict):
         print(f'Not from cache, sleeping for {secs_to_sleep} second')
         time.sleep(secs_to_sleep)
 
-    with open('json/first_page.json', 'w', encoding='utf-8') as f1:
-        json.dump(response.json(), f1, indent=4, ensure_ascii=False)
+    # with open('json/first_page.json', 'w', encoding='utf-8') as f1:
+    #     json.dump(response.json(), f1, indent=4, ensure_ascii=False)
 
     return response.json()
 
 
-def get_number_of_pages(querystring: dict):
-    first_page = get_first_page(querystring)
-    # print(f"Total items to be scraped: {first_page['data']['pagination']['total_items']}")
+def get_number_of_pages(first_page):
+    # first_page = get_first_page(querystring)
     return first_page['data']['pagination']['last_page']
-    # print(f"Last page: {last_page}")
 
 
-def get_total_items(querystring: dict):
-    first_page = get_first_page(querystring)
-    # print(f"Total items to be scraped: {first_page['data']['pagination']['total_items']}")
+def get_total_items(first_page):
+    # first_page = get_first_page(querystring)
     return first_page['data']['pagination']['total_items']
-    # last_page = scraped_page['data']['pagination']['last_page']
-    # print(f"Last page: {last_page}")
 
 
 def convert_to_human_readable_date(date: str):
@@ -164,8 +172,7 @@ def yad2_scrape(querystring: dict, feed_sources, last_page: int = 1):
 
 
 def get_cached_session(cache_name):
-    EXPIRE_AFTER = timedelta(hours=24)
-    session = CachedSession(cache_name, backend='sqlite', expire_after=EXPIRE_AFTER)
+    session = CachedSession(cache_name, backend='sqlite', expire_after=timedelta(hours=12))
     return session
 
 
@@ -252,28 +259,26 @@ def upsert_car_ad(ad_id, new_data, ref, data: dict):
         for key, value in car_ad.items():
             # print which data is changed
             if value != new_data[key]:
-                print(f"Document {ad_id} has changed: {key} changed from {value} to {new_data[key]}")
+                logging.info(f"Document {ad_id} has changed: {key} changed from {value} to {new_data[key]}")
                 is_changed = True
         if is_changed:
             ref.update({ad_id: new_data})
-            print(f"Document {ad_id} updated successfully!")
+            logging.info(f"Document {ad_id} updated successfully!\n")
     else:
         ref.update({ad_id: new_data})
-        print(f"Document {ad_id} created successfully!")
+        logging.info(f"Document {ad_id} created successfully!\n")
 
 def main():
     url_kia_niro_from_2019 = "https://www.yad2.co.il/vehicles/cars?manufacturer=48&model=3866,2829,3484&year=2019--1&km=-1-80000"
     # url = "https://www.yad2.co.il/vehicles/cars?carFamilyType=2,3,4,5,8,9,10&hand=-1-2&year=2020-2024&price=80000-135000&km=-1-40000&engineval=1400--1&priceOnly=1&imgOnly=1"
     url = url_kia_niro_from_2019
     querystring = url_to_querystring(url)
-    total_items_to_scrape = get_total_items(querystring)
+    first_page = get_first_page(querystring)
+    total_items_to_scrape = get_total_items(first_page)
     print(f"Total items to be scraped: {total_items_to_scrape}")
-    last_page = get_number_of_pages(querystring)
-    # print(f"Last page: {last_page}")
+    last_page = get_number_of_pages(first_page)
     feed_sources = FEED_SOURCES_PRIVATE
     car_ads_to_save, feed_items = yad2_scrape(querystring, feed_sources=feed_sources, last_page=last_page)
-    # dump_to_json(car_ads_to_save, feed_sources)
-    # dump_to_excel(car_ads_to_save, feed_sources)
     firebase_db.init_firebase_db()
     data = db.reference('/car_ads/').get()
     if data is None:
