@@ -5,7 +5,7 @@ from firebase_admin import db
 
 def init_firebase_db():
     databaseURL = "https://carscraper-d91d9-default-rtdb.firebaseio.com/"
-    cred = credentials.Certificate("firebase_admin_key.json")
+    cred = credentials.Certificate("chukmuk.json")
     default_app = firebase_admin.initialize_app(cred, {
         'databaseURL': databaseURL
     })

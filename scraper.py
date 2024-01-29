@@ -10,12 +10,13 @@ from rich import print
 from handz import get_pricing_from_handz
 
 import logging
-logging.basicConfig(filename='example.log', encoding='utf-8', level=logging.DEBUG)
-logging.debug('This message should go to the log file')
-logging.info('So should this')
-logging.warning('And this, too')
-logging.error('And non-ASCII stuff, too, like Øresund and Malmö')
 
+logging.basicConfig(
+    filename='example.log',
+    format='%(asctime)s %(levelname)-8s %(message)s',
+    level=logging.INFO,
+    datefmt='%Y-%m-%d %H:%M:%S',
+    encoding='utf-8')
 
 FEED_SOURCES_PRIVATE = ['private']
 FEED_SOURCES_COMMERCIAL = ['commercial', 'xml']
@@ -52,9 +53,10 @@ def scrape(parsed_feed_items: list, querystring, session) -> CachedResponse:
 
     r = session.get(url, data=payload, headers=headers, params=querystring)
 
-    print(f"Called from {inspect.stack()[1].function}")
+    if r.from_cache:
+        logging.info(f'created_at: {r.created_at.strftime("%H:%M")}, expires: {r.expires.strftime("%H:%M")}, '
+                     f'page: {querystring.get("page")}')
 
-    print(f'from cache: {r.from_cache}, created_at: {r.created_at}, expires: {r.expires.strftime()}, is_expired: {r.is_expired}')
     scraped_page = r.json()
     feed_items = scraped_page['data']['feed']['feed_items']
     for feed_item in feed_items:
@@ -258,18 +260,59 @@ def upsert_car_ad(ad_id, new_data, ref, data: dict):
         ref.update({ad_id: new_data})
         logging.info(f"Document {ad_id} created successfully!\n")
 
-def main():
-    url_kia_niro_from_2019 = "https://www.yad2.co.il/vehicles/cars?manufacturer=48&model=3866,2829,3484&year=2019--1&km=-1-80000"
-    # url = "https://www.yad2.co.il/vehicles/cars?carFamilyType=2,3,4,5,8,9,10&hand=-1-2&year=2020-2024&price=80000-135000&km=-1-40000&engineval=1400--1&priceOnly=1&imgOnly=1"
-    url = url_kia_niro_from_2019
-    querystring = url_to_querystring(url)
+
+def get_model(manufacturer_id: str):
+    session = CachedSession('yad2_model_cache', backend='sqlite', expire_after=timedelta(hours=48))
+    url = f"https://gw.yad2.co.il/search-options/vehicles/cars?fields=model&manufacturer={manufacturer_id}"
+
+    print(url)
+
+    payload = {}
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:121.0) Gecko/20100101 Firefox/121.0',
+        'Accept': 'application/json, text/plain, */*',
+        'Accept-Language': 'en-US,en;q=0.5',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Sec-Fetch-Dest': 'empty',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Site': 'same-site',
+        'Cookie': 'leadSaleRentFree=67; y2018-2-cohort=23; __uzma=3c4eec9f-8a37-4503-a6c9-191eba2c7735; '
+                  '__uzmb=1691219274; __uzmc=299333711915; __uzmd=1704738443; __uzme=5919'
+    }
+    response = session.get(url, headers=headers, data=payload, timeout=10)
+    return response.json()
+
+
+def get_search_options():
+    session = CachedSession('yad2_search_options_cache', backend='sqlite', expire_after=timedelta(hours=48))
+    url = ("https://gw.yad2.co.il/search-options/vehicles/cars?fields=manufacturer,year,area,km,ownerID,seats,"
+           "engineval,engineType,group_color,gearBox")
+
+    payload = {}
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:121.0) Gecko/20100101 Firefox/121.0',
+        'Accept': 'application/json, text/plain, */*',
+        'Accept-Language': 'en-US,en;q=0.5',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Sec-Fetch-Dest': 'empty',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Site': 'same-site',
+        'Cookie': 'leadSaleRentFree=67; y2018-2-cohort=23; __uzma=3c4eec9f-8a37-4503-a6c9-191eba2c7735; '
+                  '__uzmb=1691219274; __uzmc=394906189046; __uzmd=1704737848; __uzme=5919'
+    }
+
+    response = session.get(url, headers=headers, data=payload, timeout=10)
+    return response.json()
+
+
+def main(querystring):
     first_page = get_first_page(querystring)
     total_items_to_scrape = get_total_items(first_page)
     print(f"Total items to be scraped: {total_items_to_scrape}")
     last_page = get_number_of_pages(first_page)
     feed_sources = FEED_SOURCES_PRIVATE
     car_ads_to_save, feed_items = yad2_scrape(querystring, feed_sources=feed_sources, last_page=last_page)
-    firebase_db.init_firebase_db()
+    # firebase_db.init_firebase_db()
     data = db.reference('/car_ads/').get()
     if data is None:
         # a dict of dicts in form {car_ad_id: car_ad}
@@ -277,10 +320,16 @@ def main():
         db.reference('/car_ads/').set({car_ad['id']: car_ad for car_ad in car_ads_to_save})
     for car_ad in car_ads_to_save:
         upsert_car_ad(car_ad['id'], car_ad, db.reference('/car_ads/'), data)
+    return data
 
     # database.init_db()
     # save_to_database(car_ads_to_save)
 
 
 if __name__ == '__main__':
-    main()
+    firebase_db.init_firebase_db()
+    url_kia_niro_from_2019 = "https://www.yad2.co.il/vehicles/cars?manufacturer=48&model=3866,2829,3484&year=2019--1&km=-1-80000"
+    # url = "https://www.yad2.co.il/vehicles/cars?carFamilyType=2,3,4,5,8,9,10&hand=-1-2&year=2020-2024&price=80000-135000&km=-1-40000&engineval=1400--1&priceOnly=1&imgOnly=1"
+    q = url_to_querystring(url_kia_niro_from_2019)
+    logging.info(f"querystring: {q}")
+    main(q)
