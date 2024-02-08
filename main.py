@@ -2,21 +2,15 @@ import hashlib
 import logging
 from typing import Union, List, Annotated
 from urllib import parse
-
 from pydantic import BaseModel
 from starlette.middleware.cors import CORSMiddleware
-
 import firebase_db
 import json
 from starlette.staticfiles import StaticFiles
-from fastapi import FastAPI, Query
-from fastapi.templating import Jinja2Templates
-import pathlib
+from fastapi import FastAPI
+
 import models
 import scraper
-
-BASE_DIR = pathlib.Path(__file__).resolve().parent
-TEMPLATE_DIR = BASE_DIR / "templates"
 
 app = FastAPI()
 
@@ -29,7 +23,6 @@ app.add_middleware(
     allow_headers=["*"],  # You can specify specific headers if needed
 )
 
-templates = Jinja2Templates(directory=TEMPLATE_DIR)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 url_to_scrape = "https://www.yad2.co.il/vehicles/cars?manufacturer=48&model=3866,2829,3484&year=2019--1&km=-1-80000"
