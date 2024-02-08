@@ -23,8 +23,6 @@ app.add_middleware(
     allow_headers=["*"],  # You can specify specific headers if needed
 )
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
-
 url_to_scrape = "https://www.yad2.co.il/vehicles/cars?manufacturer=48&model=3866,2829,3484&year=2019--1&km=-1-80000"
 
 # Replace this with your actual data source or logic
