@@ -1,4 +1,5 @@
 import hashlib
+import logging
 from typing import Union, List, Annotated
 from urllib import parse
 
@@ -52,14 +53,15 @@ def startup_event():
 
 @app.get("/manufacturers")
 async def get_manufacturers():
+    logging.info(f"Getting manufacturer list")
     return manufacturers_list
 
 
 @app.get("/models/{manufacturer}")
 async def get_models(manufacturer: str):
-    print(manufacturer)
+    logging.info(manufacturer)
     res = scraper.get_model(manufacturer)['data']['model']
-    print(res)
+    logging.info(res)
     return res
 
 
@@ -130,11 +132,12 @@ class Range(BaseModel):
 
 class Item(BaseModel):
     id: int
-    manufacturer: int
-    model: list
+    email: str
+    manufacturers: list
+    models: list
     year_range: Range
-    price_range: Range
     mileage_range: Range
+    price_range: Range
 
 
 items = []
@@ -142,11 +145,13 @@ items = []
 
 @app.get("/items", response_model=List[Item])
 async def read_items():
+    logging.info(f"Getting items: {items}")
     return items
 
 
 @app.post("/items", response_model=Item)
 async def create_item(item: Item):
+    logging.info(f"Creating item {item}")
     items.append(item)
     return item
 
@@ -161,9 +166,3 @@ async def update_item(item_id: int, item: Item):
 async def delete_item(item_id: int):
     del items[item_id]
     return {"message": "Item deleted"}
-
-
-@app.get("/tasks")
-async def root():
-    tasks = models.Task.objects.all()
-    return json.loads(tasks.to_json())

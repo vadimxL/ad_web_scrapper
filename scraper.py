@@ -280,6 +280,11 @@ def get_model(manufacturer_id: str):
                   '__uzmb=1691219274; __uzmc=299333711915; __uzmd=1704738443; __uzme=5919'
     }
     response = session.get(url, headers=headers, data=payload, timeout=10)
+    if response.from_cache:
+        logging.info(f'get_model, created_at: {response.created_at.strftime("%H:%M")}, '
+                     f'expires: {response.expires.strftime("%H:%M")}')
+    else:
+        logging.info(f'Not from cache')
     return response.json()
 
 
