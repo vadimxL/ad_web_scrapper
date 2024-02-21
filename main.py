@@ -1,12 +1,11 @@
 import hashlib
 import logging
-from typing import Union, List, Annotated
+from typing import List
 from urllib import parse
 from pydantic import BaseModel
 from starlette.middleware.cors import CORSMiddleware
 import firebase_db
 import json
-from starlette.staticfiles import StaticFiles
 from fastapi import FastAPI
 
 import models
@@ -54,14 +53,6 @@ async def get_models(manufacturer: str):
     res = scraper.get_model(manufacturer)['data']['model']
     logging.info(res)
     return res
-
-
-# @app.get("/models/{manufacturer}")
-# async def get_models(manufacturer: str):
-#     if manufacturer in models_data:
-#         return {"models": models_data[manufacturer]}
-#     else:
-#         return {"models": []}
 
 
 @app.get("/ads")
