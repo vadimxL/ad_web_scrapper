@@ -108,8 +108,8 @@ async def read_items(manufacturer: str = '48', model: str | None = None, year: s
 # url_to_scrape = "https://www.yad2.co.il/vehicles/cars?manufacturer=48&model=3866,2829,3484&year=2019--1&km=-1-80000"
 
 class Range(BaseModel):
-    min: int
-    max: int
+    min: str
+    max: str
 
 
 class Item(BaseModel):
