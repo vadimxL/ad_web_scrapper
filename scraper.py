@@ -18,6 +18,9 @@ logging.basicConfig(
     datefmt='%Y-%m-%d %H:%M:%S',
     encoding='utf-8')
 
+
+KIA_NIRO_QUERYSTRING = "https://www.yad2.co.il/vehicles/cars?manufacturer=48&model=3866,2829,3484&year=2019--1&km=-1-80000"
+
 FEED_SOURCES_PRIVATE = ['private']
 FEED_SOURCES_COMMERCIAL = ['commercial', 'xml']
 FEED_SOURCES_ALL = ['xml', 'commercial', 'private']
@@ -26,6 +29,12 @@ manufacturers_dict = {
     "hyundai": "21",
     "kia": "48",
     "seat": "37"
+}
+
+num_to_manuf_dict = {
+    "21": "hyundai",
+    "48": "kia",
+    "37": "seat"
 }
 
 secs_to_sleep = 0.5
@@ -310,6 +319,10 @@ def get_search_options():
     return response.json()
 
 
+def db_path_querystring(querystring):
+    return f'/car_ads/{num_to_manuf_dict[querystring["manufacturer"]]}/{querystring["model"]}/{querystring["year"]}/{querystring["km"]}'
+
+
 def main(querystring):
     first_page = get_first_page(querystring)
     total_items_to_scrape = get_total_items(first_page)
@@ -318,13 +331,30 @@ def main(querystring):
     feed_sources = FEED_SOURCES_PRIVATE
     car_ads_to_save, feed_items = yad2_scrape(querystring, feed_sources=feed_sources, last_page=last_page)
     # firebase_db.init_firebase_db()
-    data = db.reference('/car_ads/').get()
+    manuf = num_to_manuf_dict[querystring['manufacturer']]
+    db_path = db_path_querystring(querystring)
+    ref = db.reference(db_path)
+
+    data: dict = ref.get()
     if data is None:
         # a dict of dicts in form {car_ad_id: car_ad}
         print("No data in database, creating new data")
-        db.reference('/car_ads/').set({car_ad['id']: car_ad for car_ad in car_ads_to_save})
+        db.reference(db_path).set({car_ad['id']: car_ad for car_ad in car_ads_to_save})
+
     for car_ad in car_ads_to_save:
-        upsert_car_ad(car_ad['id'], car_ad, db.reference('/car_ads/'), data)
+        upsert_car_ad(car_ad['id'], car_ad, ref, data)
+
+    data = ref.get(shallow=True)
+    if data:
+        car_ads = {d.pop('id'): d for d in car_ads_to_save}
+        for key, value in data.items():
+            if key not in car_ads:
+                logging.info(f"car id {key} is sold!")
+                # db.reference('/car_ads/').child(key).delete()
+            else:
+                logging.info(f"car id {key} still selling,  {car_ads[key]['prices'], car_ads[key]['date_created']} "
+                             f"{car_ads[key]['updated_at']} {car_ads[key]['current_price']} {car_ads[key]['kilometers']} ")
+
     return data
 
     # database.init_db()
@@ -333,8 +363,7 @@ def main(querystring):
 
 if __name__ == '__main__':
     firebase_db.init_firebase_db()
-    url_kia_niro_from_2019 = "https://www.yad2.co.il/vehicles/cars?manufacturer=48&model=3866,2829,3484&year=2019--1&km=-1-80000"
     # url = "https://www.yad2.co.il/vehicles/cars?carFamilyType=2,3,4,5,8,9,10&hand=-1-2&year=2020-2024&price=80000-135000&km=-1-40000&engineval=1400--1&priceOnly=1&imgOnly=1"
-    q = url_to_querystring(url_kia_niro_from_2019)
+    q = url_to_querystring(KIA_NIRO_QUERYSTRING)
     logging.info(f"querystring: {q}")
     main(q)

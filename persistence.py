@@ -4,7 +4,7 @@ import firebase_db
 import json
 from datetime import datetime, timedelta
 
-from scraper import FEED_SOURCES_PRIVATE
+from scraper import FEED_SOURCES_PRIVATE, db_path_querystring, KIA_NIRO_QUERYSTRING, url_to_querystring
 
 
 def dump_to_json(car_ads_to_save: dict, feed_sources: list):
@@ -43,14 +43,15 @@ def dump_to_excel(car_ads_to_save: dict, feed_sources: list):
     df.to_excel(f'excel/car_ads_{manufacturer}_{"_".join(feed_sources)}_' + time_now + ".xlsx")
 
 
-def get_car_ads_from_db():
+def get_car_ads_from_db(db_name='car_ads') -> dict:
     firebase_db.init_firebase_db()
-    return db.reference('/car_ads/').get()
+    return db.reference(db_name).get()
 
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    car_ads = get_car_ads_from_db()
+    q = url_to_querystring(KIA_NIRO_QUERYSTRING)
+    car_ads = get_car_ads_from_db(db_name=db_path_querystring(q))
     feed_sources = FEED_SOURCES_PRIVATE
-    dump_to_json(car_ads, feed_sources)
+    # dump_to_json(car_ads, feed_sources)
     dump_to_excel(car_ads, feed_sources)
