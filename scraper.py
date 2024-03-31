@@ -323,6 +323,7 @@ def db_path_querystring(querystring):
     return f'/car_ads/{num_to_manuf_dict[querystring["manufacturer"]]}/{querystring["model"]}/{querystring["year"]}/{querystring["km"]}'
 
 
+
 def main(querystring):
     first_page = get_first_page(querystring)
     total_items_to_scrape = get_total_items(first_page)
@@ -344,21 +345,32 @@ def main(querystring):
     for car_ad in car_ads_to_save:
         upsert_car_ad(car_ad['id'], car_ad, ref, data)
 
-    data = ref.get(shallow=True)
-    if data:
-        car_ads = {d.pop('id'): d for d in car_ads_to_save}
-        for key, value in data.items():
-            if key not in car_ads:
-                logging.info(f"car id {key} is sold!")
-                # db.reference('/car_ads/').child(key).delete()
-            else:
-                logging.info(f"car id {key} still selling,  {car_ads[key]['prices'], car_ads[key]['date_created']} "
-                             f"{car_ads[key]['updated_at']} {car_ads[key]['current_price']} {car_ads[key]['kilometers']} ")
-
+    data = handle_sold_cars(car_ads_to_save, data, db_path, ref)
     return data
 
     # database.init_db()
     # save_to_database(car_ads_to_save)
+
+
+def handle_sold_cars(scraped_car_ads, car_ads_db, db_path, ref):
+    sold_cars = []
+    car_ads_db = ref.get(shallow=True)
+    if car_ads_db:
+        car_ads = {d.pop('id'): d for d in scraped_car_ads}
+        for key, value in car_ads_db.items():
+            if key not in car_ads:
+                car_ad_db: dict = ref.child(key).get()
+                sold_car = {"id": car_ad_db['id'],
+                            'price_history': car_ad_db['prices'], 'km': car_ad_db['kilometers'],
+                            'year': car_ad_db['year'], 'hand': car_ad_db['hand']}
+                logging.info(f"sold car: {json.dumps(sold_car, ensure_ascii=False)}")
+                sold_cars.append(car_ad_db)
+
+        # add sold cars to a separate list
+        db_path_for_sold = f'/sold_cars{db_path}'
+        db.reference(db_path_for_sold).set({car_ad['id']: car_ad for car_ad in sold_cars})
+        # db.reference('/car_ads/').child(key).delete()
+    return car_ads_db
 
 
 if __name__ == '__main__':
