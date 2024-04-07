@@ -1,3 +1,4 @@
+import asyncio
 import inspect
 from datetime import datetime, timedelta
 import re
@@ -5,7 +6,9 @@ from firebase_admin import db
 import firebase_db
 import json
 import time
-from requests_cache import CachedSession, CachedResponse
+# from requests_cache import CachedSession, CachedResponse
+from aiohttp_client_cache import CachedSession, SQLiteBackend, CachedResponse
+
 from rich import print
 from handz import get_pricing_from_handz
 
@@ -17,7 +20,6 @@ logging.basicConfig(
     level=logging.INFO,
     datefmt='%Y-%m-%d %H:%M:%S',
     encoding='utf-8')
-
 
 KIA_NIRO_QUERYSTRING = "https://www.yad2.co.il/vehicles/cars?manufacturer=48&model=3866,2829,3484&year=2019--1&km=-1-80000"
 
@@ -31,6 +33,8 @@ manufacturers_dict = {
     "seat": "37"
 }
 
+session = CachedSession(cache=SQLiteBackend('demo_cache'), expire_after=timedelta(hours=2))
+
 num_to_manuf_dict = {
     "21": "hyundai",
     "48": "kia",
@@ -40,7 +44,7 @@ num_to_manuf_dict = {
 secs_to_sleep = 0.5
 
 
-def scrape(parsed_feed_items: list, querystring, session) -> CachedResponse:
+async def scrape(querystring: dict) -> CachedResponse:
     url = "https://gw.yad2.co.il/feed-search-legacy/vehicles/cars"
 
     payload = ""
@@ -60,37 +64,34 @@ def scrape(parsed_feed_items: list, querystring, session) -> CachedResponse:
         "Sec-Fetch-Site": "same-site"
     }
 
-    r = session.get(url, data=payload, headers=headers, params=querystring)
+    r = await session.get(url, data=payload, headers=headers, params=querystring)
 
     if r.from_cache:
-        logging.info(f'created_at: {r.created_at.strftime("%H:%M")}, expires: {r.expires.strftime("%H:%M")}, '
+        logging.info(f'created_at: {r.created_at.strftime("%H:%M")}, '
                      f'page: {querystring.get("page")}')
-
-    scraped_page = r.json()
-    feed_items = scraped_page['data']['feed']['feed_items']
-    for feed_item in feed_items:
-        # car_details = extract_car_details(feed_item)
-        car_details = dict(sorted(feed_item.items()))
-        parsed_feed_items.append(car_details)
 
     return r
 
 
-def get_first_page(querystring: dict) -> dict:
-    cache_name = 'yad2_first_page_cache'
-    session = get_cached_session(cache_name)
+async def get_first_page(querystring: dict) -> dict:
     querystring['page'] = str(1)
-    parsed_feed_items = []  # type: list
     # Use a breakpoint in the code line below to debug your script.
-    response = scrape(parsed_feed_items, querystring, session)
-    if not response.from_cache:
+    tasks = []
+    scrape_task = asyncio.create_task(scrape(querystring))
+    tasks.append(scrape_task)
+
+    # Wait for all tasks to complete
+    response = await asyncio.gather(*tasks)
+
+    if not response[0].from_cache:
         print(f'Not from cache, sleeping for {secs_to_sleep} second')
         time.sleep(secs_to_sleep)
 
     # with open('json/first_page.json', 'w', encoding='utf-8') as f1:
     #     json.dump(response.json(), f1, indent=4, ensure_ascii=False)
 
-    return response.json()
+    json_response = await response[0].json()
+    return json_response
 
 
 def get_number_of_pages(first_page):
@@ -131,19 +132,36 @@ def convert_list_to_human_readable_date(items: list):
     return [f"{date}, {price}" for date, price in data]
 
 
-def yad2_scrape(querystring: dict, feed_sources, last_page: int = 1):
-    parsed_feed_items = []  # type: list
+async def yad2_scrape(querystring: dict, feed_sources, last_page: int = 1):
     filtered_feed_items = []  # type: list
+    parsed_feed_items = []
     car_ads_to_save = []
-    cache_name = 'yad2_cache'
-    session = get_cached_session(cache_name)
+    tasks = []
+
+    async for url in session.cache.get_urls():
+        logging.info(f"cached url: {url}")
+
     for i in range(1, last_page + 1):
         querystring['page'] = str(i)
-        result = scrape(parsed_feed_items, querystring, session)
-        if not result.from_cache:
-            print(f'scraping page {i}')
+        task = asyncio.create_task(scrape(querystring.copy()))
+        tasks.append(task)
+        # result = scrape(querystring, session)
+
+    pages = await asyncio.gather(*tasks)
+
+    await session.close()
+
+    for page in pages:
+        if not page.from_cache:
             print(f'Not from cache, sleeping for {secs_to_sleep} second')
             time.sleep(secs_to_sleep)
+
+        scraped_page = await page.json()
+        feed_items = scraped_page['data']['feed']['feed_items']
+        for feed_item in feed_items:
+            # car_details = extract_car_details(feed_item)
+            car_details = dict(sorted(feed_item.items()))
+            parsed_feed_items.append(car_details)
 
     for item in parsed_feed_items:
         # if item['type'] != 'ad':
@@ -170,11 +188,6 @@ def yad2_scrape(querystring: dict, feed_sources, last_page: int = 1):
             result_filter['date_created'] = convert_to_human_readable_date(res['dateCreated'])
 
     return car_ads_to_save, filtered_feed_items
-
-
-def get_cached_session(cache_name):
-    session = CachedSession(cache_name, backend='sqlite', expire_after=timedelta(hours=12))
-    return session
 
 
 def extract_car_details(feed_item: json):
@@ -323,14 +336,13 @@ def db_path_querystring(querystring):
     return f'/car_ads/{num_to_manuf_dict[querystring["manufacturer"]]}/{querystring["model"]}/{querystring["year"]}/{querystring["km"]}'
 
 
-
-def main(querystring):
-    first_page = get_first_page(querystring)
+async def main(querystring):
+    first_page = await get_first_page(querystring)
     total_items_to_scrape = get_total_items(first_page)
     print(f"Total items to be scraped: {total_items_to_scrape}")
     last_page = get_number_of_pages(first_page)
     feed_sources = FEED_SOURCES_PRIVATE
-    car_ads_to_save, feed_items = yad2_scrape(querystring, feed_sources=feed_sources, last_page=last_page)
+    car_ads_to_save, feed_items = await yad2_scrape(querystring, feed_sources=feed_sources, last_page=last_page)
     # firebase_db.init_firebase_db()
     manuf = num_to_manuf_dict[querystring['manufacturer']]
     db_path = db_path_querystring(querystring)
@@ -345,18 +357,18 @@ def main(querystring):
     for car_ad in car_ads_to_save:
         upsert_car_ad(car_ad['id'], car_ad, ref, data)
 
-    data = handle_sold_cars(car_ads_to_save, data, db_path, ref)
+    data = handle_sold_items(car_ads_to_save, data, db_path, ref)
     return data
 
     # database.init_db()
     # save_to_database(car_ads_to_save)
 
 
-def handle_sold_cars(scraped_car_ads, car_ads_db, db_path, ref):
-    sold_cars = []
+def handle_sold_items(scraped_car_ads: list[dict], car_ads_db: dict, db_path: str, ref):
+    sold_items = []
     car_ads_db = ref.get(shallow=True)
+    car_ads: dict = {d.pop('id'): d for d in scraped_car_ads}
     if car_ads_db:
-        car_ads = {d.pop('id'): d for d in scraped_car_ads}
         for key, value in car_ads_db.items():
             if key not in car_ads:
                 car_ad_db: dict = ref.child(key).get()
@@ -364,12 +376,19 @@ def handle_sold_cars(scraped_car_ads, car_ads_db, db_path, ref):
                             'price_history': car_ad_db['prices'], 'km': car_ad_db['kilometers'],
                             'year': car_ad_db['year'], 'hand': car_ad_db['hand']}
                 logging.info(f"sold car: {json.dumps(sold_car, ensure_ascii=False)}")
-                sold_cars.append(car_ad_db)
+                sold_items.append(car_ad_db)
 
         # add sold cars to a separate list
         db_path_for_sold = f'/sold_cars{db_path}'
-        db.reference(db_path_for_sold).set({car_ad['id']: car_ad for car_ad in sold_cars})
-        # db.reference('/car_ads/').child(key).delete()
+        try:
+            db.reference(db_path_for_sold).update({car_ad['id']: car_ad for car_ad in sold_items})
+        except ValueError as e:
+            logging.error(f"Error adding sold cars to db: {e}")
+
+        # remove from main db, for next time
+        for item in sold_items:
+            logging.info(f"removing item {item['id']} from main db")
+            db.reference(db_path).child(item['id']).delete()
     return car_ads_db
 
 
@@ -378,4 +397,4 @@ if __name__ == '__main__':
     # url = "https://www.yad2.co.il/vehicles/cars?carFamilyType=2,3,4,5,8,9,10&hand=-1-2&year=2020-2024&price=80000-135000&km=-1-40000&engineval=1400--1&priceOnly=1&imgOnly=1"
     q = url_to_querystring(KIA_NIRO_QUERYSTRING)
     logging.info(f"querystring: {q}")
-    main(q)
+    asyncio.run(main(q))
