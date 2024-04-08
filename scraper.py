@@ -1,4 +1,5 @@
 import asyncio
+import sys
 from datetime import datetime, timedelta
 import re
 from firebase_admin import db
@@ -14,6 +15,8 @@ from handz import get_pricing_from_handz
 
 import logging
 
+logging.getLogger(__name__).addHandler(logging.StreamHandler(stream=sys.stdout))
+logger = logging.getLogger(__name__)
 logging.basicConfig(
     filename='example.log',
     format='%(asctime)s %(levelname)-8s %(message)s',
@@ -22,8 +25,9 @@ logging.basicConfig(
     encoding='utf-8')
 
 urls = [
-    "https://www.yad2.co.il/vehicles/cars?manufacturer=48&model=3866,2829,3484&year=2019--1&km=-1-80000",
-    "https://www.yad2.co.il/vehicles/cars?carFamilyType=10,5&year=2020--1&price=-1-130000&km=-1-60000&hand=-1-2&priceOnly=1&imgOnly=1" # ~1500 ads
+    "https://www.yad2.co.il/vehicles/cars?manufacturer=48&model=3866,2829,3484&year=2019--1&km=-1-80000",  # Kia Niro
+    "https://www.yad2.co.il/vehicles/cars?manufacturer=27&model=2333&year=2020--1&km=-1-100000",  # Mazda CX-5
+    "https://www.yad2.co.il/vehicles/cars?manufacturer=37&model=2842&year=2020--1&km=-1-100000"  # Seat Ateca
 ]
 
 FEED_SOURCES_PRIVATE = ['private']
@@ -33,13 +37,15 @@ FEED_SOURCES_ALL = ['xml', 'commercial', 'private']
 manufacturers_dict = {
     "hyundai": "21",
     "kia": "48",
-    "seat": "37"
+    "seat": "37",
+    "mazda": "27"
 }
 
 num_to_manuf_dict = {
     "21": "hyundai",
     "48": "kia",
-    "37": "seat"
+    "37": "seat",
+    "27": "mazda"
 }
 
 secs_to_sleep = 0.5
@@ -76,8 +82,8 @@ class Scraper:
             r = await session.get(url, data=payload, headers=headers, params=q)
 
         if r.from_cache:
-            logging.info(f'created_at: {r.created_at.strftime("%H:%M")}, '
-                         f'page: {q.get("page")}')
+            logger.info(f'cache created_at: {r.created_at.strftime("%H:%M")} for page: {q.get("page")}, '
+                        f'query: {q}')
 
         return r
 
@@ -245,14 +251,14 @@ class Scraper:
             for key, value in car_ad.items():
                 # print which data is changed
                 if value != new_data[key]:
-                    logging.info(f"Document {ad_id} has changed: {key} changed from {value} to {new_data[key]}")
+                    logger.info(f"Document {ad_id} has changed: {key} changed from {value} to {new_data[key]}")
                     is_changed = True
             if is_changed:
                 ref.update({ad_id: new_data})
-                logging.info(f"Document is changed, {ad_id} updated successfully!")
+                logger.info(f"Document is changed, {ad_id} updated successfully!")
         else:
             ref.update({ad_id: new_data})
-            logging.info(f"Document {ad_id} created successfully!")
+            logger.info(f"Document {ad_id} created successfully!")
 
     async def get_model(self, manufacturer_id: str):
         # session = CachedSession('yad2_model_cache', backend='sqlite', expire_after=timedelta(hours=48))
@@ -275,10 +281,10 @@ class Scraper:
         async with CachedSession(cache=self.cache, expire_after=timedelta(hours=48)) as session:
             response = session.get(url, headers=headers, data=payload, timeout=10)
         if response.from_cache:
-            logging.info(f'get_model, created_at: {response.created_at.strftime("%H:%M")}, '
+            logger.info(f'get_model, created_at: {response.created_at.strftime("%H:%M")}, '
                          f'expires: {response.expires.strftime("%H:%M")}')
         else:
-            logging.info(f'Not from cache')
+            logger.info(f'Not from cache')
         return response.json()
 
     def get_search_options(self):
@@ -303,8 +309,9 @@ class Scraper:
         return response.json()
 
     def db_path_querystring(self, query_dict: dict):
-        manufacturer = query_dict.get('manufacturer', 'multiple_manufacturers')
+        manufacturer_num = query_dict.get('manufacturer', 'multiple_manufacturers')
         model = query_dict.get('model', 'multiple_models')
+        manufacturer = num_to_manuf_dict.get(manufacturer_num, 'multiple_manufacturers')
         return f'/car_ads/{manufacturer}/{model}/{query_dict["year"]}/{query_dict["km"]}'
 
     async def run(self):
@@ -319,7 +326,7 @@ class Scraper:
     async def scrape_criteria(self, query_str: dict):
         first_page = await self.get_first_page(query_str)
         total_items_to_scrape = self.get_total_items(first_page)
-        print(f"Total items to be scraped: {total_items_to_scrape}")
+        logger.info(f"Total items to be scraped: {total_items_to_scrape} for query: {query_str}")
         last_page = self.get_number_of_pages(first_page)
         feed_sources = FEED_SOURCES_PRIVATE
         car_ads_to_save, feed_items = await self.yad2_scrape(query_str, feed_sources=feed_sources, last_page=last_page)
@@ -331,7 +338,7 @@ class Scraper:
         data: dict = ref.get()
         if data is None:
             # a dict of dicts in form {car_ad_id: car_ad}
-            print("No data in database, creating new data")
+            logging.info("No data in database, creating new data, db_path: {db_path}")
             db.reference(db_path).set({car_ad['id']: car_ad for car_ad in car_ads_to_save})
 
         for car_ad in car_ads_to_save:
