@@ -2,9 +2,8 @@ from firebase_admin import db
 import pandas as pd
 import firebase_db
 import json
-from datetime import datetime, timedelta
-
-from scraper import FEED_SOURCES_PRIVATE, db_path_querystring, KIA_NIRO_QUERYSTRING, querystring
+from datetime import datetime
+from scraper import FEED_SOURCES_PRIVATE, urls, Scraper
 
 
 def dump_to_json(car_ads_to_save: dict, feed_sources: list):
@@ -44,14 +43,15 @@ def dump_to_excel(car_ads_to_save: dict, feed_sources: list):
 
 
 def get_car_ads_from_db(db_name='car_ads') -> dict:
-    firebase_db.init_firebase_db()
     return db.reference(db_name).get()
 
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    q = querystring(KIA_NIRO_QUERYSTRING)
-    car_ads = get_car_ads_from_db(db_name=db_path_querystring(q))
-    feed_sources = FEED_SOURCES_PRIVATE
-    # dump_to_json(car_ads, feed_sources)
-    dump_to_excel(car_ads, feed_sources)
+    firebase_db.init_firebase_db()
+    for url in urls:
+        q = Scraper.querystring(url)
+        car_ads = get_car_ads_from_db(db_name=Scraper.db_path_querystring(q))
+        feed_sources = FEED_SOURCES_PRIVATE
+        # dump_to_json(car_ads, feed_sources)
+        dump_to_excel(car_ads, feed_sources)

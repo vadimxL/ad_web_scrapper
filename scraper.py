@@ -56,7 +56,6 @@ class Scraper:
         self.urls = urls_
         self.expiration = timedelta(hours=2)
         self.cache_name = 'demo_cache'
-        # self.session = CachedSession(cache=SQLiteBackend('demo_cache'), expire_after=timedelta(hours=2))
 
     async def scrape(self, q: dict) -> CachedResponse:
         url = "https://gw.yad2.co.il/feed-search-legacy/vehicles/cars"
@@ -118,10 +117,6 @@ class Scraper:
         parsed_feed_items = []
         car_ads_to_save = []
         tasks = []
-
-        # async with CachedSession(cache=self.cache, expire_after=self.expiration) as session:
-        #     async for url in session.cache.get_urls():
-        #         logging.info(f"cached url: {url}")
 
         for i in range(1, last_page + 1):
             q['page'] = str(i)
@@ -237,7 +232,8 @@ class Scraper:
 
         return car_details
 
-    def querystring(self, url: str):
+    @staticmethod
+    def querystring(url: str):
         q = {}
         for param in url.split('?')[1].split('&'):
             key, value = param.split('=')
@@ -308,7 +304,8 @@ class Scraper:
         response = session.get(url, headers=headers, data=payload, timeout=10)
         return response.json()
 
-    def db_path_querystring(self, query_dict: dict):
+    @staticmethod
+    def db_path_querystring(query_dict: dict):
         manufacturer_num = query_dict.get('manufacturer', 'multiple_manufacturers')
         model = query_dict.get('model', 'multiple_models')
         manufacturer = num_to_manuf_dict.get(manufacturer_num, 'multiple_manufacturers')
@@ -380,4 +377,5 @@ class Scraper:
 if __name__ == '__main__':
     firebase_db.init_firebase_db()
     scraper = Scraper(urls)
+    logger.info(f"Starting scraper on urls: {urls}")
     asyncio.run(scraper.run())
