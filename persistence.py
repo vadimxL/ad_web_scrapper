@@ -4,7 +4,7 @@ import firebase_db
 import json
 from datetime import datetime, timedelta
 
-from scraper import FEED_SOURCES_PRIVATE, db_path_querystring, KIA_NIRO_QUERYSTRING, url_to_querystring
+from scraper import FEED_SOURCES_PRIVATE, db_path_querystring, KIA_NIRO_QUERYSTRING, querystring
 
 
 def dump_to_json(car_ads_to_save: dict, feed_sources: list):
@@ -50,7 +50,7 @@ def get_car_ads_from_db(db_name='car_ads') -> dict:
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    q = url_to_querystring(KIA_NIRO_QUERYSTRING)
+    q = querystring(KIA_NIRO_QUERYSTRING)
     car_ads = get_car_ads_from_db(db_name=db_path_querystring(q))
     feed_sources = FEED_SOURCES_PRIVATE
     # dump_to_json(car_ads, feed_sources)

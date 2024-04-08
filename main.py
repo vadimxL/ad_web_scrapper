@@ -63,7 +63,7 @@ async def get_ads():
         'year': '2019--1',
         'km': '-1-80000'
     }
-    car_ads = scraper.main(q)
+    car_ads = scraper.scrape_criteria(q)
     return {"ads": car_ads}
 
 
