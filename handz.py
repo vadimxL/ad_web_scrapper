@@ -1,9 +1,18 @@
 import hashlib
 import json
+import logging
+import sys
 import requests
 
 from handz_payloads import payload_for_handz
-
+logging.getLogger(__name__).addHandler(logging.StreamHandler(stream=sys.stdout))
+logger = logging.getLogger(__name__)
+logging.basicConfig(
+    filename='example.log',
+    format='%(asctime)s %(levelname)-8s %(message)s',
+    level=logging.INFO,
+    datefmt='%Y-%m-%d %H:%M:%S',
+    encoding='utf-8')
 
 def parse_int(sin):
     import re
@@ -28,6 +37,11 @@ def get_pricing_from_handz(listings, token):
         'n': hash_result[:5],
         't': token
     }
+
+    logger.info(f"Requesting pricing from Handz with data: f={data['f'], data['s'], data['n'], data['t']}")
+    handz_payload = json.dumps(data, indent=4)
+    with open('handz_payload.json', 'w') as f:
+        f.write(handz_payload)
     # Make the POST request
     response = requests.post("https://api.handz.co.il/v2.0/entities/vehicles/auth",
                              headers={'Content-Type': 'application/json'}, data=json.dumps(data))
