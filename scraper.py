@@ -183,15 +183,7 @@ class Scraper:
             horsepower_value = re.search(r'\d+', horsepower_value).group(0)
             row2_without_hp = re.sub(r'\([^)]*\)', '', row2)
 
-        hand = feed_item.get('Hand_text', 'N/A')
-        if "ראשונה" in hand:
-            hand = 1
-        elif "שניה" in hand:
-            hand = 2
-        elif "שלישית" in hand:
-            hand = 3
-        elif "רביעית" in hand:
-            hand = 4
+        hand = self.get_hand(feed_item)
 
         # Fix the date format
         parsed_date = datetime.strptime(feed_item['date_added'], "%Y-%m-%d %H:%M:%S")
@@ -244,24 +236,21 @@ class Scraper:
             blind_spot=blind_spot,
             smart_cruise_control=smart_cruise_control,
             manuf_en=feed_item.get('manufacturer_eng', 'N/A'),
-            updated_at=feed_item.get('updated_at')
         )
 
-        # car_details = {'id': feed_item['id'], 'city': feed_item.get('city', 'N/A'),
-        #                'manufacturer_he': feed_item.get('manufacturer', 'N/A'),
-        #                'car_model': f"{feed_item['model']} {row2_without_hp}", 'hp': horsepower_value,
-        #                'year': feed_item['year'], 'hand': hand, 'kilometers': mileage_numeric,
-        #                'current_price': price_numeric, 'date_added_epoch': date_added_epoch,
-        #                'prices': [{'price': price_numeric, 'date': date.today().strftime("%d/%m/%Y")}],
-        #                'date_added': formatted_date,
-        #                'blind_spot': blind_spot,
-        #                'smart_cruise_control': smart_cruise_control, 'feed_source': feed_item['feed_source'],
-        #                # 'updated_at': feed_item['updated_at'],
-        #                'manuf_en': feed_item.get('manufacturer_eng', 'N/A')}
-
-        # car_details['advanced_features'] = feed_item['advanced_info']['items'][2]['values']
-
         return car_details
+
+    def get_hand(self, feed_item):
+        hand = feed_item.get('Hand_text', 'N/A')
+        if "ראשונה" in hand:
+            hand = 1
+        elif "שניה" in hand:
+            hand = 2
+        elif "שלישית" in hand:
+            hand = 3
+        elif "רביעית" in hand:
+            hand = 4
+        return hand
 
     @staticmethod
     def querystring(url: str):
@@ -312,7 +301,7 @@ class Scraper:
                         f"year: {new_ad['year']}, "
                         f"hand: {new_ad['hand']}")
             for key, value in updated_values.items():
-                logger.info(f"Document {new_ad['id']} Updated from: {ad_from_db[key]} to: {value}")
+                logger.info(f"{key} updated: {ad_from_db[key]} ===> {value}")
 
     async def get_model(self, manufacturer_id: str):
         # session = CachedSession('yad2_model_cache', backend='sqlite', expire_after=timedelta(hours=48))
