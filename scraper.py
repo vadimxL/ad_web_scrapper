@@ -13,6 +13,8 @@ from rich import print
 
 import logging
 
+from headers import scrape_headers
+
 logging.getLogger(__name__).addHandler(logging.StreamHandler(stream=sys.stdout))
 logger = logging.getLogger(__name__)
 logging.basicConfig(
@@ -68,25 +70,12 @@ class Scraper:
     async def scrape(self, q: dict) -> CachedResponse:
         url = "https://gw.yad2.co.il/feed-search-legacy/vehicles/cars"
 
-        payload = ""
-        headers = {
-            "cookie": "__uzmc=518554024966; __uzmd=1690101328",
-            "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/115.0",
-            "Accept": "application/json, text/plain, */*",
-            "Accept-Language": "en-US,en;q=0.5",
-            "Accept-Encoding": "gzip, deflate, br",
-            "mainsite_version_commit": "7c9a9c5c1fe45ec28c16bc473d25aad7141f53bd",
-            "mobile-app": "false",
-            "Origin": "https://www.yad2.co.il",
-            "Connection": "keep-alive",
-            "Referer": "https://www.yad2.co.il/",
-            "Sec-Fetch-Dest": "empty",
-            "Sec-Fetch-Mode": "cors",
-            "Sec-Fetch-Site": "same-site"
-        }
-
-        session = CachedSession(cache=self.cache)
-        r: CachedResponse = await session.get(url, data=payload, headers=headers, params=q)
+        session = CachedSession(cache=SQLiteBackend(
+            cache_name='demo_cache2',
+            expire_after=timedelta(minutes=30),
+            urls_expire_after=urls_expire_after,
+        ))
+        r: CachedResponse = await session.get(url, data="", headers=scrape_headers, params=q)
         await session.close()
 
         if r.from_cache:
@@ -260,12 +249,12 @@ class Scraper:
         updated_values = {}
         for key, value in ad_from_db.items():
             # print which data is changed
-            if new_ad['id'] == '3gk7d7w8':
-                if key == 'prices':
-                    prices = ad_from_db.get('prices', [])
-                    new_price = prices[-1]['price'] + 1
-                    new_ad['prices'] = [{'price': new_price,
-                                        'date': date.today().strftime("%d/%m/%Y")}]
+            # if new_ad['id'] == '3gk7d7w8':
+            #     if key == 'prices':
+            #         prices = ad_from_db.get('prices', [])
+            #         new_price = prices[-1]['price'] + 1
+            #         new_ad['prices'] = [{'price': new_price,
+            #                             'date': date.today().strftime("%d/%m/%Y")}]
             if key not in new_ad or value != new_ad[key]:
                 new_value = new_ad.get(key, 'N/A')
                 if key == 'prices':
@@ -278,7 +267,9 @@ class Scraper:
 
         if updated_values:
             db_ref.child(new_ad['id']).update(updated_values)
-            logger.info(f"Document {new_ad['id']} Updated with {updated_values} successfully!")
+            logger.info(f"Document {new_ad['id']} Updated with {updated_values} successfully!,"
+                        f"manuf: {new_ad['manuf_en']}, model: {new_ad['car_model']}, current_price: {new_ad['current_price']},"
+                        f"kilometers: {new_ad['kilometers']}, year: {new_ad['year']}, hand: {new_ad['hand']}")
 
     async def get_model(self, manufacturer_id: str):
         # session = CachedSession('yad2_model_cache', backend='sqlite', expire_after=timedelta(hours=48))
@@ -343,7 +334,7 @@ class Scraper:
             tasks.append(task)
 
         results = await asyncio.gather(*tasks)
-        await self.cache.close()
+        # await self.cache.close()
 
         for car_ads_to_save, query_str in results:
             db_path = self.db_path_querystring(query_str)
@@ -373,29 +364,6 @@ class Scraper:
         feed_sources = FEED_SOURCES_PRIVATE
         car_ads_to_save, feed_items = await self.yad2_scrape(query_str, feed_sources=feed_sources, last_page=last_page)
         return car_ads_to_save, query_str
-        # firebase_db.init_firebase_db()
-        # db_path = self.db_path_querystring(query_str)
-        #
-        # ref = db.reference(db_path)
-        #
-        # data: dict = ref.get()
-        # if data is None:
-        #     # a dict of dicts in form {car_ad_id: car_ad}
-        #     logging.info("No data in database, creating new data, db_path: {db_path}")
-        #     db.reference(db_path).set({car_ad['id']: car_ad for car_ad in car_ads_to_save})
-        # try:
-        #     for car_ad in car_ads_to_save:
-        #         if car_ad['id'] not in data:
-        #             self.insert_car_ad(car_ad, ref)
-        #         else:
-        #             self.update_car_ad(car_ad, ref, data[car_ad['id']])
-        # except Exception as e:
-        #     logging.error(f"Error updating database: {e}")
-        #
-        # self.handle_sold_items(car_ads_to_save, db_path, ref)
-
-        # database.init_db()
-        # save_to_database(car_ads_to_save)
 
     def handle_sold_items(self, scraped_car_ads: list[dict], db_path: str, ref: Reference):
         sold_items = []
@@ -406,6 +374,8 @@ class Scraper:
                 if key not in car_ads:
                     car_ad_db: dict = ref.child(key).get()
                     sold_car = {"id": car_ad_db['id'],
+                                'manufacturer': car_ad_db['manuf_en'], 'model': car_ad_db['car_model'],
+                                'date_added': car_ad_db['date_added'], 'current_price': car_ad_db['current_price'],
                                 'price_history': car_ad_db['prices'], 'km': car_ad_db['kilometers'],
                                 'year': car_ad_db['year'], 'hand': car_ad_db['hand']}
                     logging.info(f"sold car: {json.dumps(sold_car, ensure_ascii=False)}")
