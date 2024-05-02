@@ -1,10 +1,12 @@
 import asyncio
 import sys
+from dataclasses import asdict
 from datetime import datetime, timedelta, date
 import re
+from typing import List, Tuple
+
 from firebase_admin import db
 from firebase_admin.db import Reference
-
 import firebase_db
 import json
 import time
@@ -13,7 +15,8 @@ from rich import print
 
 import logging
 
-from headers import scrape_headers
+from car_details import CarDetails
+from headers import scrape_headers, model_headers
 
 logging.getLogger(__name__).addHandler(logging.StreamHandler(stream=sys.stdout))
 logger = logging.getLogger(__name__)
@@ -23,6 +26,8 @@ logging.basicConfig(
     level=logging.INFO,
     datefmt='%Y-%m-%d %H:%M:%S',
     encoding='utf-8')
+
+BASE_URL = "https://gw.yad2.co.il/feed-search-legacy/vehicles/cars"
 
 urls = [
     "https://www.yad2.co.il/vehicles/cars?manufacturer=48&model=3866,2829,3484&year=2019--1&km=-1-80000",  # Kia Niro
@@ -68,7 +73,7 @@ class Scraper:
         # self.cache_name = 'demo_cache'
 
     async def scrape(self, q: dict) -> CachedResponse:
-        url = "https://gw.yad2.co.il/feed-search-legacy/vehicles/cars"
+        url = BASE_URL
 
         session = CachedSession(cache=SQLiteBackend(
             cache_name='demo_cache2',
@@ -151,9 +156,11 @@ class Scraper:
                 continue
 
             filtered_feed_items.append(item)
-            car_ads_to_save.append(self.extract_car_details(item))
+            car_details: CarDetails = self.extract_car_details(item)
+            car_ads_to_save.append(car_details)
 
-        # handz_result = get_pricing_from_handz(filtered_feed_items, "62e8c1a08efe2d1fad068684")
+        # handz = Handz()
+        # handz_result = handz.get_prices(filtered_feed_items)
         #
         # for res in handz_result['data']['entities']:
         #     result_filter = next(filter(lambda x: x['id'] == res['id'], car_ads_to_save), None)
@@ -164,7 +171,7 @@ class Scraper:
 
         return car_ads_to_save, filtered_feed_items
 
-    def extract_car_details(self, feed_item: json):
+    def extract_car_details(self, feed_item: json) -> CarDetails:
         horsepower_value = 0
         row2_without_hp = 'N/A'
         row2 = feed_item.get('row_2', 'N/A')
@@ -218,16 +225,39 @@ class Scraper:
             if "שיוט" in item and "אדפטיבית" in item:
                 smart_cruise_control = item
 
-        car_details = {'id': feed_item['id'], 'city': feed_item.get('city', 'N/A'),
-                       'manufacturer_he': feed_item.get('manufacturer', 'N/A'),
-                       'car_model': f"{feed_item['model']} {row2_without_hp}", 'hp': horsepower_value,
-                       'year': feed_item['year'], 'hand': hand, 'kilometers': mileage_numeric,
-                       'current_price': price_numeric, 'date_added_epoch': date_added_epoch,
-                       'prices': [{'price': price_numeric, 'date': date.today().strftime("%d/%m/%Y")}],
-                       'date_added': formatted_date,
-                       'blind_spot': blind_spot,
-                       'smart_cruise_control': smart_cruise_control, 'feed_source': feed_item['feed_source'],
-                       'updated_at': feed_item['updated_at'], 'manuf_en': feed_item.get('manufacturer_eng', 'N/A')}
+        car_details = CarDetails(
+            id=feed_item['id'],
+            car_model=f"{feed_item['model']} {row2_without_hp}",
+            year=feed_item['year'],
+            current_price=price_numeric,
+            date_added_epoch=date_added_epoch,
+            date_added=formatted_date,
+            feed_source=feed_item['feed_source'],
+
+            # Fields with default values
+            city=feed_item.get('city', 'N/A'),
+            manufacturer_he=feed_item.get('manufacturer', 'N/A'),
+            hp=horsepower_value,
+            hand=hand,
+            kilometers=mileage_numeric,
+            prices=[{'price': price_numeric, 'date': date.today().strftime("%d/%m/%Y")}],
+            blind_spot=blind_spot,
+            smart_cruise_control=smart_cruise_control,
+            manuf_en=feed_item.get('manufacturer_eng', 'N/A'),
+            updated_at=feed_item.get('updated_at')
+        )
+
+        # car_details = {'id': feed_item['id'], 'city': feed_item.get('city', 'N/A'),
+        #                'manufacturer_he': feed_item.get('manufacturer', 'N/A'),
+        #                'car_model': f"{feed_item['model']} {row2_without_hp}", 'hp': horsepower_value,
+        #                'year': feed_item['year'], 'hand': hand, 'kilometers': mileage_numeric,
+        #                'current_price': price_numeric, 'date_added_epoch': date_added_epoch,
+        #                'prices': [{'price': price_numeric, 'date': date.today().strftime("%d/%m/%Y")}],
+        #                'date_added': formatted_date,
+        #                'blind_spot': blind_spot,
+        #                'smart_cruise_control': smart_cruise_control, 'feed_source': feed_item['feed_source'],
+        #                # 'updated_at': feed_item['updated_at'],
+        #                'manuf_en': feed_item.get('manufacturer_eng', 'N/A')}
 
         # car_details['advanced_features'] = feed_item['advanced_info']['items'][2]['values']
 
@@ -243,7 +273,13 @@ class Scraper:
 
     def insert_car_ad(self, new_ad: dict, db_ref: Reference):
         db_ref.child(new_ad['id']).set(new_ad)
-        logger.info(f"Document {new_ad['id']} Created successfully!")
+        logger.info(f"{new_ad['id']} is created successfully, "
+                    f"{new_ad['manuf_en']} "
+                    f"{new_ad['car_model']}, "
+                    f"current_price: {new_ad['current_price']}, "
+                    f"{new_ad['kilometers']} [km], "
+                    f"year: {new_ad['year']}, "
+                    f"hand: {new_ad['hand']}")
 
     def update_car_ad(self, new_ad: dict, db_ref: Reference, ad_from_db: dict):
         updated_values = {}
@@ -256,41 +292,35 @@ class Scraper:
             #         new_ad['prices'] = [{'price': new_price,
             #                             'date': date.today().strftime("%d/%m/%Y")}]
             if key not in new_ad or value != new_ad[key]:
-                new_value = new_ad.get(key, 'N/A')
-                if key == 'prices':
-                    prices = ad_from_db.get('prices', [])
-                    if prices and prices[-1]['price'] != new_value[-1]['price']:
-                        prices.append(new_value[-1])
-                        updated_values['prices'] = prices
-                else:
-                    updated_values[key] = new_value
+                new_value = new_ad.get(key)
+                if new_value:
+                    if key == 'prices':
+                        prices = ad_from_db.get('prices', [])
+                        if prices and prices[-1]['price'] != new_value[-1]['price']:
+                            prices.append(new_value[-1])
+                            updated_values['prices'] = prices
+                    else:
+                        updated_values[key] = new_value
 
         if updated_values:
             db_ref.child(new_ad['id']).update(updated_values)
-            logger.info(f"Document {new_ad['id']} Updated with {updated_values} successfully!,"
-                        f"manuf: {new_ad['manuf_en']}, model: {new_ad['car_model']}, current_price: {new_ad['current_price']},"
-                        f"kilometers: {new_ad['kilometers']}, year: {new_ad['year']}, hand: {new_ad['hand']}")
+            logger.info(f"{new_ad['id']} is changed, "
+                        f"{new_ad['manuf_en']} "
+                        f"{new_ad['car_model']}, "
+                        f"current_price: {new_ad['current_price']}, "
+                        f"{new_ad['kilometers']} [km], "
+                        f"year: {new_ad['year']}, "
+                        f"hand: {new_ad['hand']}")
+            for key, value in updated_values.items():
+                logger.info(f"Document {new_ad['id']} Updated from: {ad_from_db[key]} to: {value}")
 
     async def get_model(self, manufacturer_id: str):
         # session = CachedSession('yad2_model_cache', backend='sqlite', expire_after=timedelta(hours=48))
         url = f"https://gw.yad2.co.il/search-options/vehicles/cars?fields=model&manufacturer={manufacturer_id}"
 
-        print(url)
-
-        payload = {}
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:121.0) Gecko/20100101 Firefox/121.0',
-            'Accept': 'application/json, text/plain, */*',
-            'Accept-Language': 'en-US,en;q=0.5',
-            'Accept-Encoding': 'gzip, deflate, br',
-            'Sec-Fetch-Dest': 'empty',
-            'Sec-Fetch-Mode': 'cors',
-            'Sec-Fetch-Site': 'same-site',
-            'Cookie': 'leadSaleRentFree=67; y2018-2-cohort=23; __uzma=3c4eec9f-8a37-4503-a6c9-191eba2c7735; '
-                      '__uzmb=1691219274; __uzmc=299333711915; __uzmd=1704738443; __uzme=5919'
-        }
         async with CachedSession(cache=self.cache, expire_after=timedelta(hours=48)) as session:
-            response = session.get(url, headers=headers, data=payload, timeout=10)
+            response = session.get(url, headers=model_headers, data={}, timeout=10)
+
         if response.from_cache:
             logger.info(f'get_model, created_at: {response.created_at.strftime("%H:%M")}, '
                         f'expires: {response.expires.strftime("%H:%M")}')
@@ -303,20 +333,7 @@ class Scraper:
         url = ("https://gw.yad2.co.il/search-options/vehicles/cars?fields=manufacturer,year,area,km,ownerID,seats,"
                "engineval,engineType,group_color,gearBox")
 
-        payload = {}
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:121.0) Gecko/20100101 Firefox/121.0',
-            'Accept': 'application/json, text/plain, */*',
-            'Accept-Language': 'en-US,en;q=0.5',
-            'Accept-Encoding': 'gzip, deflate, br',
-            'Sec-Fetch-Dest': 'empty',
-            'Sec-Fetch-Mode': 'cors',
-            'Sec-Fetch-Site': 'same-site',
-            'Cookie': 'leadSaleRentFree=67; y2018-2-cohort=23; __uzma=3c4eec9f-8a37-4503-a6c9-191eba2c7735; '
-                      '__uzmb=1691219274; __uzmc=394906189046; __uzmd=1704737848; __uzme=5919'
-        }
-
-        response = session.get(url, headers=headers, data=payload, timeout=10)
+        response = session.get(url, headers=model_headers, data={}, timeout=10)
         return response.json()
 
     @staticmethod
@@ -333,28 +350,28 @@ class Scraper:
             task = asyncio.create_task(self.scrape_criteria(q.copy()))
             tasks.append(task)
 
-        results = await asyncio.gather(*tasks)
+        # Assuming results is a list of tuples, where each tuple contains a list of CarDetails and a query string
+        results: List[Tuple[List[CarDetails], dict]] = await asyncio.gather(*tasks)
         # await self.cache.close()
 
-        for car_ads_to_save, query_str in results:
-            db_path = self.db_path_querystring(query_str)
+        for new_ads, query in results:
+            db_path = self.db_path_querystring(query)
             ref = db.reference(db_path)
             data: dict = ref.get()
             if data is None:
                 # a dict of dicts in form {car_ad_id: car_ad}
                 logging.info("No data in database, creating new data, db_path: {db_path}")
-                db.reference(db_path).set({car_ad['id']: car_ad for car_ad in car_ads_to_save})
+                db.reference(db_path).set({car_ad['id']: car_ad for car_ad in new_ads})
             try:
-                for car_ad in car_ads_to_save:
-                    if car_ad['id'] not in data:
-                        self.insert_car_ad(car_ad, ref)
+                for ad in new_ads:
+                    if ad.id not in data:
+                        self.insert_car_ad(asdict(ad), ref)
                     else:
-                        self.update_car_ad(car_ad, ref, data[car_ad['id']])
+                        self.update_car_ad(asdict(ad), ref, data[ad.id])
             except Exception as e:
                 logging.error(f"Error updating database: {e}")
 
-            self.handle_sold_items(car_ads_to_save, db_path, ref)
-
+            self.handle_sold_items([asdict(new_ad) for new_ad in new_ads], db_path, ref)
 
     async def scrape_criteria(self, query_str: dict):
         first_page = await self.get_first_page(query_str)
