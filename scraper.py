@@ -32,7 +32,8 @@ BASE_URL = "https://gw.yad2.co.il/feed-search-legacy/vehicles/cars"
 urls = [
     "https://www.yad2.co.il/vehicles/cars?manufacturer=48&model=3866,2829,3484&year=2019--1&km=-1-80000",  # Kia Niro
     "https://www.yad2.co.il/vehicles/cars?manufacturer=27&model=2333&year=2020--1&km=-1-100000",  # Mazda CX-5
-    "https://www.yad2.co.il/vehicles/cars?manufacturer=37&model=2842&year=2020--1&km=-1-100000"  # Seat Ateca
+    "https://www.yad2.co.il/vehicles/cars?manufacturer=37&model=2842&year=2020--1&km=-1-100000",  # Seat Ateca
+    "https://www.yad2.co.il/vehicles/cars?manufacturer=19&model=1428&year=2013-2014&km=0-120000"  # Corola 2013-2014
 ]
 
 urls_expire_after = {
@@ -47,15 +48,11 @@ manufacturers_dict = {
     "hyundai": "21",
     "kia": "48",
     "seat": "37",
-    "mazda": "27"
+    "mazda": "27",
+    "toyota": "19"
 }
 
-num_to_manuf_dict = {
-    "21": "hyundai",
-    "48": "kia",
-    "37": "seat",
-    "27": "mazda"
-}
+num_to_manuf_dict = {value: key for key, value in manufacturers_dict.items()}
 
 secs_to_sleep = 0.5
 
@@ -350,7 +347,7 @@ class Scraper:
             if data is None:
                 # a dict of dicts in form {car_ad_id: car_ad}
                 logging.info("No data in database, creating new data, db_path: {db_path}")
-                db.reference(db_path).set({car_ad['id']: car_ad for car_ad in new_ads})
+                db.reference(db_path).set({ad.id: asdict(ad) for ad in new_ads})
             try:
                 for ad in new_ads:
                     if ad.id not in data:
