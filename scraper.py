@@ -11,6 +11,7 @@ import firebase_db
 import json
 import time
 from aiohttp_client_cache import CachedSession, SQLiteBackend, CachedResponse
+from requests_cache import CachedSession as MyCachedSession
 from rich import print
 
 import logging
@@ -315,7 +316,7 @@ class Scraper:
         return response.json()
 
     def get_search_options(self):
-        session = CachedSession('yad2_search_options_cache', backend='sqlite', expire_after=timedelta(hours=48))
+        session = MyCachedSession('yad2_search_options_cache', backend='sqlite', expire_after=timedelta(hours=48))
         url = ("https://gw.yad2.co.il/search-options/vehicles/cars?fields=manufacturer,year,area,km,ownerID,seats,"
                "engineval,engineType,group_color,gearBox")
 
@@ -358,6 +359,11 @@ class Scraper:
                 logging.error(f"Error updating database: {e}")
 
             self.handle_sold_items([asdict(new_ad) for new_ad in new_ads], db_path, ref)
+
+        ads = []
+        for new_ads, query in results:
+            ads.append(new_ads)
+        return ads
 
     async def scrape_criteria(self, query_str: dict):
         first_page = await self.get_first_page(query_str)

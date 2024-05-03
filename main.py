@@ -1,3 +1,4 @@
+import asyncio
 import hashlib
 import logging
 from typing import List
@@ -7,9 +8,8 @@ from starlette.middleware.cors import CORSMiddleware
 import firebase_db
 import json
 from fastapi import FastAPI
-
+from scraper import Scraper, urls, logger
 import models
-import scraper
 
 app = FastAPI()
 
@@ -22,7 +22,7 @@ app.add_middleware(
     allow_headers=["*"],  # You can specify specific headers if needed
 )
 
-url_to_scrape = "https://www.yad2.co.il/vehicles/cars?manufacturer=48&model=3866,2829,3484&year=2019--1&km=-1-80000"
+urls_to_scrape = ["https://www.yad2.co.il/vehicles/cars?manufacturer=48&model=3866,2829,3484&year=2019--1&km=-1-80000"]
 
 # Replace this with your actual data source or logic
 manufacturers = {}
@@ -34,11 +34,21 @@ car_models = {}
 def startup_event():
     global manufacturers_list
     firebase_db.init_firebase_db()
+    scraper = Scraper(urls_to_scrape)
     search_opts = scraper.get_search_options()
     manufacturers_list = search_opts['data']['manufacturer']
     for manuf in search_opts['data']['manufacturer']:
         manufacturers[manuf['value']] = manuf['text']
     # print(manufacturers)
+
+
+@app.post("/scrape")
+async def scrape(urls_: List[str]):
+    scraper = Scraper(urls_)
+    logger.info(f"Starting scraper on urls: {urls_}")
+    task = asyncio.get_event_loop().create_task(scraper.run())
+    result = await task
+    return result
 
 
 @app.get("/manufacturers")
@@ -50,7 +60,7 @@ async def get_manufacturers():
 @app.get("/models/{manufacturer}")
 async def get_models(manufacturer: str):
     logging.info(manufacturer)
-    res = scraper.get_model(manufacturer)['data']['model']
+    res = Scraper.get_model(manufacturer)['data']['model']
     logging.info(res)
     return res
 
