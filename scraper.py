@@ -84,7 +84,7 @@ class Scraper:
         if r.from_cache:
             logger.info(
                 f'cache created_at: {r.created_at.strftime("%H:%M")}, last_used: {r.last_used.strftime("%H:%M:%S")} for page: {q.get("page")}, '
-                f'expires: {r.expires.isoformat() if r.expires else "Never"} '
+                f'expires: {datetime.fromisoformat(r.expires.isoformat()).strftime("%H:%M:%S") if r.expires else "Never"} ,'
                 f'query: {q}')
 
         return r
@@ -99,9 +99,9 @@ class Scraper:
         # Wait for all tasks to complete
         response = await asyncio.gather(*tasks)
 
-        if not response[0].from_cache:
-            print(f'Not from cache, sleeping for {secs_to_sleep} second')
-            time.sleep(secs_to_sleep)
+        # if not response[0].from_cache:
+        #     print(f'Not from cache, sleeping for {secs_to_sleep} second')
+        #     time.sleep(secs_to_sleep)
 
         # with open('json/first_page.json', 'w', encoding='utf-8') as f1:
         #     json.dump(response.json(), f1, indent=4, ensure_ascii=False)
@@ -130,9 +130,9 @@ class Scraper:
         pages = await asyncio.gather(*tasks)
 
         for page in pages:
-            if not page.from_cache:
-                print(f'Not from cache, sleeping for {secs_to_sleep} second')
-                time.sleep(secs_to_sleep)
+            # if not page.from_cache:
+            #     print(f'Not from cache, sleeping for {secs_to_sleep} second')
+            #     time.sleep(secs_to_sleep)
 
             scraped_page = await page.json()
             feed_items = scraped_page['data']['feed']['feed_items']
@@ -347,7 +347,7 @@ class Scraper:
             data: dict = ref.get()
             if data is None:
                 # a dict of dicts in form {car_ad_id: car_ad}
-                logging.info("No data in database, creating new data, db_path: {db_path}")
+                logger.info("No data in database, creating new data, db_path: {db_path}")
                 db.reference(db_path).set({ad.id: asdict(ad) for ad in new_ads})
             try:
                 for ad in new_ads:
@@ -356,7 +356,7 @@ class Scraper:
                     else:
                         self.update_car_ad(asdict(ad), ref, data[ad.id])
             except Exception as e:
-                logging.error(f"Error updating database: {e}")
+                logger.error(f"Error updating database: {e}")
 
             self.handle_sold_items([asdict(new_ad) for new_ad in new_ads], db_path, ref)
 
@@ -387,19 +387,21 @@ class Scraper:
                                 'date_added': car_ad_db['date_added'], 'current_price': car_ad_db['current_price'],
                                 'price_history': car_ad_db['prices'], 'km': car_ad_db['kilometers'],
                                 'year': car_ad_db['year'], 'hand': car_ad_db['hand']}
-                    logging.info(f"sold car: {json.dumps(sold_car, ensure_ascii=False)}")
+                    logger.info(f"sold car: {json.dumps(sold_car, ensure_ascii=False)}")
                     sold_items.append(car_ad_db)
 
             # add sold cars to a separate list
             db_path_for_sold = f'/sold_cars{db_path}'
-            try:
-                db.reference(db_path_for_sold).update({car_ad['id']: car_ad for car_ad in sold_items})
-            except ValueError as e:
-                logging.error(f"Error adding sold cars to db: {e}")
+
+            if sold_items:
+                try:
+                    db.reference(db_path_for_sold).update({car_ad['id']: car_ad for car_ad in sold_items})
+                except ValueError as e:
+                    logger.error(f"Error adding sold cars to db: {e}")
 
             # remove from main db, for next time
             for item in sold_items:
-                logging.info(f"removing item {item['id']} from main db")
+                logger.info(f"removing item {item['id']} from main db")
                 db.reference(db_path).child(item['id']).delete()
         return car_ads_db
 
