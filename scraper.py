@@ -411,7 +411,7 @@ class Scraper:
                                                                 initial_price=car_ad_db['prices'][0]['price'],
                                                                 html_path='criteria_mail.html')
                     self.gmail_sender.send(message,
-                                           f'🎁 [Sold] - {car_ad_db["manufacturer"]} {car_ad_db["car_model"]} {car_ad_db["city"]}')
+                                           f'💸 [Sold] - {car_ad_db["manufacturer_he"]} {car_ad_db["car_model"]} {car_ad_db["city"]}')
                     sold_items.append(car_ad_db)
 
             # add sold cars to a separate list
