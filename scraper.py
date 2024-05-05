@@ -57,7 +57,7 @@ manufacturers_dict = {
 
 num_to_manuf_dict = {value: key for key, value in manufacturers_dict.items()}
 
-secs_to_sleep = 0.5
+secs_to_sleep = 0.1
 
 
 class Scraper:
@@ -133,12 +133,19 @@ class Scraper:
         pages = await asyncio.gather(*tasks)
 
         for page in pages:
-            # if not page.from_cache:
-            #     print(f'Not from cache, sleeping for {secs_to_sleep} second')
-            #     time.sleep(secs_to_sleep)
+            if not page.from_cache:
+                print(f'Not from cache, sleeping for {secs_to_sleep} second')
+                time.sleep(secs_to_sleep)
 
             scraped_page = await page.json()
-            feed_items = scraped_page['data']['feed']['feed_items']
+            try:
+                feed_items = scraped_page['data']['feed']['feed_items']
+            except KeyError as e:
+                logger.error(f"Error scraping page: {e}")
+                with open('json/error_page.json', 'w', encoding='utf-8') as f:
+                    json.dump(scraped_page, f, indent=4, ensure_ascii=False)
+                raise e
+
             for feed_item in feed_items:
                 # car_details = extract_car_details(feed_item)
                 car_details = dict(sorted(feed_item.items()))
@@ -271,18 +278,14 @@ class Scraper:
                     f"{new_ad['kilometers']} [km], "
                     f"year: {new_ad['year']}, "
                     f"hand: {new_ad['hand']}")
+        message = self.html_criteria_mail(new_ad)
+        self.gmail_sender.send(message,
+                               f'🎁 [New] - {new_ad["manufacturer_he"]} {new_ad["car_model"]} {new_ad["city"]}')
 
     def update_car_ad(self, car_ad: CarDetails, db_ref: Reference, ad_from_db: dict):
         new_ad = asdict(car_ad)
         updated_values = {}
         for key, value in ad_from_db.items():
-            # print which data is changed
-            # if new_ad['id'] == '3gk7d7w8':
-            #     if key == 'prices':
-            #         prices = ad_from_db.get('prices', [])
-            #         new_price = prices[-1]['price'] + 1
-            #         new_ad['prices'] = [{'price': new_price,
-            #                             'date': date.today().strftime("%d/%m/%Y")}]
             if key not in new_ad or value != new_ad[key]:
                 new_value = new_ad.get(key)
                 if new_value:
@@ -308,7 +311,7 @@ class Scraper:
             logger.info(msg)
             message = self.html_criteria_mail(new_ad)
             self.gmail_sender.send(message,
-                                   f'⬇️ [Update] - {new_ad["manufacturer"]} {new_ad["car_model"]} {new_ad["city"]}')
+                                   f'⬇️ [Update] - {new_ad["manufacturer_he"]} {new_ad["car_model"]} {new_ad["city"]}')
 
     async def get_model(self, manufacturer_id: str):
         # session = CachedSession('yad2_model_cache', backend='sqlite', expire_after=timedelta(hours=48))
@@ -412,7 +415,7 @@ class Scraper:
                                 'price_history': car_ad_db['prices'], 'km': car_ad_db['kilometers'],
                                 'year': car_ad_db['year'], 'hand': car_ad_db['hand']}
                     logger.info(f"sold car: {json.dumps(sold_car, ensure_ascii=False)}")
-                    message = self.html_criteria_mail(sold_car)
+                    message = self.html_criteria_mail(car_ad_db)
                     self.gmail_sender.send(message,
                                            f'💸 [Sold] - {car_ad_db["manufacturer_he"]} {car_ad_db["car_model"]} {car_ad_db["city"]}')
                     sold_items.append(car_ad_db)
