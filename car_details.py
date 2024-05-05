@@ -25,6 +25,7 @@ class CarDetails:
     smart_cruise_control: Optional[bool] = None
     manuf_en: str = 'N/A'
     updated_at: Optional[str] = None
+    gear_type: str = 'N/A'
 
 
 def create_car_details(feed_item: Dict[str, Any], row2_without_hp: str, horsepower_value: Optional[int],

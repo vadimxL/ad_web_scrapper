@@ -16,38 +16,39 @@
                 <tbody>
                 <tr>
                     <td valign="top" style="padding-top:9px">
-                        <table align="left" border="0" cellpadding="0" cellspacing="0"
-                               style="max-width:100%;min-width:100%;border-collapse:collapse" width="100%">
+                        <table style="max-width:100%;min-width:100%;border-collapse:collapse">
                             <tbody>
                             <tr>
                                 <td valign="top"
-                                    style="padding:0 18px 9px;text-align:right;word-break:break-word;color:#808080;font-family:Helvetica,serif;font-size:16px;line-height:150%">
-                                    <h3 style="text-align:right;direction:rtl;display:block;margin:0;padding:0;color:#444444;font-family:Helvetica,serif;font-size:22px;font-style:normal;font-weight:bold;line-height:150%;letter-spacing:normal">
+                                    style="padding:0 18px 9px;word-break:break-word;color:#808080;font-family:Helvetica,serif;font-size:16px;line-height:150%">
+                                    <h3 style="display:block;margin:0;padding:0;color:#444444;font-family:Helvetica,serif;font-size:22px;font-style:normal;font-weight:bold;line-height:150%;letter-spacing:normal">
                                         <span style="font-family:arial,helvetica neue,helvetica,sans-serif">{{manufacturer}}</span>
                                     </h3>
-                                    <ul dir="rtl">
-                                        <li style="text-align:right;direction:rtl"><span
-                                                style="font-family:arial,helvetica neue,helvetica,sans-serif">date created: {{date_created}}}</span>
+                                    <ul>
+                                        <li>
+                                            <span style="font-family:arial,helvetica neue,helvetica,sans-serif">id: {{id}}</span>
                                         </li>
-                                        <li style="text-align:right;direction:rtl"><span
-                                                style="font-family:arial,helvetica neue,helvetica,sans-serif">{{hand}}</span>
+                                        <li><span
+                                                style="font-family:arial,helvetica neue,helvetica,sans-serif">date created: {{date_created}}</span>
                                         </li>
-                                        <li style="text-align:right;direction:rtl"><span
-                                                style="font-family:arial,helvetica neue,helvetica,sans-serif">{{gear_type}}</span>
+                                        <li><span
+                                                style="font-family:arial,helvetica neue,helvetica,sans-serif">hand: {{hand}}</span>
                                         </li>
-                                        <li style="text-align:right;direction:rtl"><span
+                                        <li><span
+                                                style="font-family:arial,helvetica neue,helvetica,sans-serif">gear: {{gear_type}}</span>
+                                        </li>
+                                        <li><span
                                                 style="font-family:arial,helvetica neue,helvetica,sans-serif">model: {{model}}</span>
                                         </li>
-                                        <li style="text-align:right;direction:rtl"><span
+                                        <li><span
                                                 style="font-family:arial,helvetica neue,helvetica,sans-serif">mileage: {{km}} [km]</span>
                                         </li>
-                                        <li style="text-align:right;direction:rtl"><span
-                                                style="font-family:arial,helvetica neue,helvetica,sans-serif">{{free_text}}</span>
+                                        <li><span
+                                                style="font-family:arial,helvetica neue,helvetica,sans-serif">additional: {{free_text}}</span>
                                         </li>
                                     </ul>
-                                    <div dir="rtl" style="text-align:right;direction:rtl">
-                                        <span
-                                                style="font-family:arial,helvetica neue,helvetica,sans-serif">
+                                    <div>
+                                        <span style="font-family:arial,helvetica neue,helvetica,sans-serif">
                                            <span style="font-family:arial,helvetica neue,helvetica,sans-serif">
                                                <strong>price: {{price}}&nbsp;</strong>
                                                <span style="font-size:14px">initial price: {{initial_price}}</span>

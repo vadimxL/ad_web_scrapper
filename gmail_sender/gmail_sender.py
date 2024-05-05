@@ -80,14 +80,6 @@ class GmailSender:
             send_message = None
         return send_message
 
-    def create_html_msg(self, manufacturer: str, hand: str, model: str, year: str, km: str, price: str, initial_price: str,
-                        free_text: str = "", html_path: str = "../criteria_mail.html"):
-        environment = jinja2.Environment()
-        with open(html_path) as file:
-            template = environment.from_string(file.read())
-            return template.render(manufacturer=manufacturer, hand=hand, model=model, year=year, km=km, price=price,
-                                   free_text=free_text, initial_price=initial_price)
-
 
 if __name__ == "__main__":
     gmail_sender = GmailSender()
@@ -96,6 +88,7 @@ if __name__ == "__main__":
         "car_model": "Corolla",
         "city": "Tel Aviv"
     }
-    msg = gmail_sender.create_html_msg("Toyota", "פרטי", "Corolla", "2019", "50", "100000", "120000")
+
+    msg = gmail_sender.create_html_msg("Toyota", "פרטי", "Corolla", "2019", "50", "100000", "120000", "2021-09-01")
     gmail_sender.send(msg, f'🎁 [New] - {car_ad_db["manufacturer"]} {car_ad_db["car_model"]} {car_ad_db["city"]}')
-    gmail_sender.send(msg, f'⬇️ [Update] - {car_ad_db["manufacturer"]} {car_ad_db["car_model"]} {car_ad_db["city"]}')
+    # gmail_sender.send(msg, f'⬇️ [Update] - {car_ad_db["manufacturer"]} {car_ad_db["car_model"]} {car_ad_db["city"]}')
