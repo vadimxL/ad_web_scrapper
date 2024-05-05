@@ -2,8 +2,7 @@ import base64
 from email.message import EmailMessage
 import os
 from google.auth.transport.requests import Request
-from dotenv import load_dotenv
-
+import jinja2
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
@@ -22,11 +21,11 @@ SCOPES = ["https://www.googleapis.com/auth/gmail.send"]
 
 
 class GmailSender:
-    def __init__(self):
-        self.creds = self._credentials()
+    def __init__(self, credentials_path: str = "credentials.json"):
+        self.creds = self._credentials(credentials_path)
 
     @staticmethod
-    def _credentials():
+    def _credentials(credentials_path: str):
         creds = None
         # The file token.json stores the user's access and refresh tokens, and is
         # created automatically when the authorization flow completes for the first
@@ -39,7 +38,7 @@ class GmailSender:
                 creds.refresh(Request())
             else:
                 flow = InstalledAppFlow.from_client_secrets_file(
-                    "credentials.json", SCOPES
+                    credentials_path, SCOPES
                 )
                 creds = flow.run_local_server(port=0)
             # Save the credentials for the next run
@@ -47,7 +46,7 @@ class GmailSender:
                 token.write(creds.to_json())
         return creds
 
-    def send(self, msg_content: str):
+    def send(self, msg_content: str, subject: str = "Automated draft"):
         """
         Create and send an email message
         Print the returned  message id
@@ -58,10 +57,11 @@ class GmailSender:
             message = EmailMessage()
 
             message.set_content(msg_content)
+            message.add_alternative(msg_content, subtype="html")
 
             message["To"] = "vadimski30@gmail.com"
             message["From"] = "malinvadim88@gmail.com"
-            message["Subject"] = "Automated draft"
+            message["Subject"] = subject
 
             # encoded message
             encoded_message = base64.urlsafe_b64encode(message.as_bytes()).decode()
@@ -80,7 +80,22 @@ class GmailSender:
             send_message = None
         return send_message
 
+    def create_html_msg(self, manufacturer: str, hand: str, model: str, year: str, km: str, price: str, initial_price: str,
+                        free_text: str = "", html_path: str = "../criteria_mail.html"):
+        environment = jinja2.Environment()
+        with open(html_path) as file:
+            template = environment.from_string(file.read())
+            return template.render(manufacturer=manufacturer, hand=hand, model=model, year=year, km=km, price=price,
+                                   free_text=free_text, initial_price=initial_price)
+
 
 if __name__ == "__main__":
     gmail_sender = GmailSender()
-    gmail_sender.send("Hello, Vadim!")
+    car_ad_db = {
+        "manufacturer": "Toyota",
+        "car_model": "Corolla",
+        "city": "Tel Aviv"
+    }
+    msg = gmail_sender.create_html_msg("Toyota", "פרטי", "Corolla", "2019", "50", "100000", "120000")
+    gmail_sender.send(msg, f'🎁 [New] - {car_ad_db["manufacturer"]} {car_ad_db["car_model"]} {car_ad_db["city"]}')
+    gmail_sender.send(msg, f'⬇️ [Update] - {car_ad_db["manufacturer"]} {car_ad_db["car_model"]} {car_ad_db["city"]}')

@@ -17,6 +17,7 @@ from rich import print
 import logging
 
 from car_details import CarDetails
+from gmail_sender.gmail_sender import GmailSender
 from headers import scrape_headers, model_headers
 
 logging.getLogger(__name__).addHandler(logging.StreamHandler(stream=sys.stdout))
@@ -34,7 +35,8 @@ urls = [
     "https://www.yad2.co.il/vehicles/cars?manufacturer=48&model=3866,2829,3484&year=2019--1&km=-1-80000",  # Kia Niro
     "https://www.yad2.co.il/vehicles/cars?manufacturer=27&model=2333&year=2020--1&km=-1-100000",  # Mazda CX-5
     "https://www.yad2.co.il/vehicles/cars?manufacturer=37&model=2842&year=2020--1&km=-1-100000",  # Seat Ateca
-    "https://www.yad2.co.il/vehicles/cars?manufacturer=19&model=1428&year=2013-2014&km=0-120000"  # Corola 2013-2014
+    "https://www.yad2.co.il/vehicles/cars?manufacturer=19&model=1428&year=2013-2014&km=0-120000",  # Corola 2013-2014
+    "https://www.yad2.co.il/vehicles/cars?manufacturer=21&model=578&year=2020--1&km=-1-100000"  # Hyunadi Tucson
 ]
 
 urls_expire_after = {
@@ -60,6 +62,7 @@ secs_to_sleep = 0.5
 
 class Scraper:
     def __init__(self, urls_: list[str]):
+        self.gmail_sender = GmailSender("gmail_sender/credentials.json")
         self.urls = urls_
         # self.expiration = timedelta(minutes=30)
         # self.urls_for_expire_after = urls_expire_after
@@ -291,15 +294,26 @@ class Scraper:
 
         if updated_values:
             db_ref.child(new_ad['id']).update(updated_values)
-            logger.info(f"{new_ad['id']} is changed, "
-                        f"{new_ad['manuf_en']} "
-                        f"{new_ad['car_model']}, "
+            msg: str = (f"{new_ad['id']} is changed, {new_ad['manuf_en']}  {new_ad['car_model']}, "
                         f"current_price: {new_ad['current_price']}, "
-                        f"{new_ad['kilometers']} [km], "
-                        f"year: {new_ad['year']}, "
-                        f"hand: {new_ad['hand']}")
+                        f"{new_ad['kilometers']} [km], year: {new_ad['year']}, hand: {new_ad['hand']}")
+
+            logger.info(msg)
             for key, value in updated_values.items():
-                logger.info(f"{key} updated: {ad_from_db[key]} ===> {value}")
+                msg += f"{key} updated: {ad_from_db[key]} ===> {value} "
+                # logger.info(f"{key} updated: {ad_from_db[key]} ===> {value}")
+
+            message = self.gmail_sender.create_html_msg(manufacturer=new_ad['manuf_en'],
+                                                        model=new_ad['car_model'],
+                                                        price=new_ad['current_price'],
+                                                        km=new_ad['kilometers'],
+                                                        year=new_ad['year'],
+                                                        hand=new_ad['hand'],
+                                                        initial_price=ad_from_db['prices'][0]['price'],
+                                                        free_text=msg,
+                                                        html_path='criteria_mail.html')
+            logger.info(msg)
+            self.gmail_sender.send(message, f'⬇️ [Update] - {new_ad["manufacturer"]} {new_ad["car_model"]} {new_ad["city"]}')
 
     async def get_model(self, manufacturer_id: str):
         # session = CachedSession('yad2_model_cache', backend='sqlite', expire_after=timedelta(hours=48))
@@ -347,7 +361,7 @@ class Scraper:
             data: dict = ref.get()
             if data is None:
                 # a dict of dicts in form {car_ad_id: car_ad}
-                logger.info("No data in database, creating new data, db_path: {db_path}")
+                logger.info(f"No data in database, creating new data, db_path: {db_path}")
                 db.reference(db_path).set({ad.id: asdict(ad) for ad in new_ads})
             try:
                 for ad in new_ads:
@@ -388,6 +402,16 @@ class Scraper:
                                 'price_history': car_ad_db['prices'], 'km': car_ad_db['kilometers'],
                                 'year': car_ad_db['year'], 'hand': car_ad_db['hand']}
                     logger.info(f"sold car: {json.dumps(sold_car, ensure_ascii=False)}")
+                    message = self.gmail_sender.create_html_msg(manufacturer=car_ad_db['manuf_en'],
+                                                                model=car_ad_db['car_model'],
+                                                                price=car_ad_db['current_price'],
+                                                                km=car_ad_db['kilometers'],
+                                                                year=car_ad_db['year'],
+                                                                hand=car_ad_db['hand'],
+                                                                initial_price=car_ad_db['prices'][0]['price'],
+                                                                html_path='criteria_mail.html')
+                    self.gmail_sender.send(message,
+                                           f'🎁 [Sold] - {car_ad_db["manufacturer"]} {car_ad_db["car_model"]} {car_ad_db["city"]}')
                     sold_items.append(car_ad_db)
 
             # add sold cars to a separate list
