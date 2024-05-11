@@ -13,8 +13,9 @@ logger = logging.getLogger(__name__)
 class DbHandler:
     ref_path = "cars"
     ref_path_sold = "sold_cars"
-    def __init__(self):
-        pass
+
+    def __init__(self, user_path: str):
+        self.user_path = user_path
 
     def insert_car_ad(self, new_ad: CarDetails):
         db.reference(self.ref_path).child(new_ad.id).set(asdict(new_ad))

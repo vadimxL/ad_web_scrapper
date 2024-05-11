@@ -69,9 +69,12 @@ secs_to_sleep = 0.1
 
 
 class Scraper:
+    ...
+
+
     def __init__(self):
-        self.db_handler = DbHandler()
-        self.gmail_sender = GmailSender("gmail_sender/credentials.json")
+        # self.db_handler = DbHandler()
+        # self.gmail_sender = GmailSender("gmail_sender/credentials.json")
         # self.expiration = timedelta(minutes=30)
         # self.urls_for_expire_after = urls_expire_after
         self.cache = SQLiteBackend(
