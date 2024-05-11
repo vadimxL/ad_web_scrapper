@@ -3,13 +3,14 @@ from datetime import date
 from typing import List, Dict, Any, Optional
 
 
+
 @dataclass
 class CarDetails:
     # Fields without default values
     id: int
     car_model: str
     year: int
-    current_price: float
+    price: float
     date_added_epoch: int
     date_added: str
     feed_source: str
@@ -37,7 +38,7 @@ def create_car_details(feed_item: Dict[str, Any], row2_without_hp: str, horsepow
         id=feed_item['id'],
         car_model=f"{feed_item['model']} {row2_without_hp}",
         year=feed_item['year'],
-        current_price=price_numeric,
+        price=price_numeric,
         date_added_epoch=date_added_epoch,
         date_added=formatted_date,
         feed_source=feed_item['feed_source'],
@@ -56,7 +57,6 @@ def create_car_details(feed_item: Dict[str, Any], row2_without_hp: str, horsepow
     )
 
     return car_details
-
 
 # Example usage of the function
 # You would call the function with appropriate arguments

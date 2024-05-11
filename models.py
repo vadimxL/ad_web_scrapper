@@ -1,8 +1,10 @@
 import datetime
+from typing import Optional, List
 
 from mongoengine import Document, StringField, IntField, ListField, EmbeddedDocumentField, BooleanField, EmailField, \
     DateTimeField, DictField
 from mongoengine import StringField, IntField, EmbeddedDocument
+from pydantic import BaseModel
 
 
 # from scraper import PriceHistory
@@ -28,15 +30,36 @@ class Criteria(EmbeddedDocument):
     price_max = IntField(max_length=50)
 
 
-class Task(Document):
-    id = StringField(primary_key=True)
-    # title = StringField(max_length=100)
-    manufacturer = StringField(max_length=50)
+class Range(BaseModel):
+    min: int
+    max: int
 
-    mail = EmailField(max_length=100)
-    # complete = BooleanField(default=False)
-    created_at = DateTimeField(default=datetime.datetime.utcnow)
-    criteria = EmbeddedDocumentField(Criteria)
+
+# A Pydantic model
+class CarCriteria(BaseModel):
+    manufacturer: int
+    models: List[int]
+    year: Optional[Range] = {"min": -1, "max": -1}
+    km: Optional[Range] = {"min": -1, "max": -1}
+    top_area: Optional[int] = 2
+
+
+# class Task(Document):
+#     id = StringField(primary_key=True)
+#     # title = StringField(max_length=100)
+#     manufacturer = StringField(max_length=50)
+#
+#     mail = EmailField(max_length=100)
+#     # complete = BooleanField(default=False)
+#     created_at = DateTimeField(default=datetime.datetime.utcnow)
+#     criteria = EmbeddedDocumentField(Criteria)
+#
+class Task(BaseModel):
+    id: str
+    title: str
+    mail: str
+    created_at: str
+    criteria: CarCriteria
 
 
 class PriceHistory(EmbeddedDocument):

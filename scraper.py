@@ -5,20 +5,17 @@ from datetime import datetime, timedelta, date
 import re
 from typing import List, Tuple
 import jinja2
-from firebase_admin import db
-from firebase_admin.db import Reference
-import firebase_db
 import json
 import time
 from aiohttp_client_cache import CachedSession, SQLiteBackend, CachedResponse
 from requests_cache import CachedSession as MyCachedSession
 from rich import print
-
 import logging
-
 from car_details import CarDetails
+from db_handler import DbHandler
 from gmail_sender.gmail_sender import GmailSender
 from headers import scrape_headers, model_headers
+from models import CarCriteria
 
 logging.getLogger(__name__).addHandler(logging.StreamHandler(stream=sys.stdout))
 logger = logging.getLogger(__name__)
@@ -54,16 +51,27 @@ manufacturers_dict = {
     "mazda": "27",
     "toyota": "19"
 }
-
 num_to_manuf_dict = {value: key for key, value in manufacturers_dict.items()}
+
+models_dict = {
+    "tucson": "578",
+    "cx5": "2333",
+    "ateca": "2842",
+    "niro_hybrid": "2829",
+    "niro_phev": "3484",
+    "niro_plus": "3866",
+    "corolla_gli_2013_2016": "1428"
+}
+
+num_to_model_dict = {value: key for key, value in models_dict.items()}
 
 secs_to_sleep = 0.1
 
 
 class Scraper:
-    def __init__(self, urls_: list[str]):
+    def __init__(self):
+        self.db_handler = DbHandler()
         self.gmail_sender = GmailSender("gmail_sender/credentials.json")
-        self.urls = urls_
         # self.expiration = timedelta(minutes=30)
         # self.urls_for_expire_after = urls_expire_after
         self.cache = SQLiteBackend(
@@ -71,7 +79,6 @@ class Scraper:
             expire_after=timedelta(minutes=30),
             urls_expire_after=urls_expire_after,
         )
-        # self.cache_name = 'demo_cache'
 
     async def scrape(self, q: dict) -> CachedResponse:
         url = BASE_URL
@@ -167,16 +174,6 @@ class Scraper:
             car_details: CarDetails = self.extract_car_details(item)
             car_ads_to_save.append(car_details)
 
-        # handz = Handz()
-        # handz_result = handz.get_prices(filtered_feed_items)
-        #
-        # for res in handz_result['data']['entities']:
-        #     result_filter = next(filter(lambda x: x['id'] == res['id'], car_ads_to_save), None)
-        #     if result_filter:
-        #         result_filter['prices'] = res['prices']
-        #         result_filter['prices'] = human_readable_date(result_filter['prices'])
-        #         result_filter['date_created'] = convert_to_human_readable_date(res['dateCreated'])
-
         return car_ads_to_save, filtered_feed_items
 
     def extract_car_details(self, feed_item: json) -> CarDetails:
@@ -229,7 +226,7 @@ class Scraper:
             id=feed_item['id'],
             car_model=f"{feed_item['model']} {row2_without_hp}",
             year=feed_item['year'],
-            current_price=price_numeric,
+            price=price_numeric,
             date_added_epoch=date_added_epoch,
             date_added=formatted_date,
             feed_source=feed_item['feed_source'],
@@ -262,56 +259,17 @@ class Scraper:
         return hand
 
     @staticmethod
-    def querystring(url: str):
-        q = {}
-        for param in url.split('?')[1].split('&'):
-            key, value = param.split('=')
-            q[key] = value
-        return q
+    def querystring(criteria: CarCriteria):
+        query = {"manufacturer": criteria.manufacturer,
+                 "model": criteria.model,
+                 "year": f"{criteria.year_start}-{criteria.year_end}",
+                 "km": f"{criteria.km_start}-{criteria.km_end}"}
+        if criteria.km_start == -1 and criteria.km_end == -1:
+            query.pop("km")
+        if criteria.year_start == -1 and criteria.year_end == -1:
+            query.pop("year")
+        return query
 
-    def insert_car_ad(self, new_ad: dict, db_ref: Reference):
-        db_ref.child(new_ad['id']).set(new_ad)
-        logger.info(f"{new_ad['id']} is created successfully, "
-                    f"{new_ad['manuf_en']} "
-                    f"{new_ad['car_model']}, "
-                    f"current_price: {new_ad['current_price']}, "
-                    f"{new_ad['kilometers']} [km], "
-                    f"year: {new_ad['year']}, "
-                    f"hand: {new_ad['hand']}")
-        message = self.html_criteria_mail(new_ad)
-        self.gmail_sender.send(message,
-                               f'🎁 [New] - {new_ad["manufacturer_he"]} {new_ad["car_model"]} {new_ad["city"]}')
-
-    def update_car_ad(self, car_ad: CarDetails, db_ref: Reference, ad_from_db: dict):
-        new_ad = asdict(car_ad)
-        updated_values = {}
-        for key, value in ad_from_db.items():
-            if key not in new_ad or value != new_ad[key]:
-                new_value = new_ad.get(key)
-                if new_value:
-                    if key == 'prices':
-                        prices = ad_from_db.get('prices', [])
-                        if prices and prices[-1]['price'] != new_value[-1]['price']:
-                            prices.append(new_value[-1])
-                            updated_values['prices'] = prices
-                    else:
-                        updated_values[key] = new_value
-
-        if updated_values:
-            db_ref.child(new_ad['id']).update(updated_values)
-            msg: str = (f"{new_ad['id']} is changed, {new_ad['manuf_en']}  {new_ad['car_model']}, "
-                        f"current_price: {new_ad['current_price']}, "
-                        f"{new_ad['kilometers']} [km], year: {new_ad['year']}, hand: {new_ad['hand']}")
-
-            logger.info(msg)
-            for key, value in updated_values.items():
-                msg += f"{key} updated: {ad_from_db[key]} ===> {value} "
-                # logger.info(f"{key} updated: {ad_from_db[key]} ===> {value}")
-
-            logger.info(msg)
-            message = self.html_criteria_mail(new_ad)
-            self.gmail_sender.send(message,
-                                   f'⬇️ [Update] - {new_ad["manufacturer_he"]} {new_ad["car_model"]} {new_ad["city"]}')
 
     async def get_model(self, manufacturer_id: str):
         # session = CachedSession('yad2_model_cache', backend='sqlite', expire_after=timedelta(hours=48))
@@ -335,62 +293,23 @@ class Scraper:
         response = session.get(url, headers=model_headers, data={}, timeout=10)
         return response.json()
 
-    @staticmethod
-    def db_path_querystring(query_dict: dict):
-        manufacturer_num = query_dict.get('manufacturer', 'multiple_manufacturers')
-        model = query_dict.get('model', 'multiple_models')
-        manufacturer = num_to_manuf_dict.get(manufacturer_num, 'multiple_manufacturers')
-        return f'/car_ads/{manufacturer}/{model}/{query_dict["year"]}/{query_dict["km"]}'
-
-    async def run(self):
+    async def run(self, query: dict):
         tasks = []
-        for url in self.urls:
-            q = self.querystring(url)
-            task = asyncio.create_task(self.scrape_criteria(q.copy()))
-            tasks.append(task)
+        task = asyncio.create_task(self.scrape_criteria(query.copy()))
+        tasks.append(task)
 
         # Assuming results is a list of tuples, where each tuple contains a list of CarDetails and a query string
-        results: List[Tuple[List[CarDetails], dict]] = await asyncio.gather(*tasks)
+        results: List[List[CarDetails]] = await asyncio.gather(*tasks)
         # await self.cache.close()
 
-        for new_ads, query in results:
-            db_path = self.db_path_querystring(query)
-            ref = db.reference(db_path)
-            data: dict = ref.get()
-            if data is None:
-                # a dict of dicts in form {car_ad_id: car_ad}
-                logger.info(f"No data in database, creating new data, db_path: {db_path}")
-                db.reference(db_path).set({ad.id: asdict(ad) for ad in new_ads})
-            try:
-                for ad in new_ads:
-                    if ad.id not in data:
-                        self.insert_car_ad(asdict(ad), ref)
-                    else:
-                        self.update_car_ad(ad, ref, data[ad.id])
-            except Exception as e:
-                logger.error(f"Error updating database: {e}")
-
-            self.handle_sold_items([asdict(new_ad) for new_ad in new_ads], db_path, ref)
+        for res in results:
+            self.db_handler.handle_results(res)
 
         ads = []
-        for new_ads, query in results:
+        for new_ads in results:
             ads.append(new_ads)
         return ads
 
-    def html_criteria_mail(self, car_details: dict):
-        environment = jinja2.Environment()
-        with open("criteria_mail.html") as file:
-            template = environment.from_string(file.read())
-            return template.render(id=car_details['id'],
-                                   manufacturer=car_details['manuf_en'],
-                                   hand=car_details['hand'],
-                                   model=car_details['car_model'],
-                                   year=car_details['year'],
-                                   km=car_details['kilometers'],
-                                   price=car_details['current_price'],
-                                   free_text="",
-                                   initial_price=car_details['prices'][0]['price'],
-                                   date_created=car_details['date_added'])
 
     async def scrape_criteria(self, query_str: dict):
         first_page = await self.get_first_page(query_str)
@@ -399,45 +318,11 @@ class Scraper:
         last_page = self.get_number_of_pages(first_page)
         feed_sources = FEED_SOURCES_PRIVATE
         car_ads_to_save, feed_items = await self.yad2_scrape(query_str, feed_sources=feed_sources, last_page=last_page)
-        return car_ads_to_save, query_str
-
-    def handle_sold_items(self, scraped_car_ads: list[dict], db_path: str, ref: Reference):
-        sold_items = []
-        car_ads_db = ref.get(shallow=True)
-        car_ads: dict = {d.pop('id'): d for d in scraped_car_ads}
-        if car_ads_db:
-            for key, value in car_ads_db.items():
-                if key not in car_ads:
-                    car_ad_db: dict = ref.child(key).get()
-                    sold_car = {"id": car_ad_db['id'],
-                                'manufacturer': car_ad_db['manuf_en'], 'model': car_ad_db['car_model'],
-                                'date_added': car_ad_db['date_added'], 'current_price': car_ad_db['current_price'],
-                                'price_history': car_ad_db['prices'], 'km': car_ad_db['kilometers'],
-                                'year': car_ad_db['year'], 'hand': car_ad_db['hand']}
-                    logger.info(f"sold car: {json.dumps(sold_car, ensure_ascii=False)}")
-                    message = self.html_criteria_mail(car_ad_db)
-                    self.gmail_sender.send(message,
-                                           f'💸 [Sold] - {car_ad_db["manufacturer_he"]} {car_ad_db["car_model"]} {car_ad_db["city"]}')
-                    sold_items.append(car_ad_db)
-
-            # add sold cars to a separate list
-            db_path_for_sold = f'/sold_cars{db_path}'
-
-            if sold_items:
-                try:
-                    db.reference(db_path_for_sold).update({car_ad['id']: car_ad for car_ad in sold_items})
-                except ValueError as e:
-                    logger.error(f"Error adding sold cars to db: {e}")
-
-            # remove from main db, for next time
-            for item in sold_items:
-                logger.info(f"removing item {item['id']} from main db")
-                db.reference(db_path).child(item['id']).delete()
-        return car_ads_db
+        return car_ads_to_save
 
 
 if __name__ == '__main__':
     firebase_db.init_firebase_db()
-    scraper = Scraper(urls)
+    scraper = Scraper()
     logger.info(f"Starting scraper on urls: {urls}")
     asyncio.run(scraper.run())

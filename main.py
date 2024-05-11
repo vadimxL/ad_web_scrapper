@@ -1,14 +1,16 @@
 import asyncio
 import hashlib
 import logging
+import threading
+from datetime import datetime, timedelta
 from typing import List
 from urllib import parse
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from starlette.middleware.cors import CORSMiddleware
 import firebase_db
 import json
-from fastapi import FastAPI
-from scraper import Scraper, urls, logger
+from fastapi import FastAPI, HTTPException
+from scraper import Scraper, urls, logger, manufacturers_dict, num_to_manuf_dict, num_to_model_dict
 import models
 
 app = FastAPI()
@@ -34,21 +36,14 @@ car_models = {}
 def startup_event():
     global manufacturers_list
     firebase_db.init_firebase_db()
-    scraper = Scraper(urls_to_scrape)
+    scraper = Scraper()
     search_opts = scraper.get_search_options()
     manufacturers_list = search_opts['data']['manufacturer']
     for manuf in search_opts['data']['manufacturer']:
         manufacturers[manuf['value']] = manuf['text']
+    with open("manufacturers.json", "w") as manufs:
+        json.dump(manufacturers, manufs)
     # print(manufacturers)
-
-
-@app.post("/scrape")
-async def scrape(urls_: List[str]):
-    scraper = Scraper(urls_)
-    logger.info(f"Starting scraper on urls: {urls_}")
-    task = asyncio.get_event_loop().create_task(scraper.run())
-    result = await task
-    return result
 
 
 @app.get("/manufacturers")
@@ -57,104 +52,74 @@ async def get_manufacturers():
     return manufacturers_list
 
 
-@app.get("/models/{manufacturer}")
-async def get_models(manufacturer: str):
-    logging.info(manufacturer)
-    res = Scraper.get_model(manufacturer)['data']['model']
-    logging.info(res)
-    return res
-
-
-@app.get("/ads")
-async def get_ads():
-    q = {
-        'manufacturer': '48',
-        'model': '3866,2829,3484',
-        'year': '2019--1',
-        'km': '-1-80000'
-    }
-    car_ads = scraper.scrape_criteria(q)
-    return {"ads": car_ads}
-
-
-@app.post("/add/")
-def add(manufacturer_val: int, start_year: int, end_year: int):
-    manuf = {}
-    with open("json/manufacturers.json", "r") as manufs:
-        for m in json.load(manufs):
-            if m["value"] == manufacturer_val:
-                manuf = m
-                break
-    attributes_string = f"{manufacturer_val}{start_year}{end_year}"
-    criteria = models.Criteria(manufacturer=manuf, year_start=start_year, year_end=end_year)
-    new_task = models.Task(id=hashlib.md5(attributes_string.encode()).hexdigest(), criteria=criteria)
-    new_task.save()
-    return "Successfully added to DB"
-
-
-class CarData(BaseModel):
-    manufacturer: int
-    model: str
-    year: str
-    km: str
-
-
 def extract_query_params(url: str) -> dict:
     # Extract query parameters from the URL
     params = dict(parse.parse_qsl(parse.urlsplit(url).query))
     return params
 
 
-@app.get("/scrape/cars/")
-async def read_items(manufacturer: str = '48', model: str | None = None, year: str | None = None,
-                     km: str | None = None):
-    print(manufacturer, model, year, km)
-    if model is not None:
-        model = scraper.get_model(manufacturer)
-
-    return {"manufacturer": manufacturers[manufacturer], "model": model, "year": year, "km": km}
+tasks = dict()
 
 
-# url_to_scrape = "https://www.yad2.co.il/vehicles/cars?manufacturer=48&model=3866,2829,3484&year=2019--1&km=-1-80000"
-
-class Range(BaseModel):
-    min: str
-    max: str
-
-
-class Item(BaseModel):
-    id: int
-    email: str
-    manufacturers: list
-    models: list
-    year_range: Range
-    mileage_range: Range
-    price_range: Range
-
-
-items = []
-
-
-@app.get("/items", response_model=List[Item])
+@app.get("/tasks", response_model=List[models.Task])
 async def read_items():
-    logging.info(f"Getting items: {items}")
-    return items
+    logger.info(f"Getting tasks: {tasks}")
+    return list(tasks.values())
 
 
-@app.post("/items", response_model=Item)
-async def create_item(item: Item):
-    logging.info(f"Creating item {item}")
-    items.append(item)
-    return item
+async def scrape_task(task_id: str):
+    params = extract_query_params(tasks[task_id].title)
+    logger.info(f"Scraping task: {task_id}: {tasks[task_id]}")
+    scraper = Scraper()
+    task = asyncio.get_event_loop().create_task(scraper.run(params))
+    result = await task
+    while True:
+        task = asyncio.get_event_loop().create_task(scraper.run(params))
+        result = await task
+        logger.info(f"Sleeping for {timedelta(minutes=30.0).seconds} seconds")
+        await asyncio.sleep(timedelta(minutes=30.0).seconds)
+
+@app.post("/tasks", response_model=models.Task)
+async def create_item(email: EmailStr, url: str):
+    params: dict = extract_query_params(url)
+
+    if 'manufacturer' not in params or 'model' not in params or 'year' not in params or 'km' not in params:
+        raise HTTPException(status_code=400, detail="Invalid URL")
+
+    criteria = models.CarCriteria(manufacturer=params['manufacturer'],
+                                  models=params['model'].split(','),
+                                  year=get_range(params['year']),
+                                  km=get_range(params['km']))
+    id_ = hashlib.sha256(url.encode()).hexdigest()
+    if id_ in tasks:
+        return tasks[id_]
+    task = models.Task(id=id_, title=url, mail=email,
+                       created_at=datetime.now().strftime("%d_%m_%Y_%H_%M_%S"),
+                       criteria=criteria)
+    logger.info(f"Creating item {task}")
+    tasks[id_] = task
+    task = asyncio.get_event_loop().create_task(scrape_task(id_))
+    return task
 
 
-@app.put("/items/{item_id}", response_model=Item)
-async def update_item(item_id: int, item: Item):
-    items[item_id] = item
-    return item
+@app.put("/tasks/{task_id}", response_model=models.Task)
+async def update_item(task_id: str, criteria: models.CarCriteria):
+    task = tasks[task_id]
+    task.criteria = criteria
+    return task
 
 
-@app.delete("/items/{item_id}")
-async def delete_item(item_id: int):
-    del items[item_id]
-    return {"message": "Item deleted"}
+@app.delete("/tasks/{task_id}")
+async def delete_item(task_id: str):
+    task = tasks.pop(task_id, None)
+    if task is None:
+        raise HTTPException(status_code=404, detail="Task not found")
+    return {"message": f"Task: {task} deleted"}
+
+
+def get_range(data: str) -> models.Range:
+    # Split the data on the separator
+    parts = data.split('-')
+    parts = [int(part) for part in parts if part.isdigit()]
+    parts = [part * -1 if part == 1 else part for part in parts]
+    return models.Range(min=parts[0], max=parts[1])

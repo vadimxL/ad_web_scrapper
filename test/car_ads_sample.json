@@ -1,0 +1,1029 @@
+[
+  [
+    {
+      "id": "e72cfx56",
+      "car_model": "נירו הייבריד EX הייבריד אוט' 1.6 ",
+      "year": 2020,
+      "current_price": 110000,
+      "date_added_epoch": 45399,
+      "date_added": "17/4/2024",
+      "feed_source": "private",
+      "city": "מעלה אדומים",
+      "manufacturer_he": "קיה",
+      "hp": "141",
+      "hand": 1,
+      "kilometers": 122000,
+      "prices": [
+        {
+          "price": 110000,
+          "date": "07/05/2024"
+        }
+      ],
+      "blind_spot": "N/A",
+      "smart_cruise_control": "בקרת שיוט אדפטיבית",
+      "manuf_en": "kia",
+      "updated_at": null,
+      "gear_type": "אוטומט"
+    },
+    {
+      "id": "20s8n04p",
+      "car_model": "נירו הייבריד Platinum הייבריד אוט' 1.6 ",
+      "year": 2023,
+      "current_price": 170000,
+      "date_added_epoch": 45403,
+      "date_added": "21/4/2024",
+      "feed_source": "private",
+      "city": "בת ים",
+      "manufacturer_he": "קיה",
+      "hp": "140",
+      "hand": 1,
+      "kilometers": 35000,
+      "prices": [
+        {
+          "price": 170000,
+          "date": "07/05/2024"
+        }
+      ],
+      "blind_spot": "N/A",
+      "smart_cruise_control": "בקרת שיוט אדפטיבית",
+      "manuf_en": "kia",
+      "updated_at": null,
+      "gear_type": "אוטומט"
+    },
+    {
+      "id": "7fvm29n8",
+      "car_model": "נירו הייבריד LX הייבריד אוט' 1.6 ",
+      "year": 2020,
+      "current_price": 104000,
+      "date_added_epoch": 45400,
+      "date_added": "18/4/2024",
+      "feed_source": "private",
+      "city": "ירושלים",
+      "manufacturer_he": "קיה",
+      "hp": "141",
+      "hand": 1,
+      "kilometers": 60000,
+      "prices": [
+        {
+          "price": 104000,
+          "date": "07/05/2024"
+        }
+      ],
+      "blind_spot": "N/A",
+      "smart_cruise_control": "בקרת שיוט אדפטיבית",
+      "manuf_en": "kia",
+      "updated_at": null,
+      "gear_type": "אוטומט"
+    },
+    {
+      "id": "4juutyby",
+      "car_model": "נירו הייבריד EX הייבריד אוט' 1.6 ",
+      "year": 2020,
+      "current_price": 100000,
+      "date_added_epoch": 45391,
+      "date_added": "9/4/2024",
+      "feed_source": "private",
+      "city": "צפת",
+      "manufacturer_he": "קיה",
+      "hp": "141",
+      "hand": 1,
+      "kilometers": 105000,
+      "prices": [
+        {
+          "price": 100000,
+          "date": "07/05/2024"
+        }
+      ],
+      "blind_spot": "N/A",
+      "smart_cruise_control": "בקרת שיוט אדפטיבית",
+      "manuf_en": "kia",
+      "updated_at": null,
+      "gear_type": "אוטומט"
+    },
+    {
+      "id": "7kyxyo1j",
+      "car_model": "נירו הייבריד Urban הייבריד אוט' 1.6 ",
+      "year": 2021,
+      "current_price": 103000,
+      "date_added_epoch": 45386,
+      "date_added": "4/4/2024",
+      "feed_source": "private",
+      "city": "נתניה",
+      "manufacturer_he": "קיה",
+      "hp": "141",
+      "hand": 1,
+      "kilometers": 99000,
+      "prices": [
+        {
+          "price": 103000,
+          "date": "07/05/2024"
+        }
+      ],
+      "blind_spot": "N/A",
+      "smart_cruise_control": "בקרת שיוט אדפטיבית",
+      "manuf_en": "kia",
+      "updated_at": null,
+      "gear_type": "אוטומט"
+    },
+    {
+      "id": "7dks1epj",
+      "car_model": "נירו הייבריד LX הייבריד אוט' 1.6 ",
+      "year": 2020,
+      "current_price": 76300,
+      "date_added_epoch": 45385,
+      "date_added": "3/4/2024",
+      "feed_source": "private",
+      "city": "קרית אתא",
+      "manufacturer_he": "קיה",
+      "hp": "141",
+      "hand": 2,
+      "kilometers": 177000,
+      "prices": [
+        {
+          "price": 76300,
+          "date": "07/05/2024"
+        }
+      ],
+      "blind_spot": "N/A",
+      "smart_cruise_control": "בקרת שיוט אדפטיבית",
+      "manuf_en": "kia",
+      "updated_at": null,
+      "gear_type": "אוטומט"
+    },
+    {
+      "id": "lzfdbhjb",
+      "car_model": "נירו הייבריד PHEV LX אוט' 1.6 ",
+      "year": 2020,
+      "current_price": 101000,
+      "date_added_epoch": 45389,
+      "date_added": "7/4/2024",
+      "feed_source": "private",
+      "city": "ירושלים",
+      "manufacturer_he": "קיה",
+      "hp": "141",
+      "hand": 2,
+      "kilometers": 105000,
+      "prices": [
+        {
+          "price": 101000,
+          "date": "07/05/2024"
+        }
+      ],
+      "blind_spot": "N/A",
+      "smart_cruise_control": "בקרת שיוט אדפטיבית",
+      "manuf_en": "kia",
+      "updated_at": null,
+      "gear_type": "אוטומט"
+    },
+    {
+      "id": "3uk7a4f3",
+      "car_model": "נירו הייבריד EX הייבריד אוט' 1.6 ",
+      "year": 2020,
+      "current_price": 106350,
+      "date_added_epoch": 45418,
+      "date_added": "6/5/2024",
+      "feed_source": "private",
+      "city": "אשקלון",
+      "manufacturer_he": "קיה",
+      "hp": "141",
+      "hand": 1,
+      "kilometers": 101000,
+      "prices": [
+        {
+          "price": 106350,
+          "date": "07/05/2024"
+        }
+      ],
+      "blind_spot": "N/A",
+      "smart_cruise_control": "בקרת שיוט אדפטיבית",
+      "manuf_en": "kia",
+      "updated_at": null,
+      "gear_type": "אוטומט"
+    },
+    {
+      "id": "8ov65082",
+      "car_model": "נירו הייבריד PHEV LX אוט' 1.6 ",
+      "year": 2020,
+      "current_price": 112000,
+      "date_added_epoch": 45418,
+      "date_added": "6/5/2024",
+      "feed_source": "private",
+      "city": "בית שאן",
+      "manufacturer_he": "קיה",
+      "hp": "141",
+      "hand": 2,
+      "kilometers": 1010,
+      "prices": [
+        {
+          "price": 112000,
+          "date": "07/05/2024"
+        }
+      ],
+      "blind_spot": "N/A",
+      "smart_cruise_control": "בקרת שיוט אדפטיבית",
+      "manuf_en": "kia",
+      "updated_at": null,
+      "gear_type": "אוטומט"
+    },
+    {
+      "id": "9i1lbszp",
+      "car_model": "נירו הייבריד Urban הייבריד אוט' 1.6 ",
+      "year": 2021,
+      "current_price": 95000,
+      "date_added_epoch": 45395,
+      "date_added": "13/4/2024",
+      "feed_source": "private",
+      "city": "חיפה",
+      "manufacturer_he": "קיה",
+      "hp": "141",
+      "hand": 1,
+      "kilometers": 140000,
+      "prices": [
+        {
+          "price": 95000,
+          "date": "07/05/2024"
+        }
+      ],
+      "blind_spot": "N/A",
+      "smart_cruise_control": "בקרת שיוט אדפטיבית",
+      "manuf_en": "kia",
+      "updated_at": null,
+      "gear_type": "אוטומט"
+    },
+    {
+      "id": "t6jvpkja",
+      "car_model": "נירו הייבריד Urban הייבריד אוט' 1.6 ",
+      "year": 2022,
+      "current_price": 120000,
+      "date_added_epoch": 45413,
+      "date_added": "1/5/2024",
+      "feed_source": "private",
+      "city": "רחובות",
+      "manufacturer_he": "קיה",
+      "hp": "141",
+      "hand": 1,
+      "kilometers": 59000,
+      "prices": [
+        {
+          "price": 120000,
+          "date": "07/05/2024"
+        }
+      ],
+      "blind_spot": "N/A",
+      "smart_cruise_control": "בקרת שיוט אדפטיבית",
+      "manuf_en": "kia",
+      "updated_at": null,
+      "gear_type": "אוטומט"
+    },
+    {
+      "id": "tkx8btpw",
+      "car_model": "נירו הייבריד EX הייבריד אוט' 1.6 ",
+      "year": 2020,
+      "current_price": 110000,
+      "date_added_epoch": 45414,
+      "date_added": "2/5/2024",
+      "feed_source": "private",
+      "city": "באר שבע",
+      "manufacturer_he": "קיה",
+      "hp": "141",
+      "hand": 1,
+      "kilometers": 55800,
+      "prices": [
+        {
+          "price": 110000,
+          "date": "07/05/2024"
+        }
+      ],
+      "blind_spot": "N/A",
+      "smart_cruise_control": "בקרת שיוט אדפטיבית",
+      "manuf_en": "kia",
+      "updated_at": null,
+      "gear_type": "אוטומט"
+    },
+    {
+      "id": "i2klys5v",
+      "car_model": "נירו הייבריד LX הייבריד אוט' 1.6 ",
+      "year": 2020,
+      "current_price": 90500,
+      "date_added_epoch": 45416,
+      "date_added": "4/5/2024",
+      "feed_source": "private",
+      "city": "עפולה",
+      "manufacturer_he": "קיה",
+      "hp": "141",
+      "hand": 1,
+      "kilometers": 110000,
+      "prices": [
+        {
+          "price": 90500,
+          "date": "07/05/2024"
+        }
+      ],
+      "blind_spot": "N/A",
+      "smart_cruise_control": "בקרת שיוט אדפטיבית",
+      "manuf_en": "kia",
+      "updated_at": null,
+      "gear_type": "אוטומט"
+    },
+    {
+      "id": "7977nt88",
+      "car_model": "נירו הייבריד LX הייבריד אוט' 1.6 ",
+      "year": 2020,
+      "current_price": 95000,
+      "date_added_epoch": 45376,
+      "date_added": "25/3/2024",
+      "feed_source": "private",
+      "city": "באר שבע",
+      "manufacturer_he": "קיה",
+      "hp": "141",
+      "hand": 1,
+      "kilometers": 104045,
+      "prices": [
+        {
+          "price": 95000,
+          "date": "07/05/2024"
+        }
+      ],
+      "blind_spot": "N/A",
+      "smart_cruise_control": "בקרת שיוט אדפטיבית",
+      "manuf_en": "kia",
+      "updated_at": null,
+      "gear_type": "אוטומט"
+    },
+    {
+      "id": "v2vkwdmy",
+      "car_model": "נירו הייבריד EX הייבריד אוט' 1.6 ",
+      "year": 2020,
+      "current_price": 0,
+      "date_added_epoch": 45390,
+      "date_added": "8/4/2024",
+      "feed_source": "private",
+      "city": "באר יעקב",
+      "manufacturer_he": "קיה",
+      "hp": "141",
+      "hand": 2,
+      "kilometers": 80000,
+      "prices": [
+        {
+          "price": 0,
+          "date": "07/05/2024"
+        }
+      ],
+      "blind_spot": "N/A",
+      "smart_cruise_control": "בקרת שיוט אדפטיבית",
+      "manuf_en": "kia",
+      "updated_at": null,
+      "gear_type": "אוטומט"
+    },
+    {
+      "id": "rowu58b5",
+      "car_model": "נירו הייבריד PHEV LX אוט' 1.6 ",
+      "year": 2020,
+      "current_price": 112000,
+      "date_added_epoch": 45395,
+      "date_added": "13/4/2024",
+      "feed_source": "private",
+      "city": "מודיעין מכבים רעות",
+      "manufacturer_he": "קיה",
+      "hp": "141",
+      "hand": 1,
+      "kilometers": 84000,
+      "prices": [
+        {
+          "price": 112000,
+          "date": "07/05/2024"
+        }
+      ],
+      "blind_spot": "N/A",
+      "smart_cruise_control": "בקרת שיוט אדפטיבית",
+      "manuf_en": "kia",
+      "updated_at": null,
+      "gear_type": "אוטומט"
+    },
+    {
+      "id": "dyh1sf44",
+      "car_model": "נירו הייבריד LX הייבריד אוט' 1.6 ",
+      "year": 2020,
+      "current_price": 90000,
+      "date_added_epoch": 45317,
+      "date_added": "26/1/2024",
+      "feed_source": "private",
+      "city": "חיפה",
+      "manufacturer_he": "קיה",
+      "hp": "141",
+      "hand": 2,
+      "kilometers": 100000,
+      "prices": [
+        {
+          "price": 90000,
+          "date": "07/05/2024"
+        }
+      ],
+      "blind_spot": "N/A",
+      "smart_cruise_control": "בקרת שיוט אדפטיבית",
+      "manuf_en": "kia",
+      "updated_at": null,
+      "gear_type": "אוטומט"
+    },
+    {
+      "id": "8ojkkb9b",
+      "car_model": "נירו הייבריד EX הייבריד אוט' 1.6 ",
+      "year": 2021,
+      "current_price": 119000,
+      "date_added_epoch": 45408,
+      "date_added": "26/4/2024",
+      "feed_source": "private",
+      "city": "אבן יהודה",
+      "manufacturer_he": "קיה",
+      "hp": "141",
+      "hand": 2,
+      "kilometers": 63000,
+      "prices": [
+        {
+          "price": 119000,
+          "date": "07/05/2024"
+        }
+      ],
+      "blind_spot": "N/A",
+      "smart_cruise_control": "בקרת שיוט אדפטיבית",
+      "manuf_en": "kia",
+      "updated_at": null,
+      "gear_type": "אוטומט"
+    },
+    {
+      "id": "i6x6il9p",
+      "car_model": "נירו הייבריד PHEV LX אוט' 1.6 ",
+      "year": 2020,
+      "current_price": 125650,
+      "date_added_epoch": 45350,
+      "date_added": "28/2/2024",
+      "feed_source": "private",
+      "city": "גדרה",
+      "manufacturer_he": "קיה",
+      "hp": "141",
+      "hand": 2,
+      "kilometers": 67652,
+      "prices": [
+        {
+          "price": 125650,
+          "date": "07/05/2024"
+        }
+      ],
+      "blind_spot": "N/A",
+      "smart_cruise_control": "בקרת שיוט אדפטיבית",
+      "manuf_en": "kia",
+      "updated_at": null,
+      "gear_type": "אוטומט"
+    },
+    {
+      "id": "cdjche46",
+      "car_model": "נירו הייבריד EX הייבריד אוט' 1.6 ",
+      "year": 2020,
+      "current_price": 107000,
+      "date_added_epoch": 45320,
+      "date_added": "29/1/2024",
+      "feed_source": "private",
+      "city": "מודיעין מכבים רעות",
+      "manufacturer_he": "קיה",
+      "hp": "141",
+      "hand": 1,
+      "kilometers": 101000,
+      "prices": [
+        {
+          "price": 107000,
+          "date": "07/05/2024"
+        }
+      ],
+      "blind_spot": "N/A",
+      "smart_cruise_control": "בקרת שיוט אדפטיבית",
+      "manuf_en": "kia",
+      "updated_at": null,
+      "gear_type": "אוטומט"
+    },
+    {
+      "id": "h0o1mv1h",
+      "car_model": "נירו הייבריד Urban הייבריד אוט' 1.6 ",
+      "year": 2021,
+      "current_price": 121800,
+      "date_added_epoch": 45414,
+      "date_added": "2/5/2024",
+      "feed_source": "private",
+      "city": "בית חנניה",
+      "manufacturer_he": "קיה",
+      "hp": "141",
+      "hand": 1,
+      "kilometers": 78000,
+      "prices": [
+        {
+          "price": 121800,
+          "date": "07/05/2024"
+        }
+      ],
+      "blind_spot": "N/A",
+      "smart_cruise_control": "בקרת שיוט אדפטיבית",
+      "manuf_en": "kia",
+      "updated_at": null,
+      "gear_type": "אוטומט"
+    },
+    {
+      "id": "xvqg0349",
+      "car_model": "נירו הייבריד Urban הייבריד אוט' 1.6 ",
+      "year": 2021,
+      "current_price": 116000,
+      "date_added_epoch": 45414,
+      "date_added": "2/5/2024",
+      "feed_source": "private",
+      "city": "קרית אתא",
+      "manufacturer_he": "קיה",
+      "hp": "141",
+      "hand": 2,
+      "kilometers": 44011,
+      "prices": [
+        {
+          "price": 116000,
+          "date": "07/05/2024"
+        }
+      ],
+      "blind_spot": "N/A",
+      "smart_cruise_control": "בקרת שיוט אדפטיבית",
+      "manuf_en": "kia",
+      "updated_at": null,
+      "gear_type": "אוטומט"
+    },
+    {
+      "id": "7mjuztcl",
+      "car_model": "נירו הייבריד LX הייבריד אוט' 1.6 ",
+      "year": 2020,
+      "current_price": 83000,
+      "date_added_epoch": 45412,
+      "date_added": "30/4/2024",
+      "feed_source": "private",
+      "city": "קרית מלאכי",
+      "manufacturer_he": "קיה",
+      "hp": "141",
+      "hand": 2,
+      "kilometers": 124000,
+      "prices": [
+        {
+          "price": 83000,
+          "date": "07/05/2024"
+        }
+      ],
+      "blind_spot": "N/A",
+      "smart_cruise_control": "בקרת שיוט אדפטיבית",
+      "manuf_en": "kia",
+      "updated_at": null,
+      "gear_type": "אוטומט"
+    },
+    {
+      "id": "l1li4fo5",
+      "car_model": "נירו הייבריד PHEV LX אוט' 1.6 ",
+      "year": 2021,
+      "current_price": 96000,
+      "date_added_epoch": 45386,
+      "date_added": "4/4/2024",
+      "feed_source": "private",
+      "city": "באר שבע",
+      "manufacturer_he": "קיה",
+      "hp": "141",
+      "hand": 2,
+      "kilometers": 144000,
+      "prices": [
+        {
+          "price": 96000,
+          "date": "07/05/2024"
+        }
+      ],
+      "blind_spot": "N/A",
+      "smart_cruise_control": "בקרת שיוט אדפטיבית",
+      "manuf_en": "kia",
+      "updated_at": null,
+      "gear_type": "אוטומט"
+    },
+    {
+      "id": "rsuzvoxf",
+      "car_model": "נירו הייבריד EX הייבריד אוט' 1.6 ",
+      "year": 2020,
+      "current_price": 0,
+      "date_added_epoch": 45407,
+      "date_added": "25/4/2024",
+      "feed_source": "private",
+      "city": "רמלה",
+      "manufacturer_he": "קיה",
+      "hp": "141",
+      "hand": 1,
+      "kilometers": 88234,
+      "prices": [
+        {
+          "price": 0,
+          "date": "07/05/2024"
+        }
+      ],
+      "blind_spot": "N/A",
+      "smart_cruise_control": "בקרת שיוט אדפטיבית",
+      "manuf_en": "kia",
+      "updated_at": null,
+      "gear_type": "אוטומט"
+    },
+    {
+      "id": "l0rfo57l",
+      "car_model": "נירו הייבריד LX הייבריד אוט' 1.6 ",
+      "year": 2020,
+      "current_price": 105200,
+      "date_added_epoch": 45402,
+      "date_added": "20/4/2024",
+      "feed_source": "private",
+      "city": "כיסרא סומיע",
+      "manufacturer_he": "קיה",
+      "hp": "141",
+      "hand": 2,
+      "kilometers": 100000,
+      "prices": [
+        {
+          "price": 105200,
+          "date": "07/05/2024"
+        }
+      ],
+      "blind_spot": "N/A",
+      "smart_cruise_control": "בקרת שיוט אדפטיבית",
+      "manuf_en": "kia",
+      "updated_at": null,
+      "gear_type": "אוטומט"
+    },
+    {
+      "id": "8f1zowpt",
+      "car_model": "נירו הייבריד LX הייבריד אוט' 1.6 ",
+      "year": 2020,
+      "current_price": 95000,
+      "date_added_epoch": 45368,
+      "date_added": "17/3/2024",
+      "feed_source": "private",
+      "city": "בית שמש",
+      "manufacturer_he": "קיה",
+      "hp": "141",
+      "hand": 2,
+      "kilometers": 107000,
+      "prices": [
+        {
+          "price": 95000,
+          "date": "07/05/2024"
+        }
+      ],
+      "blind_spot": "N/A",
+      "smart_cruise_control": "בקרת שיוט אדפטיבית",
+      "manuf_en": "kia",
+      "updated_at": null,
+      "gear_type": "אוטומט"
+    },
+    {
+      "id": "dwyfg0b4",
+      "car_model": "נירו הייבריד PHEV LX אוט' 1.6 ",
+      "year": 2021,
+      "current_price": 105000,
+      "date_added_epoch": 45398,
+      "date_added": "16/4/2024",
+      "feed_source": "private",
+      "city": "אשקלון",
+      "manufacturer_he": "קיה",
+      "hp": "141",
+      "hand": 2,
+      "kilometers": 65000,
+      "prices": [
+        {
+          "price": 105000,
+          "date": "07/05/2024"
+        }
+      ],
+      "blind_spot": "N/A",
+      "smart_cruise_control": "בקרת שיוט אדפטיבית",
+      "manuf_en": "kia",
+      "updated_at": null,
+      "gear_type": "אוטומט"
+    },
+    {
+      "id": "tkr1mq22",
+      "car_model": "נירו הייבריד EX הייבריד אוט' 1.6 ",
+      "year": 2020,
+      "current_price": 100000,
+      "date_added_epoch": 45384,
+      "date_added": "2/4/2024",
+      "feed_source": "private",
+      "city": "מעון",
+      "manufacturer_he": "קיה",
+      "hp": "141",
+      "hand": 1,
+      "kilometers": 116000,
+      "prices": [
+        {
+          "price": 100000,
+          "date": "07/05/2024"
+        }
+      ],
+      "blind_spot": "N/A",
+      "smart_cruise_control": "בקרת שיוט אדפטיבית",
+      "manuf_en": "kia",
+      "updated_at": null,
+      "gear_type": "אוטומט"
+    },
+    {
+      "id": "icmfsfma",
+      "car_model": "נירו הייבריד LX הייבריד אוט' 1.6 ",
+      "year": 2020,
+      "current_price": 98250,
+      "date_added_epoch": 45394,
+      "date_added": "12/4/2024",
+      "feed_source": "private",
+      "city": "בני עי\"ש",
+      "manufacturer_he": "קיה",
+      "hp": "141",
+      "hand": 2,
+      "kilometers": 98000,
+      "prices": [
+        {
+          "price": 98250,
+          "date": "07/05/2024"
+        }
+      ],
+      "blind_spot": "N/A",
+      "smart_cruise_control": "בקרת שיוט אדפטיבית",
+      "manuf_en": "kia",
+      "updated_at": null,
+      "gear_type": "אוטומט"
+    },
+    {
+      "id": "wyhdd4jn",
+      "car_model": "נירו הייבריד LX הייבריד אוט' 1.6 ",
+      "year": 2020,
+      "current_price": 99000,
+      "date_added_epoch": 45363,
+      "date_added": "12/3/2024",
+      "feed_source": "private",
+      "city": "יבנה",
+      "manufacturer_he": "קיה",
+      "hp": "141",
+      "hand": 2,
+      "kilometers": 97000,
+      "prices": [
+        {
+          "price": 99000,
+          "date": "07/05/2024"
+        }
+      ],
+      "blind_spot": "N/A",
+      "smart_cruise_control": "בקרת שיוט אדפטיבית",
+      "manuf_en": "kia",
+      "updated_at": null,
+      "gear_type": "אוטומט"
+    },
+    {
+      "id": "adwezg15",
+      "car_model": "נירו הייבריד PHEV LX אוט' 1.6 ",
+      "year": 2021,
+      "current_price": 108000,
+      "date_added_epoch": 45335,
+      "date_added": "13/2/2024",
+      "feed_source": "private",
+      "city": "הרצליה",
+      "manufacturer_he": "קיה",
+      "hp": "141",
+      "hand": 2,
+      "kilometers": 120000,
+      "prices": [
+        {
+          "price": 108000,
+          "date": "07/05/2024"
+        }
+      ],
+      "blind_spot": "N/A",
+      "smart_cruise_control": "בקרת שיוט אדפטיבית",
+      "manuf_en": "kia",
+      "updated_at": null,
+      "gear_type": "אוטומט"
+    },
+    {
+      "id": "4i5ymczz",
+      "car_model": "נירו הייבריד Urban הייבריד אוט' 1.6 ",
+      "year": 2021,
+      "current_price": 132000,
+      "date_added_epoch": 45362,
+      "date_added": "11/3/2024",
+      "feed_source": "private",
+      "city": "טירת כרמל",
+      "manufacturer_he": "קיה",
+      "hp": "141",
+      "hand": 1,
+      "kilometers": 35000,
+      "prices": [
+        {
+          "price": 132000,
+          "date": "07/05/2024"
+        }
+      ],
+      "blind_spot": "N/A",
+      "smart_cruise_control": "בקרת שיוט אדפטיבית",
+      "manuf_en": "kia",
+      "updated_at": null,
+      "gear_type": "אוטומט"
+    },
+    {
+      "id": "jeewbj6a",
+      "car_model": "נירו הייבריד Urban הייבריד אוט' 1.6 ",
+      "year": 2021,
+      "current_price": 111800,
+      "date_added_epoch": 45257,
+      "date_added": "27/11/2023",
+      "feed_source": "private",
+      "city": "נתניה",
+      "manufacturer_he": "קיה",
+      "hp": "141",
+      "hand": 1,
+      "kilometers": 74000,
+      "prices": [
+        {
+          "price": 111800,
+          "date": "07/05/2024"
+        }
+      ],
+      "blind_spot": "N/A",
+      "smart_cruise_control": "בקרת שיוט אדפטיבית",
+      "manuf_en": "kia",
+      "updated_at": null,
+      "gear_type": "אוטומט"
+    },
+    {
+      "id": "8mma0oj7",
+      "car_model": "נירו הייבריד LX הייבריד אוט' 1.6 ",
+      "year": 2020,
+      "current_price": 92000,
+      "date_added_epoch": 45390,
+      "date_added": "8/4/2024",
+      "feed_source": "private",
+      "city": "מודיעין מכבים רעות",
+      "manufacturer_he": "קיה",
+      "hp": "141",
+      "hand": 2,
+      "kilometers": 140000,
+      "prices": [
+        {
+          "price": 92000,
+          "date": "07/05/2024"
+        }
+      ],
+      "blind_spot": "N/A",
+      "smart_cruise_control": "בקרת שיוט אדפטיבית",
+      "manuf_en": "kia",
+      "updated_at": null,
+      "gear_type": "אוטומט"
+    },
+    {
+      "id": "whq195ni",
+      "car_model": "נירו הייבריד LX הייבריד אוט' 1.6 ",
+      "year": 2020,
+      "current_price": 85000,
+      "date_added_epoch": 45389,
+      "date_added": "7/4/2024",
+      "feed_source": "private",
+      "city": "יהוד מונוסון",
+      "manufacturer_he": "קיה",
+      "hp": "141",
+      "hand": 1,
+      "kilometers": 142000,
+      "prices": [
+        {
+          "price": 85000,
+          "date": "07/05/2024"
+        }
+      ],
+      "blind_spot": "N/A",
+      "smart_cruise_control": "בקרת שיוט אדפטיבית",
+      "manuf_en": "kia",
+      "updated_at": null,
+      "gear_type": "אוטומט"
+    },
+    {
+      "id": "tcyfxp6m",
+      "car_model": "נירו הייבריד LX הייבריד אוט' 1.6 ",
+      "year": 2020,
+      "current_price": 90000,
+      "date_added_epoch": 45389,
+      "date_added": "7/4/2024",
+      "feed_source": "private",
+      "city": "עספיא",
+      "manufacturer_he": "קיה",
+      "hp": "141",
+      "hand": 1,
+      "kilometers": 140000,
+      "prices": [
+        {
+          "price": 90000,
+          "date": "07/05/2024"
+        }
+      ],
+      "blind_spot": "N/A",
+      "smart_cruise_control": "בקרת שיוט אדפטיבית",
+      "manuf_en": "kia",
+      "updated_at": null,
+      "gear_type": "אוטומט"
+    },
+    {
+      "id": "s8ikybod",
+      "car_model": "נירו הייבריד LX הייבריד אוט' 1.6 ",
+      "year": 2020,
+      "current_price": 88000,
+      "date_added_epoch": 45335,
+      "date_added": "13/2/2024",
+      "feed_source": "private",
+      "city": "נס ציונה",
+      "manufacturer_he": "קיה",
+      "hp": "141",
+      "hand": 2,
+      "kilometers": 37000,
+      "prices": [
+        {
+          "price": 88000,
+          "date": "07/05/2024"
+        }
+      ],
+      "blind_spot": "N/A",
+      "smart_cruise_control": "בקרת שיוט אדפטיבית",
+      "manuf_en": "kia",
+      "updated_at": null,
+      "gear_type": "אוטומט"
+    },
+    {
+      "id": "9lfycr88",
+      "car_model": "נירו הייבריד EX הייבריד אוט' 1.6 ",
+      "year": 2020,
+      "current_price": 90000,
+      "date_added_epoch": 45376,
+      "date_added": "25/3/2024",
+      "feed_source": "private",
+      "city": "יקנעם עילית",
+      "manufacturer_he": "קיה",
+      "hp": "141",
+      "hand": 1,
+      "kilometers": 180000,
+      "prices": [
+        {
+          "price": 90000,
+          "date": "07/05/2024"
+        }
+      ],
+      "blind_spot": "N/A",
+      "smart_cruise_control": "בקרת שיוט אדפטיבית",
+      "manuf_en": "kia",
+      "updated_at": null,
+      "gear_type": "אוטומט"
+    },
+    {
+      "id": "eslrogy9",
+      "car_model": "נירו הייבריד LX הייבריד אוט' 1.6 ",
+      "year": 2020,
+      "current_price": 98500,
+      "date_added_epoch": 45249,
+      "date_added": "19/11/2023",
+      "feed_source": "private",
+      "city": "טבריה",
+      "manufacturer_he": "קיה",
+      "hp": "141",
+      "hand": 2,
+      "kilometers": 89000,
+      "prices": [
+        {
+          "price": 98500,
+          "date": "07/05/2024"
+        }
+      ],
+      "blind_spot": "N/A",
+      "smart_cruise_control": "בקרת שיוט אדפטיבית",
+      "manuf_en": "kia",
+      "updated_at": null,
+      "gear_type": "אוטומט"
+    },
+    {
+      "id": "anu537mg",
+      "car_model": "נירו הייבריד EX הייבריד אוט' 1.6 ",
+      "year": 2020,
+      "current_price": 114700,
+      "date_added_epoch": 45379,
+      "date_added": "28/3/2024",
+      "feed_source": "private",
+      "city": "נצרת",
+      "manufacturer_he": "קיה",
+      "hp": "141",
+      "hand": 25,
+      "kilometers": 67000,
+      "prices": [
+        {
+          "price": 114700,
+          "date": "07/05/2024"
+        }
+      ],
+      "blind_spot": "123123",
+      "smart_cruise_control": "בקרת שיוט אדפטיבית",
+      "manuf_en": "kia",
+      "updated_at": null,
+      "gear_type": "אוטומט"
+    }
+  ]
+]
