@@ -10,6 +10,8 @@ from starlette.middleware.cors import CORSMiddleware
 import firebase_db
 import json
 from fastapi import FastAPI, HTTPException
+
+from db_handler import DbHandler
 from scraper import Scraper, urls, logger, manufacturers_dict, num_to_manuf_dict, num_to_model_dict
 import models
 
@@ -35,7 +37,10 @@ car_models = {}
 @app.on_event("startup")
 def startup_event():
     global manufacturers_list
-    firebase_db.init_firebase_db()
+    try:
+        firebase_db.init_firebase_db()
+    except Exception as e:
+        logger.error(f"Error initializing firebase db: {e}")
     scraper = Scraper()
     search_opts = scraper.get_search_options()
     manufacturers_list = search_opts['data']['manufacturer']
@@ -67,17 +72,21 @@ async def read_items():
     return list(tasks.values())
 
 
-async def scrape_task(task_id: str):
+async def scrape_task(task_id: str, minutes=5.0):
     params = extract_query_params(tasks[task_id].title)
     logger.info(f"Scraping task: {task_id}: {tasks[task_id]}")
     scraper = Scraper()
     task = asyncio.get_event_loop().create_task(scraper.run(params))
-    result = await task
+    results = await task
+    db_handler = DbHandler(parse.urlsplit(tasks[task_id].title).query)
+    db_handler.create_collection(results)
     while True:
+        logger.info(f"Sleeping for {timedelta(minutes=minutes).seconds} seconds")
+        await asyncio.sleep(timedelta(minutes=minutes).seconds)
+        # Scrapping again
         task = asyncio.get_event_loop().create_task(scraper.run(params))
-        result = await task
-        logger.info(f"Sleeping for {timedelta(minutes=30.0).seconds} seconds")
-        await asyncio.sleep(timedelta(minutes=30.0).seconds)
+        results = await task
+        db_handler.handle_results(results)
 
 @app.post("/tasks", response_model=models.Task)
 async def create_item(email: EmailStr, url: str):
@@ -98,7 +107,7 @@ async def create_item(email: EmailStr, url: str):
                        criteria=criteria)
     logger.info(f"Creating item {task}")
     tasks[id_] = task
-    task = asyncio.get_event_loop().create_task(scrape_task(id_))
+    t = asyncio.get_event_loop().create_task(scrape_task(id_))
     return task
 
 

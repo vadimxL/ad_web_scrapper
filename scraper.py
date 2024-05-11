@@ -17,10 +17,10 @@ from gmail_sender.gmail_sender import GmailSender
 from headers import scrape_headers, model_headers
 from models import CarCriteria
 
-logging.getLogger(__name__).addHandler(logging.StreamHandler(stream=sys.stdout))
-logger = logging.getLogger(__name__)
+logging.getLogger("ad_web_scrapper").addHandler(logging.StreamHandler(stream=sys.stdout))
+logger = logging.getLogger("ad_web_scrapper")
 logging.basicConfig(
-    filename='example.log',
+    filename='ad_web_scrapper.log',
     format='%(asctime)s %(levelname)-8s %(message)s',
     level=logging.INFO,
     datefmt='%Y-%m-%d %H:%M:%S',
@@ -303,15 +303,8 @@ class Scraper:
 
         # Assuming results is a list of tuples, where each tuple contains a list of CarDetails and a query string
         results: List[List[CarDetails]] = await asyncio.gather(*tasks)
-        # await self.cache.close()
 
-        for res in results:
-            self.db_handler.handle_results(res)
-
-        ads = []
-        for new_ads in results:
-            ads.append(new_ads)
-        return ads
+        return results[0]
 
 
     async def scrape_criteria(self, query_str: dict):

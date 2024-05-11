@@ -2,12 +2,14 @@ import logging
 from dataclasses import asdict
 from typing import List
 
+import jinja2
 from firebase_admin import db
 from firebase_admin.db import Reference
 import firebase_db
 from car_details import CarDetails
+from gmail_sender.gmail_sender import GmailSender
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("ad_web_scrapper")
 
 
 class DbHandler:
@@ -16,9 +18,11 @@ class DbHandler:
 
     def __init__(self, user_path: str):
         self.user_path = user_path
+        self.path = f'{self.ref_path}/{self.user_path}'
+        self.gmail_sender = GmailSender()
 
     def insert_car_ad(self, new_ad: CarDetails):
-        db.reference(self.ref_path).child(new_ad.id).set(asdict(new_ad))
+        db.reference(self.path).child(new_ad.id).set(asdict(new_ad))
         logger.info(f"{new_ad.id} is created successfully, "
                     f"{new_ad.manuf_en} "
                     f"{new_ad.car_model}, "
@@ -26,23 +30,32 @@ class DbHandler:
                     f"{new_ad.kilometers} [km], "
                     f"year: {new_ad.year}, "
                     f"hand: {new_ad.hand}")
-        # message = self.html_criteria_mail(new_ad)
-        # self.gmail_sender.send(message,
-        #                        f'🎁 [New] - {new_ad["manufacturer_he"]} {new_ad["car_model"]} {new_ad["city"]}')
+
+        try:
+            message = self.html_criteria_mail(asdict(new_ad))
+            self.gmail_sender.send(message,
+                                   f'🎁 [New] - {new_ad.manufacturer_he} {new_ad.car_model} {new_ad.city}')
+        except Exception as e:
+            logger.error(f"Error sending email: {e}")
 
     def update_car_ad(self, new_ad: CarDetails):
         updated_values = {}
-        ad = db.reference(self.ref_path).get(new_ad.id)
+        try:
+            ad: dict = db.reference(self.path).child(new_ad.id).get()
+        except Exception as e:
+            logger.error(f"Error updating car ad: {e}")
+            return
+
         db_ad = CarDetails(**ad)
         if new_ad.prices and db_ad.prices[-1]['price'] != new_ad.prices[-1]['price']:
             db_ad.prices.append(new_ad.prices[-1]['price'])
             updated_values['prices'] = new_ad.prices[-1]['price']
 
         if updated_values:
-            db.reference(self.ref_path).child(new_ad.id).update(updated_values)
-            msg: str = (f"{new_ad['id']} is changed, {new_ad['manuf_en']}  {new_ad['car_model']}, "
-                        f"current_price: {new_ad['current_price']}, "
-                        f"{new_ad['kilometers']} [km], year: {new_ad['year']}, hand: {new_ad['hand']}")
+            db.reference(self.path).child(new_ad.id).update(updated_values)
+            msg: str = (f"{new_ad.id} is changed, {new_ad.manuf_en}  {new_ad.car_model}, "
+                        f"current_price: {new_ad.price}, "
+                        f"{new_ad.kilometers} [km], year: {new_ad.year}, hand: {new_ad.hand}")
 
             logger.info(msg)
             for key, value in updated_values.items():
@@ -50,9 +63,12 @@ class DbHandler:
                 # logger.info(f"{key} updated: {ad_from_db[key]} ===> {value}")
 
             logger.info(msg)
-            # message = self.html_criteria_mail(new_ad)
-            # self.gmail_sender.send(message,
-            #                        f'⬇️ [Update] - {new_ad["manufacturer_he"]} {new_ad["car_model"]} {new_ad["city"]}')
+            try:
+                message = self.html_criteria_mail(asdict(new_ad))
+                self.gmail_sender.send(message,
+                                       f'⬇️ [Update] - {new_ad.manufacturer_he} {new_ad.car_model} {new_ad.car_model} {new_ad.city}')
+            except Exception as e:
+                logger.error(f"Error sending email: {e}")
 
     def html_criteria_mail(self, car_details: dict):
         environment = jinja2.Environment()
@@ -69,20 +85,22 @@ class DbHandler:
                                    initial_price=car_details['prices'][0]['price'],
                                    date_created=car_details['date_added'])
 
+    def create_collection(self, results: List[CarDetails]):
+        try:
+            db.reference(self.path).set({ad.id: asdict(ad) for ad in results})
+        except ValueError as e:
+            logger.error(f"Error adding new cars to db: {e}")
+        except Exception as e:
+            logger.error(f"Error adding new cars to db: {e}")
+
     def handle_results(self, results: List[CarDetails]):
-        data = db.reference(self.ref_path).get(shallow=True)
+        data = db.reference(self.path).get(shallow=True)
         try:
             for ad in results:
-                # ref = db.reference(f"{self.ref_path}/{ad.manuf_en}/year_{ad.year}/hand_{ad.hand}")
-                # if not ref:
-                #     db.reference(f"{self.ref_path}/{ad.manuf_en}/year_{ad.year}/hand_{ad.hand}").set({ad.id: asdict(ad)})
-                #     continue
                 if ad.id not in data:
-                    logger.info(f"Insert car ad: {ad}")
-                    # self.insert_car_ad(ad)
+                    self.insert_car_ad(ad)
                 else:
-                    logger.info(f"Update car ad: {ad}")
-                    # self.update_car_ad()
+                    self.update_car_ad(ad)
         except Exception as e:
             logger.error(f"Error updating database: {e}")
 
