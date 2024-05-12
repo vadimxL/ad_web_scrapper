@@ -1,8 +1,13 @@
+import datetime
 from dataclasses import dataclass, field
 from datetime import date
 from typing import List, Dict, Any, Optional
 
 
+@dataclass
+class PriceHistory:
+    price: int
+    date: datetime.datetime
 
 @dataclass
 class CarDetails:
@@ -21,7 +26,7 @@ class CarDetails:
     hp: Optional[int] = None
     hand: Optional[int] = None
     kilometers: Optional[int] = None
-    prices: List[Dict[str, Any]] = field(default_factory=list)
+    prices: List[PriceHistory] = field(default_factory=list)
     blind_spot: Optional[bool] = None
     smart_cruise_control: Optional[bool] = None
     manuf_en: str = 'N/A'

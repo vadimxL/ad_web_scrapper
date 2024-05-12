@@ -41,7 +41,7 @@ def startup_event():
         firebase_db.init_firebase_db()
     except Exception as e:
         logger.error(f"Error initializing firebase db: {e}")
-    scraper = Scraper()
+    scraper = Scraper(cache_timeout_min=5)
     search_opts = scraper.get_search_options()
     manufacturers_list = search_opts['data']['manufacturer']
     for manuf in search_opts['data']['manufacturer']:
@@ -75,18 +75,18 @@ async def read_items():
 async def scrape_task(task_id: str, minutes=5.0):
     params = extract_query_params(tasks[task_id].title)
     logger.info(f"Scraping task: {task_id}: {tasks[task_id]}")
-    scraper = Scraper()
+    scraper = Scraper(cache_timeout_min=30)
     task = asyncio.get_event_loop().create_task(scraper.run(params))
     results = await task
     db_handler = DbHandler(parse.urlsplit(tasks[task_id].title).query)
     db_handler.create_collection(results)
     while True:
-        logger.info(f"Sleeping for {timedelta(minutes=minutes).seconds} seconds")
-        await asyncio.sleep(timedelta(minutes=minutes).seconds)
         # Scrapping again
         task = asyncio.get_event_loop().create_task(scraper.run(params))
         results = await task
         db_handler.handle_results(results)
+        logger.info(f"Sleeping for {timedelta(minutes=minutes).seconds} seconds")
+        await asyncio.sleep(timedelta(minutes=minutes).seconds)
 
 @app.post("/tasks", response_model=models.Task)
 async def create_item(email: EmailStr, url: str):

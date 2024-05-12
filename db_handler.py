@@ -32,58 +32,48 @@ class DbHandler:
                     f"hand: {new_ad.hand}")
 
         try:
-            message = self.html_criteria_mail(asdict(new_ad))
+            message = self.html_criteria_mail(new_ad)
             self.gmail_sender.send(message,
                                    f'🎁 [New] - {new_ad.manufacturer_he} {new_ad.car_model} {new_ad.city}')
         except Exception as e:
             logger.error(f"Error sending email: {e}")
 
     def update_car_ad(self, new_ad: CarDetails):
-        updated_values = {}
         try:
             ad: dict = db.reference(self.path).child(new_ad.id).get()
         except Exception as e:
             logger.error(f"Error updating car ad: {e}")
             return
 
-        db_ad = CarDetails(**ad)
-        if new_ad.prices and db_ad.prices[-1]['price'] != new_ad.prices[-1]['price']:
-            db_ad.prices.append(new_ad.prices[-1]['price'])
-            updated_values['prices'] = new_ad.prices[-1]['price']
-
-        if updated_values:
-            db.reference(self.path).child(new_ad.id).update(updated_values)
-            msg: str = (f"{new_ad.id} is changed, {new_ad.manuf_en}  {new_ad.car_model}, "
+        db_ad: CarDetails = CarDetails(**ad)
+        if new_ad.prices and db_ad.prices[-1].price != new_ad.prices[-1].price:
+            db_ad.prices.append(new_ad.prices[-1])
+            logger.info(f"{new_ad.id} is changed, {new_ad.manuf_en}  {new_ad.car_model}, "
                         f"current_price: {new_ad.price}, "
                         f"{new_ad.kilometers} [km], year: {new_ad.year}, hand: {new_ad.hand}")
+            logger.info(f"price changed: {db_ad.prices[-2].price} ===> {db_ad.prices[-1].price}")
 
-            logger.info(msg)
-            for key, value in updated_values.items():
-                msg += f"{key} updated: {ad} ===> {value} "
-                # logger.info(f"{key} updated: {ad_from_db[key]} ===> {value}")
-
-            logger.info(msg)
             try:
-                message = self.html_criteria_mail(asdict(new_ad))
+                message = self.html_criteria_mail(new_ad)
                 self.gmail_sender.send(message,
                                        f'⬇️ [Update] - {new_ad.manufacturer_he} {new_ad.car_model} {new_ad.car_model} {new_ad.city}')
             except Exception as e:
                 logger.error(f"Error sending email: {e}")
 
-    def html_criteria_mail(self, car_details: dict):
+    def html_criteria_mail(self, car_details: CarDetails):
         environment = jinja2.Environment()
         with open("criteria_mail.html") as file:
             template = environment.from_string(file.read())
-            return template.render(id=car_details['id'],
-                                   manufacturer=car_details['manuf_en'],
-                                   hand=car_details['hand'],
-                                   model=car_details['car_model'],
-                                   year=car_details['year'],
-                                   km=car_details['kilometers'],
-                                   price=car_details['current_price'],
+            return template.render(id=car_details.id,
+                                   manufacturer=car_details.manuf_en,
+                                   hand=car_details.hand,
+                                   model=car_details.car_model,
+                                   year=car_details.year,
+                                   km=car_details.kilometers,
+                                   price=car_details.price,
                                    free_text="",
-                                   initial_price=car_details['prices'][0]['price'],
-                                   date_created=car_details['date_added'])
+                                   initial_price=car_details.prices[0].price,
+                                   date_created=car_details.date_added)
 
     def create_collection(self, results: List[CarDetails]):
         try:

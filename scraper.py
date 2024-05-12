@@ -69,17 +69,14 @@ secs_to_sleep = 0.1
 
 
 class Scraper:
-    ...
-
-
-    def __init__(self):
+    def __init__(self, cache_timeout_min: int):
         # self.db_handler = DbHandler()
         # self.gmail_sender = GmailSender("gmail_sender/credentials.json")
         # self.expiration = timedelta(minutes=30)
         # self.urls_for_expire_after = urls_expire_after
         self.cache = SQLiteBackend(
             cache_name='demo_cache2',
-            expire_after=timedelta(minutes=30),
+            expire_after=timedelta(minutes=cache_timeout_min),
             urls_expire_after=urls_expire_after,
         )
 
@@ -273,7 +270,6 @@ class Scraper:
             query.pop("year")
         return query
 
-
     async def get_model(self, manufacturer_id: str):
         # session = CachedSession('yad2_model_cache', backend='sqlite', expire_after=timedelta(hours=48))
         url = f"https://gw.yad2.co.il/search-options/vehicles/cars?fields=model&manufacturer={manufacturer_id}"
@@ -305,7 +301,6 @@ class Scraper:
         results: List[List[CarDetails]] = await asyncio.gather(*tasks)
 
         return results[0]
-
 
     async def scrape_criteria(self, query_str: dict):
         first_page = await self.get_first_page(query_str)
