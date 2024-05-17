@@ -11,11 +11,8 @@ from aiohttp_client_cache import CachedSession, SQLiteBackend, CachedResponse
 from requests_cache import CachedSession as MyCachedSession
 from rich import print
 import logging
-from car_details import CarDetails
-from db_handler import DbHandler
-from gmail_sender.gmail_sender import GmailSender
+from car_details import CarDetails, PriceHistory
 from headers import scrape_headers, model_headers
-from models import CarCriteria
 
 logging.getLogger("ad_web_scrapper").addHandler(logging.StreamHandler(stream=sys.stdout))
 logger = logging.getLogger("ad_web_scrapper")
@@ -70,10 +67,6 @@ secs_to_sleep = 0.1
 
 class Scraper:
     def __init__(self, cache_timeout_min: int):
-        # self.db_handler = DbHandler()
-        # self.gmail_sender = GmailSender("gmail_sender/credentials.json")
-        # self.expiration = timedelta(minutes=30)
-        # self.urls_for_expire_after = urls_expire_after
         self.cache = SQLiteBackend(
             cache_name='demo_cache2',
             expire_after=timedelta(minutes=cache_timeout_min),
@@ -99,7 +92,7 @@ class Scraper:
 
         return r
 
-    async def get_first_page(self, q: dict) -> dict:
+    async def first_page(self, q: dict) -> dict:
         q['page'] = str(1)
         # Use a breakpoint in the code line below to debug your script.
         tasks = []
@@ -158,22 +151,27 @@ class Scraper:
                 car_details = dict(sorted(feed_item.items()))
                 parsed_feed_items.append(car_details)
 
+        no_id_items_num = 0
+        incompatible_feed_sources_items_num = 0
         for item in parsed_feed_items:
             # if item['type'] != 'ad':
             #     # print(f"Skipping item {car_details['type']} because it's not an ad")
             #     continue
             #
             if 'id' not in item:
+                no_id_items_num += 1
                 continue
 
             if item['feed_source'] not in feed_sources:
-                # print(f"Skipping item {car_details['feed_source']} because it's not a private ad")
+                incompatible_feed_sources_items_num += 1
                 continue
 
             filtered_feed_items.append(item)
             car_details: CarDetails = self.extract_car_details(item)
             car_ads_to_save.append(car_details)
 
+        logger.info(f"Skipped {no_id_items_num} items because they don't have an id")
+        logger.info(f"Skipped {incompatible_feed_sources_items_num} items because they are not in {feed_sources} list")
         return car_ads_to_save, filtered_feed_items
 
     def extract_car_details(self, feed_item: json) -> CarDetails:
@@ -237,14 +235,22 @@ class Scraper:
             hp=horsepower_value,
             hand=hand,
             kilometers=mileage_numeric,
-            prices=[{'price': price_numeric, 'date': date.today().strftime("%d/%m/%Y")}],
+            prices=[PriceHistory(price=price_numeric, date=datetime.now())],
             blind_spot=blind_spot,
             smart_cruise_control=smart_cruise_control,
             manuf_en=feed_item.get('manufacturer_eng', 'N/A'),
-            gear_type=feed_item.get('Auto_text', 'אוטומט'),
+            gear_type=self.gear_type(feed_item),
         )
 
         return car_details
+
+    def gear_type(self, feed_item):
+        gear_type = feed_item.get('Auto_text', 'N/A')
+        if "אוטומט" in gear_type:
+            gear_type = "automatic"
+        elif "ידני" in gear_type:
+            gear_type = "manual"
+        return gear_type
 
     def get_hand(self, feed_item):
         hand = feed_item.get('Hand_text', 'N/A')
@@ -256,19 +262,9 @@ class Scraper:
             hand = 3
         elif "רביעית" in hand:
             hand = 4
+        elif "חמישית" in hand:
+            hand = 5
         return hand
-
-    @staticmethod
-    def querystring(criteria: CarCriteria):
-        query = {"manufacturer": criteria.manufacturer,
-                 "model": criteria.model,
-                 "year": f"{criteria.year_start}-{criteria.year_end}",
-                 "km": f"{criteria.km_start}-{criteria.km_end}"}
-        if criteria.km_start == -1 and criteria.km_end == -1:
-            query.pop("km")
-        if criteria.year_start == -1 and criteria.year_end == -1:
-            query.pop("year")
-        return query
 
     async def get_model(self, manufacturer_id: str):
         # session = CachedSession('yad2_model_cache', backend='sqlite', expire_after=timedelta(hours=48))
@@ -303,17 +299,15 @@ class Scraper:
         return results[0]
 
     async def scrape_criteria(self, query_str: dict):
-        first_page = await self.get_first_page(query_str)
+        first_page = await self.first_page(query_str)
         total_items_to_scrape = self.get_total_items(first_page)
         logger.info(f"Total items to be scraped: {total_items_to_scrape} for query: {query_str}")
         last_page = self.get_number_of_pages(first_page)
         feed_sources = FEED_SOURCES_PRIVATE
         car_ads_to_save, feed_items = await self.yad2_scrape(query_str, feed_sources=feed_sources, last_page=last_page)
+        logger.info(f"Scraped {len(car_ads_to_save)} items for query: {query_str}, feed_sources: {feed_sources}")
         return car_ads_to_save
 
 
 if __name__ == '__main__':
-    firebase_db.init_firebase_db()
-    scraper = Scraper()
-    logger.info(f"Starting scraper on urls: {urls}")
-    asyncio.run(scraper.run())
+    pass

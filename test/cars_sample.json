@@ -1,0 +1,2430 @@
+{
+  "cars": {
+    "manufacturer=21&model=578&year=2020-2024&price=-1-150000&km=-1-100000": {
+      "0nf1ltfb": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Elite אוט' בנזין 1.6 ",
+        "city": "מעלה אדומים",
+        "date_added": "1/2/2024",
+        "date_added_epoch": 45323,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "180",
+        "id": "0nf1ltfb",
+        "kilometers": 57000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 230000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 230000
+          }
+        ],
+        "smart_cruise_control": "בקרת שיוט אדפטיבית",
+        "year": 2021
+      },
+      "0ruim9mp": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Prestige אוט' 1.6 ",
+        "city": "רעננה",
+        "date_added": "5/5/2024",
+        "date_added_epoch": 45417,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "180",
+        "id": "0ruim9mp",
+        "kilometers": 31000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 135000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 135000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2021
+      },
+      "16rtdb1z": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Premium אוט' בנזין 2.0 ",
+        "city": "חדרה",
+        "date_added": "2/4/2024",
+        "date_added_epoch": 45384,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "156",
+        "id": "16rtdb1z",
+        "kilometers": 48500,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 117000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 117000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2021
+      },
+      "2okvb8cx": {
+        "blind_spot": "N/A",
+        "car_model": "טוסון Prime Plus אוט' בנזין 2.0 ",
+        "city": "ירושלים",
+        "date_added": "9/11/2023",
+        "date_added_epoch": 45239,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "155",
+        "id": "2okvb8cx",
+        "kilometers": 60000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 106000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 106000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2021
+      },
+      "2uzk3q6f": {
+        "blind_spot": "N/A",
+        "car_model": "טוסון Panoramic אוט' בנזין 1.6 ",
+        "city": "חיפה",
+        "date_added": "24/1/2024",
+        "date_added_epoch": 45315,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "180",
+        "id": "2uzk3q6f",
+        "kilometers": 21000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 145000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 145000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2022
+      },
+      "306jjd1v": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Luxury אוט' 1.6 ",
+        "city": "נעלה",
+        "date_added": "26/4/2024",
+        "date_added_epoch": 45408,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "180",
+        "id": "306jjd1v",
+        "kilometers": 32000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 144000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 144000
+          }
+        ],
+        "smart_cruise_control": "בקרת שיוט אדפטיבית",
+        "year": 2022
+      },
+      "3fwre62b": {
+        "blind_spot": "N/A",
+        "car_model": "טוסון Panoramic אוט' בנזין 1.6 ",
+        "city": "אבן שמואל",
+        "date_added": "25/2/2024",
+        "date_added_epoch": 45347,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "180",
+        "id": "3fwre62b",
+        "kilometers": 33000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 135000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 135000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2022
+      },
+      "3l1xtf2t": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Elite Turbo אוט' בנזין 1.6 ",
+        "city": "טבריה",
+        "date_added": "16/4/2024",
+        "date_added_epoch": 45398,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 2,
+        "hp": "177",
+        "id": "3l1xtf2t",
+        "kilometers": 28000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 145000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 145000
+          }
+        ],
+        "smart_cruise_control": "בקרת שיוט אדפטיבית",
+        "year": 2021
+      },
+      "3p3su5cr": {
+        "blind_spot": "N/A",
+        "car_model": "טוסון Panoramic אוט' בנזין 2.0 ",
+        "city": "מבשרת ציון",
+        "date_added": "21/4/2024",
+        "date_added_epoch": 45403,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 3,
+        "hp": "155",
+        "id": "3p3su5cr",
+        "kilometers": 38000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 113000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 113000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2020
+      },
+      "52xhufpj": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Luxury אוט' 1.6 ",
+        "city": "רמת גן",
+        "date_added": "4/5/2024",
+        "date_added_epoch": 45416,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "180",
+        "id": "52xhufpj",
+        "kilometers": 15000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 142000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 142000
+          }
+        ],
+        "smart_cruise_control": "בקרת שיוט אדפטיבית",
+        "year": 2022
+      },
+      "59dp8ggn": {
+        "blind_spot": "N/A",
+        "car_model": "טוסון Panoramic אוט' בנזין 2.0 ",
+        "city": "פתח תקווה",
+        "date_added": "21/2/2024",
+        "date_added_epoch": 45343,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 5,
+        "hp": "155",
+        "id": "59dp8ggn",
+        "kilometers": 100000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 110000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 110000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2020
+      },
+      "5f7v5os3": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Elite אוט' בנזין 2.0  [2018-2020]",
+        "city": "רמלה",
+        "date_added": "3/3/2024",
+        "date_added_epoch": 45354,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "155",
+        "id": "5f7v5os3",
+        "kilometers": 30000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 125000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 125000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2020
+      },
+      "5pisyrsz": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Elite Turbo אוט' בנזין 1.6 ",
+        "city": "באקה אל ע'רביה",
+        "date_added": "27/4/2024",
+        "date_added_epoch": 45409,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "177",
+        "id": "5pisyrsz",
+        "kilometers": 23000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 145000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 145000
+          }
+        ],
+        "smart_cruise_control": "בקרת שיוט אדפטיבית",
+        "year": 2021
+      },
+      "5vf41uwk": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Elite אוט' בנזין 1.6 ",
+        "city": "טבריה",
+        "date_added": "2/4/2024",
+        "date_added_epoch": 45384,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "180",
+        "id": "5vf41uwk",
+        "kilometers": 32000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 140000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 140000
+          }
+        ],
+        "smart_cruise_control": "בקרת שיוט אדפטיבית",
+        "year": 2021
+      },
+      "5x9o2445": {
+        "blind_spot": "N/A",
+        "car_model": "טוסון Panoramic אוט' בנזין 2.0 ",
+        "city": "בית ג'ן",
+        "date_added": "15/4/2024",
+        "date_added_epoch": 45397,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 2,
+        "hp": "155",
+        "id": "5x9o2445",
+        "kilometers": 41983,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 0,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 0
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2020
+      },
+      "6lptefw8": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Luxury אוט' 1.6 ",
+        "city": "מודיעין מכבים רעות",
+        "date_added": "2/5/2024",
+        "date_added_epoch": 45414,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "180",
+        "id": "6lptefw8",
+        "kilometers": 33000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 140000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 140000
+          }
+        ],
+        "smart_cruise_control": "בקרת שיוט אדפטיבית",
+        "year": 2021
+      },
+      "6mqablx8": {
+        "blind_spot": "N/A",
+        "car_model": "טוסון Panoramic אוט' בנזין 2.0 ",
+        "city": "כפר סבא",
+        "date_added": "11/4/2024",
+        "date_added_epoch": 45393,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 2,
+        "hp": "155",
+        "id": "6mqablx8",
+        "kilometers": 55000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 0,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 0
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2020
+      },
+      "6qzqkebz": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Premium אוט' בנזין 2.0 ",
+        "city": "חיפה",
+        "date_added": "18/3/2024",
+        "date_added_epoch": 45369,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "156",
+        "id": "6qzqkebz",
+        "kilometers": 21000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 130000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 130000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2021
+      },
+      "6tsec85c": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Elite אוט' בנזין 2.0  [2018-2020]",
+        "city": "קרית אתא",
+        "date_added": "17/2/2024",
+        "date_added_epoch": 45339,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 2,
+        "hp": "155",
+        "id": "6tsec85c",
+        "kilometers": 45000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 113000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 113000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2020
+      },
+      "6vherl0u": {
+        "blind_spot": "N/A",
+        "car_model": "טוסון Prime אוט' בנזין 2.0 ",
+        "city": "ירושלים",
+        "date_added": "13/3/2024",
+        "date_added_epoch": 45364,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "156",
+        "id": "6vherl0u",
+        "kilometers": 4000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 145000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 145000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2023
+      },
+      "72l2rsi0": {
+        "blind_spot": "N/A",
+        "car_model": "טוסון Prime אוט' דיזל 1.6 ",
+        "city": "רמת השרון",
+        "date_added": "18/4/2024",
+        "date_added_epoch": 45400,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 2,
+        "hp": "135",
+        "id": "72l2rsi0",
+        "kilometers": 49000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 145000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 145000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2021
+      },
+      "7a2dpubq": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Luxury אוט' 1.6 ",
+        "city": "באר שבע",
+        "date_added": "12/4/2024",
+        "date_added_epoch": 45394,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "180",
+        "id": "7a2dpubq",
+        "kilometers": 28000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 145000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 145000
+          }
+        ],
+        "smart_cruise_control": "בקרת שיוט אדפטיבית",
+        "year": 2022
+      },
+      "7gtlfx4j": {
+        "blind_spot": "N/A",
+        "car_model": "טוסון Prime Plus אוט' בנזין 2.0 ",
+        "city": "הרצליה",
+        "date_added": "13/12/2023",
+        "date_added_epoch": 45273,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "155",
+        "id": "7gtlfx4j",
+        "kilometers": 55000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 100000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 100000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2020
+      },
+      "7o4bo1jj": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Elite אוט' בנזין 2.0  [2018-2020]",
+        "city": "טבריה",
+        "date_added": "29/2/2024",
+        "date_added_epoch": 45351,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 2,
+        "hp": "155",
+        "id": "7o4bo1jj",
+        "kilometers": 54000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 117000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 117000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2020
+      },
+      "80e3flyh": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Elite Turbo אוט' בנזין 1.6 ",
+        "city": "דימונה",
+        "date_added": "13/3/2024",
+        "date_added_epoch": 45364,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 3,
+        "hp": "177",
+        "id": "80e3flyh",
+        "kilometers": 60000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 112000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 112000
+          }
+        ],
+        "smart_cruise_control": "בקרת שיוט אדפטיבית",
+        "year": 2020
+      },
+      "80kbeo18": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Elite אוט' בנזין 2.0  [2018-2020]",
+        "city": "גני תקווה",
+        "date_added": "1/5/2024",
+        "date_added_epoch": 45413,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 2,
+        "hp": "155",
+        "id": "80kbeo18",
+        "kilometers": 37000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 0,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 0
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2020
+      },
+      "838nxh06": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Elite אוט' בנזין 1.6 ",
+        "city": "אילת",
+        "date_added": "17/1/2024",
+        "date_added_epoch": 45308,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "180",
+        "id": "838nxh06",
+        "kilometers": 38614,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 140000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 140000
+          }
+        ],
+        "smart_cruise_control": "בקרת שיוט אדפטיבית",
+        "year": 2021
+      },
+      "86xsld4h": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Elite אוט' בנזין 1.6 ",
+        "city": "הוד השרון",
+        "date_added": "2/5/2024",
+        "date_added_epoch": 45414,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "180",
+        "id": "86xsld4h",
+        "kilometers": 50000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 143000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 143000
+          }
+        ],
+        "smart_cruise_control": "בקרת שיוט אדפטיבית",
+        "year": 2022
+      },
+      "8a11td1y": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Prestige אוט' 1.6 ",
+        "city": "אשקלון",
+        "date_added": "2/5/2024",
+        "date_added_epoch": 45414,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "180",
+        "id": "8a11td1y",
+        "kilometers": 48000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 128000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 128000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2021
+      },
+      "9phw9pk7": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Elite Turbo אוט' בנזין 1.6 ",
+        "city": "אור עקיבא",
+        "date_added": "15/2/2024",
+        "date_added_epoch": 45337,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 2,
+        "hp": "177",
+        "id": "9phw9pk7",
+        "kilometers": 100000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 115000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 115000
+          }
+        ],
+        "smart_cruise_control": "בקרת שיוט אדפטיבית",
+        "year": 2020
+      },
+      "9vyn5rgo": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Elite אוט' בנזין 1.6 ",
+        "city": "צפת",
+        "date_added": "27/4/2024",
+        "date_added_epoch": 45409,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "180",
+        "id": "9vyn5rgo",
+        "kilometers": 43000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 143000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 143000
+          }
+        ],
+        "smart_cruise_control": "בקרת שיוט אדפטיבית",
+        "year": 2022
+      },
+      "a6jzdyx1": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Luxury אוט' 1.6 ",
+        "city": "באר שבע",
+        "date_added": "16/4/2024",
+        "date_added_epoch": 45398,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 2,
+        "hp": "180",
+        "id": "a6jzdyx1",
+        "kilometers": 54000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 131000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 131000
+          }
+        ],
+        "smart_cruise_control": "בקרת שיוט אדפטיבית",
+        "year": 2021
+      },
+      "afcu4078": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Prestige אוט' 1.6 ",
+        "city": "חולון",
+        "date_added": "8/5/2024",
+        "date_added_epoch": 45420,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "180",
+        "id": "afcu4078",
+        "kilometers": 26000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 125000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 125000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2021
+      },
+      "ah2r0dn2": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Elite Turbo אוט' בנזין 1.6 ",
+        "city": "קדימה צורן",
+        "date_added": "3/5/2024",
+        "date_added_epoch": 45415,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 2,
+        "hp": "177",
+        "id": "ah2r0dn2",
+        "kilometers": 69000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 115000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 115000
+          }
+        ],
+        "smart_cruise_control": "בקרת שיוט אדפטיבית",
+        "year": 2020
+      },
+      "bf3a8ga0": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Premium אוט' בנזין 2.0 ",
+        "city": "כפר בלום",
+        "date_added": "29/2/2024",
+        "date_added_epoch": 45351,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 2,
+        "hp": "156",
+        "id": "bf3a8ga0",
+        "kilometers": 34500,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 117000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 117000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2021
+      },
+      "c39m4zo8": {
+        "blind_spot": "N/A",
+        "car_model": "טוסון Prime Plus אוט' בנזין 2.0 ",
+        "city": "ירושלים",
+        "date_added": "28/3/2024",
+        "date_added_epoch": 45379,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 2,
+        "hp": "155",
+        "id": "c39m4zo8",
+        "kilometers": 46000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 97000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 97000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2020
+      },
+      "cw1wfc6k": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Elite אוט' בנזין 2.0  [2018-2020]",
+        "city": "מעש",
+        "date_added": "2/5/2024",
+        "date_added_epoch": 45414,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "155",
+        "id": "cw1wfc6k",
+        "kilometers": 20000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 125000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 125000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2020
+      },
+      "db6cawr0": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Premium אוט' בנזין 2.0 ",
+        "city": "קרית מוצקין",
+        "date_added": "27/3/2024",
+        "date_added_epoch": 45378,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 2,
+        "hp": "156",
+        "id": "db6cawr0",
+        "kilometers": 36000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 120000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 120000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2021
+      },
+      "dreczhnl": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Prestige אוט' 1.6 ",
+        "city": "כרמיאל",
+        "date_added": "22/2/2024",
+        "date_added_epoch": 45344,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 2,
+        "hp": "180",
+        "id": "dreczhnl",
+        "kilometers": 13000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 0,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 0
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2023
+      },
+      "dx4756ij": {
+        "blind_spot": "N/A",
+        "car_model": "טוסון Prime Plus אוט' בנזין 2.0 ",
+        "city": "יבנה",
+        "date_added": "16/4/2024",
+        "date_added_epoch": 45398,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "155",
+        "id": "dx4756ij",
+        "kilometers": 50000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 105000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 105000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2020
+      },
+      "efty9d4q": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Elite אוט' בנזין 1.6 ",
+        "city": "באר שבע",
+        "date_added": "10/9/2023",
+        "date_added_epoch": 45179,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "180",
+        "id": "efty9d4q",
+        "kilometers": 70000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 141000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 141000
+          }
+        ],
+        "smart_cruise_control": "בקרת שיוט אדפטיבית",
+        "year": 2021
+      },
+      "f3ad1yya": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Prestige אוט' 1.6 ",
+        "city": "פקיעין",
+        "date_added": "25/2/2024",
+        "date_added_epoch": 45347,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 2,
+        "hp": "180",
+        "id": "f3ad1yya",
+        "kilometers": 27000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 127000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 127000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2021
+      },
+      "ffx410bz": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Elite Turbo אוט' בנזין 1.6 ",
+        "city": "אילת",
+        "date_added": "2/5/2024",
+        "date_added_epoch": 45414,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 2,
+        "hp": "177",
+        "id": "ffx410bz",
+        "kilometers": 71000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 115000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 115000
+          }
+        ],
+        "smart_cruise_control": "בקרת שיוט אדפטיבית",
+        "year": 2020
+      },
+      "fnl7hu5q": {
+        "blind_spot": "N/A",
+        "car_model": "טוסון Prime Plus אוט' בנזין 2.0 ",
+        "city": "רמת גן",
+        "date_added": "27/3/2024",
+        "date_added_epoch": 45378,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "155",
+        "id": "fnl7hu5q",
+        "kilometers": 38000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 125000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 125000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2020
+      },
+      "fp2mzf28": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Luxury אוט' 1.6 ",
+        "city": "רמלה",
+        "date_added": "5/5/2024",
+        "date_added_epoch": 45417,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "180",
+        "id": "fp2mzf28",
+        "kilometers": 53000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 136000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 136000
+          }
+        ],
+        "smart_cruise_control": "בקרת שיוט אדפטיבית",
+        "year": 2022
+      },
+      "fqhhcdr4": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Elite אוט' בנזין 1.6 ",
+        "city": "גבעת שמואל",
+        "date_added": "25/4/2024",
+        "date_added_epoch": 45407,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 2,
+        "hp": "180",
+        "id": "fqhhcdr4",
+        "kilometers": 27000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 145000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 145000
+          }
+        ],
+        "smart_cruise_control": "בקרת שיוט אדפטיבית",
+        "year": 2022
+      },
+      "fux9a9qf": {
+        "blind_spot": "N/A",
+        "car_model": "טוסון Panoramic אוט' בנזין 1.6 ",
+        "city": "באר שבע",
+        "date_added": "5/5/2024",
+        "date_added_epoch": 45417,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "180",
+        "id": "fux9a9qf",
+        "kilometers": 38000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 134000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 134000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2022
+      },
+      "gfycfguh": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Luxury אוט' 1.6 ",
+        "city": "תל אביב יפו",
+        "date_added": "29/4/2024",
+        "date_added_epoch": 45411,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "180",
+        "id": "gfycfguh",
+        "kilometers": 31000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 139000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 139000
+          }
+        ],
+        "smart_cruise_control": "בקרת שיוט אדפטיבית",
+        "year": 2021
+      },
+      "h5s39irw": {
+        "blind_spot": "N/A",
+        "car_model": "טוסון Prime Plus אוט' בנזין 2.0 ",
+        "city": "אשקלון",
+        "date_added": "1/5/2024",
+        "date_added_epoch": 45413,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "155",
+        "id": "h5s39irw",
+        "kilometers": 35000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 110000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 110000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2020
+      },
+      "h6cioccb": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Elite אוט' בנזין 1.6 ",
+        "city": "קרית ביאליק",
+        "date_added": "7/12/2023",
+        "date_added_epoch": 45267,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "180",
+        "id": "h6cioccb",
+        "kilometers": 41000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 141000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 141000
+          }
+        ],
+        "smart_cruise_control": "בקרת שיוט אדפטיבית",
+        "year": 2022
+      },
+      "hm7tv1sh": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Premium אוט' בנזין 2.0 ",
+        "city": "ירושלים",
+        "date_added": "22/4/2024",
+        "date_added_epoch": 45404,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "156",
+        "id": "hm7tv1sh",
+        "kilometers": 4850,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 140000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 140000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2021
+      },
+      "hm8wixc7": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Luxury אוט' 1.6 ",
+        "city": "דימונה",
+        "date_added": "14/12/2023",
+        "date_added_epoch": 45274,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "180",
+        "id": "hm8wixc7",
+        "kilometers": 34000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 142000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 142000
+          }
+        ],
+        "smart_cruise_control": "בקרת שיוט אדפטיבית",
+        "year": 2022
+      },
+      "i7sumvns": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Elite Turbo אוט' בנזין 1.6 ",
+        "city": "פתח תקווה",
+        "date_added": "17/3/2024",
+        "date_added_epoch": 45368,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 2,
+        "hp": "177",
+        "id": "i7sumvns",
+        "kilometers": 58000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 119999,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 119999
+          }
+        ],
+        "smart_cruise_control": "בקרת שיוט אדפטיבית",
+        "year": 2020
+      },
+      "iosilxuu": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Luxury אוט' 1.6 ",
+        "city": "ירושלים",
+        "date_added": "12/4/2024",
+        "date_added_epoch": 45394,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "180",
+        "id": "iosilxuu",
+        "kilometers": 61000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 135000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 135000
+          }
+        ],
+        "smart_cruise_control": "בקרת שיוט אדפטיבית",
+        "year": 2021
+      },
+      "iu4fvs79": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Elite אוט' בנזין 2.0  [2018-2020]",
+        "city": "באר יעקב",
+        "date_added": "16/4/2024",
+        "date_added_epoch": 45398,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "155",
+        "id": "iu4fvs79",
+        "kilometers": 35000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 130000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 130000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2020
+      },
+      "j1uaztn2": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Elite אוט' בנזין 1.6 ",
+        "city": "שמשית",
+        "date_added": "3/4/2024",
+        "date_added_epoch": 45385,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 2,
+        "hp": "180",
+        "id": "j1uaztn2",
+        "kilometers": 58000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 135000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 135000
+          }
+        ],
+        "smart_cruise_control": "בקרת שיוט אדפטיבית",
+        "year": 2021
+      },
+      "jaw0hoy9": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Luxury אוט' 1.6 ",
+        "city": "באר שבע",
+        "date_added": "3/5/2024",
+        "date_added_epoch": 45415,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "180",
+        "id": "jaw0hoy9",
+        "kilometers": 59000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 130000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 130000
+          }
+        ],
+        "smart_cruise_control": "בקרת שיוט אדפטיבית",
+        "year": 2021
+      },
+      "jly95lep": {
+        "blind_spot": "N/A",
+        "car_model": "טוסון Prime Plus אוט' בנזין 2.0 ",
+        "city": "חדיד",
+        "date_added": "6/5/2024",
+        "date_added_epoch": 45418,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "155",
+        "id": "jly95lep",
+        "kilometers": 44000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 0,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 0
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2020
+      },
+      "jyrm9lls": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Luxury אוט' 1.6 ",
+        "city": "ראשון לציון",
+        "date_added": "7/4/2024",
+        "date_added_epoch": 45389,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "180",
+        "id": "jyrm9lls",
+        "kilometers": 51000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 140000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 140000
+          }
+        ],
+        "smart_cruise_control": "בקרת שיוט אדפטיבית",
+        "year": 2021
+      },
+      "km5wvfs5": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Elite אוט' בנזין 2.0  [2018-2020]",
+        "city": "רמת גן",
+        "date_added": "9/4/2024",
+        "date_added_epoch": 45391,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "155",
+        "id": "km5wvfs5",
+        "kilometers": 100000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 115000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 115000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2020
+      },
+      "l2hqxdfp": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Elite אוט' בנזין 1.6 ",
+        "city": "אבן יהודה",
+        "date_added": "6/4/2024",
+        "date_added_epoch": 45388,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "180",
+        "id": "l2hqxdfp",
+        "kilometers": 52000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 135000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 135000
+          }
+        ],
+        "smart_cruise_control": "בקרת שיוט אדפטיבית",
+        "year": 2021
+      },
+      "lcvwzjo5": {
+        "blind_spot": "N/A",
+        "car_model": "טוסון Prime Plus אוט' בנזין 2.0 ",
+        "city": "אשקלון",
+        "date_added": "15/2/2024",
+        "date_added_epoch": 45337,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 2,
+        "hp": "155",
+        "id": "lcvwzjo5",
+        "kilometers": 56000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 120000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 120000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2021
+      },
+      "lgbvn5a7": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Elite Turbo אוט' בנזין 1.6 ",
+        "city": "צפת",
+        "date_added": "7/5/2024",
+        "date_added_epoch": 45419,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "177",
+        "id": "lgbvn5a7",
+        "kilometers": 15000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 0,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 0
+          }
+        ],
+        "smart_cruise_control": "בקרת שיוט אדפטיבית",
+        "year": 2020
+      },
+      "lxi9la5w": {
+        "blind_spot": "N/A",
+        "car_model": "טוסון Prime Plus אוט' בנזין 2.0 ",
+        "city": "דימונה",
+        "date_added": "13/1/2024",
+        "date_added_epoch": 45304,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "155",
+        "id": "lxi9la5w",
+        "kilometers": 42000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 120000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 120000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2020
+      },
+      "mmf7gw0k": {
+        "blind_spot": "N/A",
+        "car_model": "טוסון Prime Plus אוט' בנזין 2.0 ",
+        "city": "מגדל העמק",
+        "date_added": "26/4/2024",
+        "date_added_epoch": 45408,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "155",
+        "id": "mmf7gw0k",
+        "kilometers": 45000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 109000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 109000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2021
+      },
+      "mndp49mn": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Elite אוט' בנזין 1.6 ",
+        "city": "באר שבע",
+        "date_added": "27/11/2023",
+        "date_added_epoch": 45257,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "180",
+        "id": "mndp49mn",
+        "kilometers": 48000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 150000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 150000
+          }
+        ],
+        "smart_cruise_control": "בקרת שיוט אדפטיבית",
+        "year": 2022
+      },
+      "mz4luz8b": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Elite Turbo אוט' בנזין 1.6 ",
+        "city": "רמלה",
+        "date_added": "7/4/2024",
+        "date_added_epoch": 45389,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 2,
+        "hp": "177",
+        "id": "mz4luz8b",
+        "kilometers": 80000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 125000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 125000
+          }
+        ],
+        "smart_cruise_control": "בקרת שיוט אדפטיבית",
+        "year": 2020
+      },
+      "nljykbix": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Luxury אוט' 1.6 ",
+        "city": "ראשון לציון",
+        "date_added": "21/4/2024",
+        "date_added_epoch": 45403,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "180",
+        "id": "nljykbix",
+        "kilometers": 29000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 131500,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 131500
+          }
+        ],
+        "smart_cruise_control": "בקרת שיוט אדפטיבית",
+        "year": 2021
+      },
+      "nmd9mm9b": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Premium אוט' בנזין 2.0 ",
+        "city": "אשקלון",
+        "date_added": "21/3/2024",
+        "date_added_epoch": 45372,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "156",
+        "id": "nmd9mm9b",
+        "kilometers": 12000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 142000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 142000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2022
+      },
+      "nrivy2e2": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Premium אוט' בנזין 2.0 ",
+        "city": "ירושלים",
+        "date_added": "30/4/2024",
+        "date_added_epoch": 45412,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "156",
+        "id": "nrivy2e2",
+        "kilometers": 17000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 132000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 132000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2022
+      },
+      "ns6zggcs": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Premium אוט' בנזין 2.0 ",
+        "city": "אשדוד",
+        "date_added": "12/3/2024",
+        "date_added_epoch": 45363,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "156",
+        "id": "ns6zggcs",
+        "kilometers": 33000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 125000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 125000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2021
+      },
+      "nx23vp3b": {
+        "blind_spot": "N/A",
+        "car_model": "טוסון Panoramic אוט' בנזין 2.0 ",
+        "city": "ראש העין",
+        "date_added": "11/3/2024",
+        "date_added_epoch": 45362,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "155",
+        "id": "nx23vp3b",
+        "kilometers": 68000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 110000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 110000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2020
+      },
+      "ommh6mio": {
+        "blind_spot": "N/A",
+        "car_model": "טוסון Panoramic אוט' בנזין 1.6 ",
+        "city": "הרצליה",
+        "date_added": "10/5/2024",
+        "date_added_epoch": 45422,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "180",
+        "id": "ommh6mio",
+        "kilometers": 11000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 150000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 150000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2022
+      },
+      "qglcmri5": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Luxury אוט' 1.6 ",
+        "city": "קרית גת",
+        "date_added": "9/5/2024",
+        "date_added_epoch": 45421,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "180",
+        "id": "qglcmri5",
+        "kilometers": 11000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 145000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 145000
+          }
+        ],
+        "smart_cruise_control": "בקרת שיוט אדפטיבית",
+        "year": 2023
+      },
+      "qiyh185d": {
+        "blind_spot": "N/A",
+        "car_model": "טוסון Prime Plus אוט' בנזין 2.0 ",
+        "city": "כרמיאל",
+        "date_added": "15/4/2024",
+        "date_added_epoch": 45397,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 2,
+        "hp": "155",
+        "id": "qiyh185d",
+        "kilometers": 28500,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 120000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 120000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2020
+      },
+      "qon3twfc": {
+        "blind_spot": "N/A",
+        "car_model": "טוסון Panoramic אוט' בנזין 2.0 ",
+        "city": "אילת",
+        "date_added": "5/5/2024",
+        "date_added_epoch": 45417,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "155",
+        "id": "qon3twfc",
+        "kilometers": 39000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 115000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 115000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2020
+      },
+      "qzgir9io": {
+        "blind_spot": "N/A",
+        "car_model": "טוסון Prime Plus אוט' בנזין 2.0 ",
+        "city": "אשקלון",
+        "date_added": "31/12/2023",
+        "date_added_epoch": 45291,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "155",
+        "id": "qzgir9io",
+        "kilometers": 100000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 91000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 91000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2020
+      },
+      "r55ukmfo": {
+        "blind_spot": "N/A",
+        "car_model": "טוסון Panoramic אוט' בנזין 1.6 ",
+        "city": "כאבול",
+        "date_added": "19/2/2024",
+        "date_added_epoch": 45341,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "180",
+        "id": "r55ukmfo",
+        "kilometers": 30120,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 145000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 145000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2021
+      },
+      "rxcwclj7": {
+        "blind_spot": "N/A",
+        "car_model": "טוסון Prime אוט' דיזל 1.6 ",
+        "city": "אשקלון",
+        "date_added": "8/4/2024",
+        "date_added_epoch": 45390,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "135",
+        "id": "rxcwclj7",
+        "kilometers": 29000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 0,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 0
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2021
+      },
+      "sgv9m7sf": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Prestige אוט' 1.6 ",
+        "city": "פתח תקווה",
+        "date_added": "6/5/2024",
+        "date_added_epoch": 45418,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "180",
+        "id": "sgv9m7sf",
+        "kilometers": 14500,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 130000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 130000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2021
+      },
+      "sjmnedgf": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Elite אוט' בנזין 2.0  [2018-2020]",
+        "city": "אשקלון",
+        "date_added": "26/4/2024",
+        "date_added_epoch": 45408,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "155",
+        "id": "sjmnedgf",
+        "kilometers": 69000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 120000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 120000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2020
+      },
+      "szchs60f": {
+        "blind_spot": "N/A",
+        "car_model": "טוסון Comfort אוט' הייבריד 1.6  ",
+        "city": "פתח תקווה",
+        "date_added": "10/4/2024",
+        "date_added_epoch": 45392,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "230",
+        "id": "szchs60f",
+        "kilometers": 34000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 145000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 145000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2023
+      },
+      "tc58hm64": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Luxury אוט' 1.6 ",
+        "city": "ביתר עילית",
+        "date_added": "31/3/2024",
+        "date_added_epoch": 45382,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 2,
+        "hp": "180",
+        "id": "tc58hm64",
+        "kilometers": 29000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 142000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 142000
+          }
+        ],
+        "smart_cruise_control": "בקרת שיוט אדפטיבית",
+        "year": 2022
+      },
+      "tcb2rgg9": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Elite Turbo אוט' בנזין 1.6 ",
+        "city": "באר שבע",
+        "date_added": "5/11/2023",
+        "date_added_epoch": 45235,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "177",
+        "id": "tcb2rgg9",
+        "kilometers": 59000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 121000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 121000
+          }
+        ],
+        "smart_cruise_control": "בקרת שיוט אדפטיבית",
+        "year": 2020
+      },
+      "tivitiab": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Luxury אוט' 1.6 ",
+        "city": "נתניה",
+        "date_added": "6/7/2023",
+        "date_added_epoch": 45113,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "180",
+        "id": "tivitiab",
+        "kilometers": 21000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 145000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 145000
+          }
+        ],
+        "smart_cruise_control": "בקרת שיוט אדפטיבית",
+        "year": 2022
+      },
+      "tn1xcr9u": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Elite Turbo אוט' בנזין 1.6 ",
+        "city": "ירושלים",
+        "date_added": "23/2/2023",
+        "date_added_epoch": 44980,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 2,
+        "hp": "177",
+        "id": "tn1xcr9u",
+        "kilometers": 38500,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 126000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 126000
+          }
+        ],
+        "smart_cruise_control": "בקרת שיוט אדפטיבית",
+        "year": 2020
+      },
+      "ty7uvg3w": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Luxury אוט' 1.6 ",
+        "city": "באר יעקב",
+        "date_added": "27/4/2024",
+        "date_added_epoch": 45409,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "180",
+        "id": "ty7uvg3w",
+        "kilometers": 32000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 140000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 140000
+          }
+        ],
+        "smart_cruise_control": "בקרת שיוט אדפטיבית",
+        "year": 2022
+      },
+      "uwl20cz8": {
+        "blind_spot": "N/A",
+        "car_model": "טוסון Panoramic אוט' בנזין 2.0 ",
+        "city": "באר שבע",
+        "date_added": "18/4/2024",
+        "date_added_epoch": 45400,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "155",
+        "id": "uwl20cz8",
+        "kilometers": 30000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 116000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 116000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2020
+      },
+      "uyzxxwip": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Luxury אוט' 1.6 ",
+        "city": "רעננה",
+        "date_added": "8/5/2024",
+        "date_added_epoch": 45420,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 2,
+        "hp": "180",
+        "id": "uyzxxwip",
+        "kilometers": 13000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 137500,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 137500
+          }
+        ],
+        "smart_cruise_control": "בקרת שיוט אדפטיבית",
+        "year": 2022
+      },
+      "w59sl347": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Elite אוט' בנזין 2.0  [2018-2020]",
+        "city": "כפר כנא",
+        "date_added": "2/4/2024",
+        "date_added_epoch": 45384,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "155",
+        "id": "w59sl347",
+        "kilometers": 48000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 125000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 125000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2020
+      },
+      "whhm7yu8": {
+        "blind_spot": "N/A",
+        "car_model": "טוסון Panoramic אוט' בנזין 2.0 ",
+        "city": "חדרה",
+        "date_added": "29/3/2024",
+        "date_added_epoch": 45380,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "155",
+        "id": "whhm7yu8",
+        "kilometers": 29000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 120000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 120000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2020
+      },
+      "wn7wnesv": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Luxury אוט' 1.6 ",
+        "city": "קרית מוצקין",
+        "date_added": "10/3/2024",
+        "date_added_epoch": 45361,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 2,
+        "hp": "180",
+        "id": "wn7wnesv",
+        "kilometers": 51000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 125000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 125000
+          }
+        ],
+        "smart_cruise_control": "בקרת שיוט אדפטיבית",
+        "year": 2021
+      },
+      "xov8p3e8": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Elite אוט' בנזין 1.6 ",
+        "city": "בת ים",
+        "date_added": "4/4/2024",
+        "date_added_epoch": 45386,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "180",
+        "id": "xov8p3e8",
+        "kilometers": 41000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 139000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 139000
+          }
+        ],
+        "smart_cruise_control": "בקרת שיוט אדפטיבית",
+        "year": 2021
+      },
+      "xu86ioht": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Luxury אוט' 1.6 ",
+        "city": "ראשון לציון",
+        "date_added": "28/4/2024",
+        "date_added_epoch": 45410,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 3,
+        "hp": "180",
+        "id": "xu86ioht",
+        "kilometers": 48000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 130000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 130000
+          }
+        ],
+        "smart_cruise_control": "בקרת שיוט אדפטיבית",
+        "year": 2021
+      },
+      "y1vdkxvq": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Premium אוט' בנזין 2.0 ",
+        "city": "חולון",
+        "date_added": "7/4/2024",
+        "date_added_epoch": 45389,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "156",
+        "id": "y1vdkxvq",
+        "kilometers": 17000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 0,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 0
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2021
+      },
+      "yhddkiys": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Elite אוט' בנזין 1.6 ",
+        "city": "מגידו",
+        "date_added": "29/4/2024",
+        "date_added_epoch": 45411,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "180",
+        "id": "yhddkiys",
+        "kilometers": 31000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 140000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 140000
+          }
+        ],
+        "smart_cruise_control": "בקרת שיוט אדפטיבית",
+        "year": 2022
+      },
+      "yi4e55lu": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Elite אוט' בנזין 2.0  [2018-2020]",
+        "city": "אור יהודה",
+        "date_added": "14/1/2024",
+        "date_added_epoch": 45305,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "155",
+        "id": "yi4e55lu",
+        "kilometers": 64200,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 118000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 118000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2020
+      },
+      "ys03b3f1": {
+        "blind_spot": "N/A",
+        "car_model": "טוסון Prime Plus אוט' בנזין 2.0 ",
+        "city": "בת ים",
+        "date_added": "22/2/2024",
+        "date_added_epoch": 45344,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 2,
+        "hp": "155",
+        "id": "ys03b3f1",
+        "kilometers": 73000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 101000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 101000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2020
+      },
+      "za5k6k2d": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Elite אוט' בנזין 2.0  [2018-2020]",
+        "city": "רמת גן",
+        "date_added": "30/11/2023",
+        "date_added_epoch": 45260,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "155",
+        "id": "za5k6k2d",
+        "kilometers": 32000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 132000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 132000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2020
+      },
+      "zib07i2j": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Elite Turbo אוט' בנזין 1.6 ",
+        "city": "כפר קרע",
+        "date_added": "16/3/2024",
+        "date_added_epoch": 45367,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 1,
+        "hp": "177",
+        "id": "zib07i2j",
+        "kilometers": 53800,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 0,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 0
+          }
+        ],
+        "smart_cruise_control": "בקרת שיוט אדפטיבית",
+        "year": 2020
+      },
+      "zni53de8": {
+        "blind_spot": "זיהוי בשטח \"מת\"",
+        "car_model": "טוסון Elite אוט' בנזין 2.0  [2018-2020]",
+        "city": "נהריה",
+        "date_added": "7/5/2024",
+        "date_added_epoch": 45419,
+        "feed_source": "private",
+        "gear_type": "אוטומט",
+        "hand": 2,
+        "hp": "155",
+        "id": "zni53de8",
+        "kilometers": 47000,
+        "manuf_en": "hyundai",
+        "manufacturer_he": "יונדאי",
+        "price": 115000,
+        "prices": [
+          {
+            "date": "12/05/2024",
+            "price": 115000
+          }
+        ],
+        "smart_cruise_control": "N/A",
+        "year": 2020
+      }
+    }
+  }
+}

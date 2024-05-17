@@ -1,9 +1,11 @@
 import asyncio
+import dataclasses
 import hashlib
 import logging
-import threading
+from dataclasses import dataclass
+
 from datetime import datetime, timedelta
-from typing import List
+from typing import List, Dict
 from urllib import parse
 from pydantic import BaseModel, EmailStr
 from starlette.middleware.cors import CORSMiddleware
@@ -11,7 +13,9 @@ import firebase_db
 import json
 from fastapi import FastAPI, HTTPException
 
+from car_details import CarDetails
 from db_handler import DbHandler
+from gmail_sender.gmail_sender import GmailSender
 from scraper import Scraper, urls, logger, manufacturers_dict, num_to_manuf_dict, num_to_model_dict
 import models
 
@@ -32,6 +36,7 @@ urls_to_scrape = ["https://www.yad2.co.il/vehicles/cars?manufacturer=48&model=38
 manufacturers = {}
 manufacturers_list = []
 car_models = {}
+gmail_sender = GmailSender(credentials_path="gmail_sender/credentials.json")
 
 
 @app.on_event("startup")
@@ -63,67 +68,78 @@ def extract_query_params(url: str) -> dict:
     return params
 
 
-tasks = dict()
+@dataclass
+class InternalTask:
+    task: asyncio.Task
+    task_info: models.Task
+
+
+tasks: Dict[str, InternalTask] = dict()
 
 
 @app.get("/tasks", response_model=List[models.Task])
 async def read_items():
-    logger.info(f"Getting tasks: {tasks}")
-    return list(tasks.values())
+    return [task.task_info for task in tasks.values()]
 
 
-async def scrape_task(task_id: str, minutes=5.0):
-    params = extract_query_params(tasks[task_id].title)
+async def scrape_task(task_id: str):
+    params = extract_query_params(tasks[task_id].task_info.title)
     logger.info(f"Scraping task: {task_id}: {tasks[task_id]}")
     scraper = Scraper(cache_timeout_min=30)
     task = asyncio.get_event_loop().create_task(scraper.run(params))
-    results = await task
-    db_handler = DbHandler(parse.urlsplit(tasks[task_id].title).query)
+    results: List[CarDetails] = await task
+    time_now = datetime.now().strftime("%d_%m_%Y_%H_%M_%S")
+    filename_json = f'json/car_ads_{task_id}' + time_now + '.json'
+    with open(filename_json, 'w', encoding='utf-8') as f1:
+        json.dump({ad.id: ad.model_dump(mode='json') for ad in results}, f1, indent=4, ensure_ascii=False)
+    db_handler = DbHandler(parse.urlsplit(tasks[task_id].task_info.title).query, gmail_sender)
     db_handler.create_collection(results)
     while True:
         # Scrapping again
+        minutes = tasks[task_id].task_info.duration
         task = asyncio.get_event_loop().create_task(scraper.run(params))
         results = await task
         db_handler.handle_results(results)
         logger.info(f"Sleeping for {timedelta(minutes=minutes).seconds} seconds")
         await asyncio.sleep(timedelta(minutes=minutes).seconds)
 
+
 @app.post("/tasks", response_model=models.Task)
-async def create_item(email: EmailStr, url: str):
+async def create_item(email: EmailStr, duration: int, url: str):
     params: dict = extract_query_params(url)
 
     if 'manufacturer' not in params or 'model' not in params or 'year' not in params or 'km' not in params:
         raise HTTPException(status_code=400, detail="Invalid URL")
 
-    criteria = models.CarCriteria(manufacturer=params['manufacturer'],
-                                  models=params['model'].split(','),
-                                  year=get_range(params['year']),
-                                  km=get_range(params['km']))
     id_ = hashlib.sha256(url.encode()).hexdigest()
     if id_ in tasks:
-        return tasks[id_]
-    task = models.Task(id=id_, title=url, mail=email,
+        return tasks[id_].task_info
+    task_info = models.Task(id=id_, title=url, mail=email,
                        created_at=datetime.now().strftime("%d_%m_%Y_%H_%M_%S"),
-                       criteria=criteria)
-    logger.info(f"Creating item {task}")
-    tasks[id_] = task
-    t = asyncio.get_event_loop().create_task(scrape_task(id_))
-    return task
+                       duration=duration)
+    logger.info(f"Creating item {task_info}")
+    t: asyncio.Task = asyncio.get_event_loop().create_task(scrape_task(id_))
+    tasks[id_] = InternalTask(task=t, task_info=task_info)
+    return task_info
 
 
-@app.put("/tasks/{task_id}", response_model=models.Task)
-async def update_item(task_id: str, criteria: models.CarCriteria):
+@app.put("/tasks/{task_id}")
+async def update_item(task_id: str, duration: int):
+    if task_id not in tasks:
+        return {"message": f"Task: {task_id} not found"}
     task = tasks[task_id]
-    task.criteria = criteria
-    return task
+    task.task_info.duration = duration
+    logger.info(f"Updating item {task.task_info} with duration {duration}")
+    return task.task_info
 
 
 @app.delete("/tasks/{task_id}")
 async def delete_item(task_id: str):
-    task = tasks.pop(task_id, None)
-    if task is None:
-        raise HTTPException(status_code=404, detail="Task not found")
-    return {"message": f"Task: {task} deleted"}
+    if task_id not in tasks:
+        return {"message": f"Task: {task_id} not found"}
+    task: InternalTask = tasks.pop(task_id)
+    task.task.cancel()
+    return {"message": f"Task: {task.task_info} deleted"}
 
 
 def get_range(data: str) -> models.Range:

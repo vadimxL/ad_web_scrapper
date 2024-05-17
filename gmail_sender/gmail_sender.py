@@ -21,7 +21,7 @@ SCOPES = ["https://www.googleapis.com/auth/gmail.send"]
 
 
 class GmailSender:
-    def __init__(self, credentials_path: str = "credentials.json"):
+    def __init__(self, credentials_path: str):
         self.creds = self._credentials(credentials_path)
 
     @staticmethod

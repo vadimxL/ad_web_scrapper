@@ -1,9 +1,4 @@
-import datetime
-from typing import Optional, List
-
-from mongoengine import Document, StringField, IntField, ListField, EmbeddedDocumentField, BooleanField, EmailField, \
-    DateTimeField, DictField
-from mongoengine import StringField, IntField, EmbeddedDocument
+from mongoengine import Document, ListField, EmbeddedDocumentField, DictField, StringField, IntField, EmbeddedDocument
 from pydantic import BaseModel
 
 
@@ -36,12 +31,12 @@ class Range(BaseModel):
 
 
 # A Pydantic model
-class CarCriteria(BaseModel):
-    manufacturer: int
-    models: List[int]
-    year: Optional[Range] = {"min": -1, "max": -1}
-    km: Optional[Range] = {"min": -1, "max": -1}
-    top_area: Optional[int] = 2
+# class CarCriteria(BaseModel):
+#     manufacturer: int
+#     models: List[int]
+#     year: Optional[Range] = {"min": -1, "max": -1}
+#     km: Optional[Range] = {"min": -1, "max": -1}
+#     top_area: Optional[int] = 2
 
 
 # class Task(Document):
@@ -59,7 +54,8 @@ class Task(BaseModel):
     title: str
     mail: str
     created_at: str
-    criteria: CarCriteria
+    duration: int
+    # criteria: CarCriteria
 
 
 class PriceHistory(EmbeddedDocument):
