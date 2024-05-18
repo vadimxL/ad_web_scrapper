@@ -48,8 +48,8 @@ def startup_event():
         firebase_db.init_firebase_db()
     except Exception as e:
         logger.error(f"Error initializing firebase db: {e}")
-    scraper = Scraper(cache_timeout_min=5)
-    search_opts = scraper.get_search_options()
+    # scraper = Scraper(cache_timeout_min=5)
+    search_opts = Scraper.get_search_options()
     manufacturers_list = search_opts['data']['manufacturer']
     for manuf in search_opts['data']['manufacturer']:
         manufacturers[manuf['value']] = manuf['text']
@@ -62,6 +62,15 @@ def startup_event():
 async def get_manufacturers():
     logging.info(f"Getting manufacturer list")
     return manufacturers_list
+
+
+@app.get("/models/{manufacturer_id}")
+async def get_models(manufacturer_id: str):
+    logging.info(f"Getting models for manufacturer: {manufacturer_id}")
+    # scraper = Scraper(cache_timeout_min=5)
+    models = await Scraper.get_model(manufacturer_id)
+    print(models)
+    return models['data']['model']
 
 
 def extract_query_params(url: str) -> dict:
@@ -133,7 +142,7 @@ def scrape_task(task_id: str, loop):
 
 
 @app.post("/tasks", response_model=models.Task)
-async def create_item(email: EmailStr, duration: int, url: str):
+async def create_item(email: EmailStr, url: str):
     params: dict = extract_query_params(url)
 
     if 'manufacturer' not in params or 'model' not in params or 'year' not in params or 'km' not in params:
@@ -143,25 +152,24 @@ async def create_item(email: EmailStr, duration: int, url: str):
     if id_ in tasks:
         return tasks[id_].task_info
     task_info = models.Task(id=id_, title=url, mail=email,
-                            created_at=datetime.now().strftime("%d_%m_%Y_%H_%M_%S"),
-                            duration=duration)
+                            created_at=datetime.now().strftime("%d_%m_%Y_%H_%M_%S"))
     loop = asyncio.get_event_loop()
     schedule.every(1).seconds.do(scrape_task, id_, loop)
-    schedule.every(duration).minutes.do(recurrent_scrape, id_, params, loop)
+    schedule.every(6).hours.do(recurrent_scrape, id_, params, loop)
     event_ = run_continuously()
     tasks[id_] = InternalTask(event=event_, task_info=task_info)
     # Start the background thread
     return task_info
 
 
-@app.put("/tasks/{task_id}")
-async def update_item(task_id: str, duration: int):
-    if task_id not in tasks:
-        return {"message": f"Task: {task_id} not found"}
-    task = tasks[task_id]
-    task.task_info.duration = duration
-    logger.info(f"Updating item {task.task_info} with duration {duration}")
-    return task.task_info
+# @app.put("/tasks/{task_id}")
+# async def update_item(task_id: str, duration: int):
+#     if task_id not in tasks:
+#         return {"message": f"Task: {task_id} not found"}
+#     task = tasks[task_id]
+#     task.task_info.duration = duration
+#     logger.info(f"Updating item {task.task_info} with duration {duration}")
+#     return task.task_info
 
 
 @app.delete("/tasks/{task_id}")

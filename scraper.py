@@ -266,21 +266,16 @@ class Scraper:
             hand = 5
         return hand
 
-    async def get_model(self, manufacturer_id: str):
-        # session = CachedSession('yad2_model_cache', backend='sqlite', expire_after=timedelta(hours=48))
+    @staticmethod
+    async def get_model(manufacturer_id: str):
+        session = MyCachedSession('yad2_model_cache', backend='sqlite', expire_after=timedelta(hours=48))
         url = f"https://gw.yad2.co.il/search-options/vehicles/cars?fields=model&manufacturer={manufacturer_id}"
 
-        async with CachedSession(cache=self.cache, expire_after=timedelta(hours=48)) as session:
-            response = session.get(url, headers=model_headers, data={}, timeout=10)
-
-        if response.from_cache:
-            logger.info(f'get_model, created_at: {response.created_at.strftime("%H:%M")}, '
-                        f'expires: {response.expires.strftime("%H:%M")}')
-        else:
-            logger.info(f'Not from cache')
+        response = session.get(url, headers=model_headers, data={}, timeout=10)
         return response.json()
 
-    def get_search_options(self):
+    @staticmethod
+    def get_search_options():
         session = MyCachedSession('yad2_search_options_cache', backend='sqlite', expire_after=timedelta(hours=48))
         url = ("https://gw.yad2.co.il/search-options/vehicles/cars?fields=manufacturer,year,area,km,ownerID,seats,"
                "engineval,engineType,group_color,gearBox")
