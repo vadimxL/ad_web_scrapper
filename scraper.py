@@ -288,15 +288,10 @@ class Scraper:
         response = session.get(url, headers=model_headers, data={}, timeout=10)
         return response.json()
 
-    async def run(self, query: dict):
-        tasks = []
-        task = asyncio.create_task(self.scrape_criteria(query.copy()))
-        tasks.append(task)
-
+    def run(self, query: dict, loop):
         # Assuming results is a list of tuples, where each tuple contains a list of CarDetails and a query string
-        results: List[List[CarDetails]] = await asyncio.gather(*tasks)
-
-        return results[0]
+        future = asyncio.run_coroutine_threadsafe(self.scrape_criteria(query.copy()), loop)
+        return future.result()
 
     async def scrape_criteria(self, query_str: dict):
         first_page = await self.first_page(query_str)
