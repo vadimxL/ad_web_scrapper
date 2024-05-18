@@ -1,3 +1,5 @@
+from typing import Optional, List
+
 from mongoengine import Document, ListField, EmbeddedDocumentField, DictField, StringField, IntField, EmbeddedDocument
 from pydantic import BaseModel
 
@@ -54,7 +56,9 @@ class Task(BaseModel):
     title: str
     mail: str
     created_at: str
-    duration: int
+    duration: Optional[int] = None
+    manufacturer: Optional[str] = None
+    car_models: Optional[List[str]] = None
     # criteria: CarCriteria
 
 

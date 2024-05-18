@@ -36,21 +36,20 @@ urls_to_scrape = ["https://www.yad2.co.il/vehicles/cars?manufacturer=48&model=38
 
 # Replace this with your actual data source or logic
 manufacturers = {}
-manufacturers_list = []
-car_models = {}
+manufs_unaltered = []
 gmail_sender = GmailSender(credentials_path="gmail_sender/credentials.json")
 
 
 @app.on_event("startup")
 def startup_event():
-    global manufacturers_list
+    global manufs_unaltered
     try:
         firebase_db.init_firebase_db()
     except Exception as e:
         logger.error(f"Error initializing firebase db: {e}")
     # scraper = Scraper(cache_timeout_min=5)
     search_opts = Scraper.get_search_options()
-    manufacturers_list = search_opts['data']['manufacturer']
+    manufs_unaltered = search_opts['data']['manufacturer']
     for manuf in search_opts['data']['manufacturer']:
         manufacturers[manuf['value']] = manuf['text']
     with open("manufacturers.json", "w") as manufs:
@@ -61,16 +60,17 @@ def startup_event():
 @app.get("/manufacturers")
 async def get_manufacturers():
     logging.info(f"Getting manufacturer list")
-    return manufacturers_list
+    return manufs_unaltered
 
 
 @app.get("/models/{manufacturer_id}")
 async def get_models(manufacturer_id: str):
     logging.info(f"Getting models for manufacturer: {manufacturer_id}")
     # scraper = Scraper(cache_timeout_min=5)
-    models = await Scraper.get_model(manufacturer_id)
-    print(models)
-    return models['data']['model']
+    car_models = await Scraper.get_model(manufacturer_id)
+    if 'data' not in car_models:
+        return []
+    return car_models['data']['model']
 
 
 def extract_query_params(url: str) -> dict:
@@ -141,6 +141,12 @@ def scrape_task(task_id: str, loop):
     return schedule.CancelJob
 
 
+def search_by_model(car_list, target_value):
+    for car in car_list:
+        if car["value"] == target_value:
+            return car["text"]
+    return None  # Return None if the value is not found
+
 @app.post("/tasks", response_model=models.Task)
 async def create_item(email: EmailStr, url: str):
     params: dict = extract_query_params(url)
@@ -151,26 +157,31 @@ async def create_item(email: EmailStr, url: str):
     id_ = hashlib.sha256(url.encode()).hexdigest()
     if id_ in tasks:
         return tasks[id_].task_info
+
+    car_models = []
+    car_models_dict = await get_models(params['manufacturer'])
+    for car_model in params['model'].split(","):
+        car_models.append(search_by_model(car_models_dict, car_model))
+
     task_info = models.Task(id=id_, title=url, mail=email,
-                            created_at=datetime.now().strftime("%d_%m_%Y_%H_%M_%S"))
+                            created_at=datetime.now().strftime("%d_%m_%Y_%H_%M_%S"),
+                            duration=6,
+                            manufacturer=manufacturers[params['manufacturer']],
+                            car_models=car_models)
     loop = asyncio.get_event_loop()
     schedule.every(1).seconds.do(scrape_task, id_, loop)
     schedule.every(6).hours.do(recurrent_scrape, id_, params, loop)
     event_ = run_continuously()
     tasks[id_] = InternalTask(event=event_, task_info=task_info)
-    # Start the background thread
     return task_info
 
 
-# @app.put("/tasks/{task_id}")
-# async def update_item(task_id: str, duration: int):
-#     if task_id not in tasks:
-#         return {"message": f"Task: {task_id} not found"}
-#     task = tasks[task_id]
-#     task.task_info.duration = duration
-#     logger.info(f"Updating item {task.task_info} with duration {duration}")
-#     return task.task_info
-
+@app.on_event("shutdown")
+def shutdown_event():
+    print("Application shutdown")
+    for task_id in tasks:
+        tasks[task_id].event.set()
+        print("Cleared task with task id: " + task_id)
 
 @app.delete("/tasks/{task_id}")
 async def delete_item(task_id: str):
