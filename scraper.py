@@ -204,13 +204,13 @@ class Scraper:
             price = str(item['price']) if item['price'] is not None else 'None'
 
             # Create the string with date and price separated by '|'
-            line = f"{simplified_date} | {price}"
+            line = f"{simplified_date} {price}"
 
             # Add the string to the list of lines
             lines.append(line)
 
         # Join all lines into a single string with new line separators
-        result_string = ', '.join(lines)
+        result_string = '| '.join(lines)
 
         return result_string
 
