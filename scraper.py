@@ -186,7 +186,7 @@ class Scraper:
             result_filter: CarDetails = next(filter(lambda x: x.id == res['id'], car_ads_to_save), None)
             if result_filter:
                 prices = []
-                result_filter.prices_handz = self.convert_data(res['prices'])
+                result_filter.prices_handz = self.convert_data_to_string(res['prices'])
 
         return car_ads_to_save, filtered_feed_items
 
@@ -210,7 +210,7 @@ class Scraper:
             lines.append(line)
 
         # Join all lines into a single string with new line separators
-        result_string = '\n'.join(lines)
+        result_string = ', '.join(lines)
 
         return result_string
 
