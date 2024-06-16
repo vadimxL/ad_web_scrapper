@@ -220,27 +220,33 @@ class Scraper:
             if "שיוט" in item and "אדפטיבית" in item:
                 smart_cruise_control = item
 
-        car_details = CarDetails(
-            id=feed_item['id'],
-            car_model=f"{feed_item['model']} {row2_without_hp}",
-            year=feed_item['year'],
-            price=price_numeric,
-            date_added_epoch=date_added_epoch,
-            date_added=formatted_date,
-            feed_source=feed_item['feed_source'],
+        try:
+            car_details = CarDetails(
+                id=feed_item['id'],
+                car_model=f"{feed_item['model']} {row2_without_hp}",
+                year=feed_item['year'],
+                price=price_numeric,
+                date_added_epoch=date_added_epoch,
+                date_added=formatted_date,
+                feed_source=feed_item['feed_source'],
 
-            # Fields with default values
-            city=feed_item.get('city', 'N/A'),
-            manufacturer_he=feed_item.get('manufacturer', 'N/A'),
-            hp=horsepower_value,
-            hand=hand,
-            kilometers=mileage_numeric,
-            prices=[PriceHistory(price=price_numeric, date=datetime.now())],
-            blind_spot=blind_spot,
-            smart_cruise_control=smart_cruise_control,
-            manuf_en=feed_item.get('manufacturer_eng', 'N/A'),
-            gear_type=self.gear_type(feed_item),
-        )
+                # Fields with default values
+                city=feed_item.get('city', 'N/A'),
+                manufacturer_he=feed_item.get('manufacturer', 'N/A'),
+                hp=horsepower_value,
+                hand=hand,
+                kilometers=mileage_numeric,
+                prices=[PriceHistory(price=price_numeric, date=datetime.now())],
+                blind_spot=blind_spot,
+                smart_cruise_control=smart_cruise_control,
+                manuf_en=feed_item.get('manufacturer_eng', 'N/A'),
+                gear_type=self.gear_type(feed_item),
+            )
+        except Exception as e:
+            logger.error(f"Error extracting car details: {e}")
+            with open('json/error_feed_item.json', 'w', encoding='utf-8') as f:
+                json.dump(feed_item, f, indent=4, ensure_ascii=False)
+            raise e
 
         return car_details
 
@@ -264,6 +270,8 @@ class Scraper:
             hand = 4
         elif "חמישית" in hand:
             hand = 5
+        elif "מיבואן" in hand:
+            hand = 0
         return hand
 
     @staticmethod

@@ -4,6 +4,9 @@ import logging
 import threading
 import time
 from dataclasses import dataclass
+from io import BytesIO
+
+import pandas as pd
 import schedule
 
 from datetime import datetime, timedelta
@@ -11,17 +14,22 @@ from typing import List, Dict
 from urllib import parse
 from pydantic import EmailStr
 from starlette.middleware.cors import CORSMiddleware
+from starlette.responses import StreamingResponse
+
 import firebase_db
 import json
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import FileResponse
 
 from car_details import CarDetails
 from db_handler import DbHandler
 from gmail_sender.gmail_sender import GmailSender
+from persistence import dump_to_excel_car_details
 from scraper import Scraper, logger
 import models
 
 app = FastAPI()
+
 
 # Allow all origins with appropriate methods, headers, and credentials if needed
 app.add_middleware(
@@ -30,6 +38,7 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],  # You can specify specific methods (e.g., ["GET", "POST"])
     allow_headers=["*"],  # You can specify specific headers if needed
+    expose_headers=["*"]
 )
 
 urls_to_scrape = ["https://www.yad2.co.il/vehicles/cars?manufacturer=48&model=3866,2829,3484&year=2019--1&km=-1-80000"]
@@ -37,7 +46,7 @@ urls_to_scrape = ["https://www.yad2.co.il/vehicles/cars?manufacturer=48&model=38
 # Replace this with your actual data source or logic
 manufacturers = {}
 manufs_unaltered = []
-gmail_sender = GmailSender(credentials_path="gmail_sender/credentials.json")
+gmail_sender = GmailSender(credentials_path="gmail_sender/credentials.json", token_path="gmail_sender/token.json")
 
 
 @app.on_event("startup")
@@ -93,6 +102,38 @@ async def read_items():
     return [task.task_info for task in tasks.values()]
 
 
+@app.get("/scrape")
+async def scrape(url: str, response_model=List[CarDetails]):
+    params = extract_query_params(url)
+    scraper = Scraper(cache_timeout_min=30)
+    results: List[CarDetails] = await scraper.scrape_criteria(params)
+    return results
+
+
+@app.get("/scrape_excel")
+async def scrape_excel(url: str):
+    params: dict = extract_query_params(url)
+    scraper = Scraper(cache_timeout_min=30)
+    results: List[CarDetails] = await scraper.scrape_criteria(params)
+    df: pd.DataFrame = dump_to_excel_car_details(results)
+    filename = "car_ads_"
+    for param in params.values():
+        filename += param + "_"
+    filename = filename + ".xlsx"
+    # return StreamingResponse(
+    #     iter([df.to_csv(index=False)]),
+    #     media_type="text/csv",
+    #     headers={"Content-Disposition": f"attachment; filename=data.csv"})
+    df.to_excel('car_ads.xlsx', index=False)
+    buffer = BytesIO()
+    with pd.ExcelWriter(buffer) as writer:
+        df.to_excel(writer, index=False)
+
+    return StreamingResponse(
+        BytesIO(buffer.getvalue()),
+        media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        headers={"Content-Disposition": f"attachment; filename={filename}"})
+
 def run_continuously(interval=1):
     """Continuously run, while executing pending jobs at each
     elapsed time interval.
@@ -147,6 +188,7 @@ def search_by_model(car_list, target_value):
             return car["text"]
     return None  # Return None if the value is not found
 
+
 @app.post("/tasks", response_model=models.Task)
 async def create_item(email: EmailStr, url: str):
     params: dict = extract_query_params(url)
@@ -182,6 +224,7 @@ def shutdown_event():
     for task_id in tasks:
         tasks[task_id].event.set()
         print("Cleared task with task id: " + task_id)
+
 
 @app.delete("/tasks/{task_id}")
 async def delete_item(task_id: str):

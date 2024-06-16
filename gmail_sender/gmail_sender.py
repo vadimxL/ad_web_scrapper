@@ -21,17 +21,16 @@ SCOPES = ["https://www.googleapis.com/auth/gmail.send"]
 
 
 class GmailSender:
-    def __init__(self, credentials_path: str):
-        self.creds = self._credentials(credentials_path)
+    def __init__(self, credentials_path: str, token_path: str) -> None:
+        self.creds = self._credentials(credentials_path, token_path)
 
-    @staticmethod
-    def _credentials(credentials_path: str):
+    def _credentials(self, credentials_path: str, token_path: str) -> Credentials:
         creds = None
         # The file token.json stores the user's access and refresh tokens, and is
         # created automatically when the authorization flow completes for the first
         # time.
-        if os.path.exists("token.json"):
-            creds = Credentials.from_authorized_user_file("token.json", SCOPES)
+        if os.path.exists(token_path):
+            creds = Credentials.from_authorized_user_file(token_path, SCOPES)
         # If there are no (valid) credentials available, let the user log in.
         if not creds or not creds.valid:
             if creds and creds.expired and creds.refresh_token:
@@ -42,7 +41,7 @@ class GmailSender:
                 )
                 creds = flow.run_local_server(port=0)
             # Save the credentials for the next run
-            with open("token.json", "w") as token:
+            with open(token_path, "w") as token:
                 token.write(creds.to_json())
         return creds
 
