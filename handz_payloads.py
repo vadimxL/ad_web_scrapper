@@ -1560,3 +1560,259 @@ payload_for_handz = {
     "n": "7ad1c",
     "t": "62e8c1a08efe2d1fad068684"
 }
+
+payload_for_handz_2 = {
+    "entities": [
+        {
+            "AirConditioner_text": "מיזוג",
+            "AreaID_text": "אזור חיפה והסביבה",
+            "Auto_text": "אוטומט",
+            "DateOnRoad_text": "מרץ",
+            "EngineTypeID_text": "בנזין",
+            "EngineVal_text": 1329,
+            "Hand_text": "יד ראשונה",
+            "IsVisibleForReco": False,
+            "ModelID": 1470,
+            "ModelID_text": "טויוטה",
+            "OwnerID_text": "ליסינג",
+            "PrimaryArea": "north",
+            "PrimaryAreaID": 25,
+            "SecondaryArea": "north",
+            "SubModelID_text": "יאריס",
+            "TradeIn_text": "מוכן להחלפה",
+            "Year_text": 2017,
+            "abovePrice": "50000",
+            "ad_highlight_type": "yellow",
+            "ad_number": 82098263,
+            "ad_number_second": 50975575,
+            "ad_type": "ad",
+            "advanced_info": {
+                "items": [
+                    {},
+                    {},
+                    {
+                        "title_text": "אבזור",
+                        "values": [
+                            "מזגן",
+                            "ABS",
+                            "4 חלונות חשמל",
+                            "הגה כוח",
+                            "7 כריות אויר",
+                            "הנעה 4X2",
+                            "מצלמת רוורס",
+                            "בקרת יציבות",
+                            "מערכת עזר לבלמים",
+                            "חיישני לחץ אויר בצמיגים",
+                            "חיישני חגורות",
+                            "תאורה אוטומטית בנסיעה קדימה"
+                        ]
+                    },
+                    {
+                        "opinions": []
+                    },
+                    {
+                        "values": [
+                            {
+                                "level_pollution": 10
+                            },
+                            {
+                                "safety_points": 0.5
+                            }
+                        ]
+                    }
+                ]
+            },
+            "agency_contact_name": "שריף",
+            "api_agency_name": "רכב תפארת",
+            "area_id": 5,
+            "background_color": "fef0a9",
+            "can_change_layout": 1,
+            "can_hide": 0,
+            "car_family_type": [
+                1
+            ],
+            "car_family_type_info": [
+                {
+                    "engTitle": "mini",
+                    "id": 1,
+                    "title": "קטנים"
+                }
+            ],
+            "cat_id": 1,
+            "categoryDic": {
+                "catEn": "vehicles",
+                "subCatEn": "cars"
+            },
+            "city": "חיפה",
+            "city_text": "חיפה",
+            "contact_name": "שריף",
+            "coordinates": {},
+            "currency": "₪",
+            "currency_text": "₪",
+            "customer_id": 7516034,
+            "date": "2023-07-31 22:07:16",
+            "date_added": "2023-07-26 09:26:05",
+            "deal_info": None,
+            "default_layout": "system",
+            "email": True,
+            "engine_size_text": "1,329 סמ\"ק",
+            "external": [],
+            "feed_source": "commercial",
+            "fromEngineVal_text": 1329,
+            "highlight_text": "",
+            "id": "6w67lalg",
+            "ignition_text": "4X2",
+            "images": [
+                "https://img.yad2.co.il/Pic/202307/26/1_8/o/y2_1_1Er3EHlwG8_20230726.jpg",
+                "https://img.yad2.co.il/Pic/202307/26/1_8/o/y2_5_nGimR7O3ZU_20230726.jpg",
+                "https://img.yad2.co.il/Pic/202307/26/1_8/o/y2_4_vSAa_S45F2_20230726.jpg",
+                "https://img.yad2.co.il/Pic/202307/26/1_8/o/y2_3_tka46zVGQi_20230726.jpg",
+                "https://img.yad2.co.il/Pic/202307/26/1_8/o/y2_2_Gw_HTOlthr_20230726.jpg"
+            ],
+            "images_count": 5,
+            "images_urls": [
+                "https://img.yad2.co.il/Pic/202307/26/1_8/o/y2_1_1Er3EHlwG8_20230726.jpg",
+                "https://img.yad2.co.il/Pic/202307/26/1_8/o/y2_5_nGimR7O3ZU_20230726.jpg",
+                "https://img.yad2.co.il/Pic/202307/26/1_8/o/y2_4_vSAa_S45F2_20230726.jpg",
+                "https://img.yad2.co.il/Pic/202307/26/1_8/o/y2_3_tka46zVGQi_20230726.jpg",
+                "https://img.yad2.co.il/Pic/202307/26/1_8/o/y2_2_Gw_HTOlthr_20230726.jpg"
+            ],
+            "img_url": "https://img.yad2.co.il/Pic/202307/26/1_8/o/y2_1_1Er3EHlwG8_20230726.jpg",
+            "info_bar_items": [
+                {
+                    "key": "km",
+                    "label": "ק\"מ",
+                    "title": "80,000 ק\"מ",
+                    "titleWithoutLabel": 80000
+                },
+                {
+                    "key": "hand",
+                    "label": None,
+                    "title": "יד ראשונה",
+                    "titleWithoutLabel": "יד ראשונה"
+                },
+                {
+                    "key": "gearBox",
+                    "label": None,
+                    "title": "אוטומט",
+                    "titleWithoutLabel": "אוטומט"
+                }
+            ],
+            "info_text": "שמור כמו חדש מתחיב בבדיקה גיר .מנוע.שלדה מטופל במוסך מורשה אפשרות לטרייד אין ומימון עד 100 אחוז",
+            "isVisibleForReco": True,
+            "is_business": True,
+            "is_hidden": 0,
+            "is_liked": 0,
+            "kilometers": "80,000",
+            "like_count": 0,
+            "line_1": "",
+            "line_1_text_color": "",
+            "line_2": "רכב תפארת",
+            "line_2_text_color": "808080",
+            "line_3": None,
+            "link_token": "6w67lalg",
+            "main_title": "טויוטה יאריס שנת 2017 יד ראשונה 80,000 ק\"מ",
+            "main_title_params": [
+                2017
+            ],
+            "manufacturer": "טויוטה",
+            "manufacturer_eng": "toyota",
+            "merchant": True,
+            "merchant_name": "רכב תפארת",
+            "model": "יאריס",
+            "more_details": [
+                {
+                    "key": "קילומטראז'",
+                    "name": "kilometers",
+                    "value": "80,000"
+                },
+                {
+                    "key": "סוג מנוע",
+                    "name": "engineType",
+                    "value": "בנזין"
+                },
+                {
+                    "key": "תיבת הילוכים",
+                    "name": "gearBox",
+                    "value": "אוטומט"
+                },
+                {
+                    "key": "צבע",
+                    "name": "color",
+                    "value": "כסוף מטאלי"
+                },
+                {
+                    "key": "תאריך עליה לכביש",
+                    "name": "month",
+                    "value": "03/2017"
+                },
+                {
+                    "key": "טסט עד",
+                    "name": "testDate",
+                    "value": "03/2024"
+                },
+                {
+                    "key": "בעלות נוכחית",
+                    "name": "ownerID",
+                    "value": "ליסינג"
+                },
+                {
+                    "key": "מותאם לנכים",
+                    "name": "disabledFriendly",
+                    "value": "לא"
+                }
+            ],
+            "moving_text": "",
+            "mp4_video_url": None,
+            "order_type_id": 3,
+            "price": "60,000 ₪",
+            "pricelist_link_url": "https://www.yad2.co.il/price-list/sub-model/27324/2017",
+            "promotional_ad": 0,
+            "record_id": 50975575,
+            "remove_on_unlike": False,
+            "row_1": "טויוטה יאריס",
+            "row_2": "Sol אוט' 1.3 (99 כ\"ס) ",
+            "row_3": [
+                2017,
+                "יד ראשונה",
+                "ק״מ 80,000"
+            ],
+            "row_4": [
+                {
+                    "key": "year",
+                    "label": "שנה",
+                    "value": 2017
+                },
+                {
+                    "key": "hand",
+                    "label": "יד",
+                    "value": 1
+                },
+                {
+                    "key": "engine_size",
+                    "label": "סמ״ק",
+                    "value": "1,329"
+                }
+            ],
+            "row_5": [
+                "2017",
+                "יד 1",
+                "סמ״ק 1329"
+            ],
+            "search_text": "שם מוכר רכב תפארת רכב תפארת שריף רכב סוכנות מסוג טויוטה יאריס Sol אוט' 1.3 (99 כ\"ס)  שנת 2017 בבעלות ליסינג יד ראשונה באזור אזור חיפה והסביבה בחיפהבעל תיבת הילוכים אוטומט מנוע בנזין בצבע כסוף מטאלי הלקוח מוכן להחלפה תאור לקוח שמור כמו חדש מתחיב בבדיקה גיר .מנוע.שלדה מטופל במוסך מורשה אפשרות לטרייד אין ומימון עד 100 אחוז ",
+            "subModelId": 27324,
+            "subcat_id": "21",
+            "title_1": "שנת 2017",
+            "title_2": "",
+            "type": "ad",
+            "uid": None,
+            "updated_at": "רכב תפארת",
+            "video_url": None,
+            "year": 2017
+        },
+    ],
+    "f": "08174adf27",
+    "s": "b7a18",
+    "n": "7ad1c",
+    "t": "62e8c1a08efe2d1fad068684"
+}

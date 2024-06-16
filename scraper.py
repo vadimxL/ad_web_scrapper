@@ -12,6 +12,7 @@ from requests_cache import CachedSession as MyCachedSession
 from rich import print
 import logging
 from car_details import CarDetails, PriceHistory
+from handz import Handz
 from headers import scrape_headers, model_headers
 
 logging.getLogger("ad_web_scrapper").addHandler(logging.StreamHandler(stream=sys.stdout))
@@ -172,7 +173,53 @@ class Scraper:
 
         logger.info(f"Skipped {no_id_items_num} items because they don't have an id")
         logger.info(f"Skipped {incompatible_feed_sources_items_num} items because they are not in {feed_sources} list")
+
+        handz = Handz()
+        divided_feed_items = list(self.divide_chunks(filtered_feed_items, 50))
+        handz_results = []
+        for divided_feed_item in divided_feed_items:
+            handz_result = handz.get_prices(divided_feed_item)
+            handz_results.extend(handz_result['data']['entities'])
+
+        # logger.info(handz_results)
+        for res in handz_results:
+            result_filter: CarDetails = next(filter(lambda x: x.id == res['id'], car_ads_to_save), None)
+            if result_filter:
+                prices = []
+                result_filter.prices_handz = self.convert_data(res['prices'])
+
         return car_ads_to_save, filtered_feed_items
+
+    # Function to convert and simplify the data
+    # Function to convert and simplify the data
+    # Function to convert and simplify the data into a single string
+    def convert_data_to_string(self, data):
+        lines = []
+        for item in data:
+            # Parse the date and format it to a simpler date format (e.g., YYYY-MM-DD)
+            parsed_date = datetime.fromisoformat(item['date'].replace('Z', '+00:00'))
+            simplified_date = parsed_date.strftime('%Y-%m-%d')  # Simplified date format
+
+            # Get the price, handle None case
+            price = str(item['price']) if item['price'] is not None else 'None'
+
+            # Create the string with date and price separated by '|'
+            line = f"{simplified_date} | {price}"
+
+            # Add the string to the list of lines
+            lines.append(line)
+
+        # Join all lines into a single string with new line separators
+        result_string = '\n'.join(lines)
+
+        return result_string
+
+    # Yield successive n-sized
+    # chunks from l.
+    def divide_chunks(self, listing: List, n: int):
+        # looping till length l
+        for i in range(0, len(listing), n):
+            yield listing[i:i + n]
 
     def extract_car_details(self, feed_item: json) -> CarDetails:
         horsepower_value = 0

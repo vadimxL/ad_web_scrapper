@@ -9,7 +9,7 @@ from io import BytesIO
 import pandas as pd
 import schedule
 
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import List, Dict
 from urllib import parse
 from pydantic import EmailStr
@@ -19,7 +19,6 @@ from starlette.responses import StreamingResponse
 import firebase_db
 import json
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import FileResponse
 
 from car_details import CarDetails
 from db_handler import DbHandler
@@ -41,7 +40,6 @@ app.add_middleware(
     expose_headers=["*"]
 )
 
-urls_to_scrape = ["https://www.yad2.co.il/vehicles/cars?manufacturer=48&model=3866,2829,3484&year=2019--1&km=-1-80000"]
 
 # Replace this with your actual data source or logic
 manufacturers = {}

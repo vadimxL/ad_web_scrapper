@@ -27,6 +27,8 @@ class CarDetails(BaseModel):
     hand: Optional[int] = None
     kilometers: Optional[int] = None
     prices: List[PriceHistory] = field(default_factory=list)
+    # prices_handz: List[Dict] = field(default_factory=list)
+    prices_handz: str = 'N/A'
     blind_spot: Optional[str] = None
     smart_cruise_control: Optional[str] = None
     manuf_en: str = 'N/A'

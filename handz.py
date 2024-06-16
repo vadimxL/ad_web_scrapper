@@ -1,10 +1,13 @@
 import hashlib
+from datetime import datetime, timedelta
+from typing import List, Dict
+
 import json
 import logging
 import sys
 import requests
 import re
-
+from requests_cache import CachedSession as MyCachedSession
 from handz_payloads import payload_for_handz
 
 logging.getLogger(__name__).addHandler(logging.StreamHandler(stream=sys.stdout))
@@ -27,16 +30,16 @@ class Handz:
 
 
     @staticmethod
-    def get_prices(listings):
+    def get_prices(listings: List[Dict]):
         data = Handz.prepare_data(listings)
 
-        # logger.info(f"Requesting pricing from Handz with data: f={data['f'], data['s'], data['n'], data['t']}")
-        # handz_payload = json.dumps(data, indent=4)
-        # with open('handz_payload.json', 'w') as f:
-        #     f.write(handz_payload)
+        url = "https://api.handz.co.il/v2.0/entities/vehicles/auth"
+        headers = {'Content-Type': 'application/json'}
         # Make the POST request
-        response = requests.post("https://api.handz.co.il/v2.0/entities/vehicles/auth",
-                                 headers={'Content-Type': 'application/json'}, data=json.dumps(data))
+        # response = requests.post("https://api.handz.co.il/v2.0/entities/vehicles/auth",
+        #                          headers=headers, data=json.dumps(data))
+        session = MyCachedSession('yad2_model_cache', backend='sqlite', expire_after=timedelta(hours=2))
+        response = session.post(url, headers=headers, data=json.dumps(data), timeout=10)
         #
         # Parse the response as JSON and return it
         return response.json()
