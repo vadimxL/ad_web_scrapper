@@ -22,6 +22,7 @@ from fastapi import FastAPI, HTTPException
 
 from car_details import CarDetails
 from db_handler import DbHandler
+from email_sender.email_sender import EmailSender
 from gmail_sender.gmail_sender import GmailSender
 from persistence import dump_to_excel_car_details
 from scraper import Scraper, logger
@@ -44,7 +45,7 @@ app.add_middleware(
 # Replace this with your actual data source or logic
 manufacturers = {}
 manufs_unaltered = []
-gmail_sender = GmailSender(credentials_path="gmail_sender/credentials.json", token_path="gmail_sender/token.json")
+# gmail_sender = GmailSender(credentials_path="gmail_sender/credentials.json", token_path="gmail_sender/token.json")
 
 
 @app.on_event("startup")
@@ -159,7 +160,8 @@ def run_continuously(interval=1):
 
 def recurrent_scrape(task_id: str, params: dict, loop):
     scraper = Scraper(cache_timeout_min=30)
-    db_handler = DbHandler(parse.urlsplit(tasks[task_id].task_info.title).query, gmail_sender)
+    mail_sender = EmailSender()
+    db_handler = DbHandler(parse.urlsplit(tasks[task_id].task_info.title).query, mail_sender)
     results = scraper.run(params, loop)
     logger.info(f"Recurrence task: {task_id}: {tasks[task_id]}")
     db_handler.handle_results(results)
@@ -174,7 +176,8 @@ def scrape_task(task_id: str, loop):
     filename_json = f'json/car_ads_{task_id}' + time_now + '.json'
     with open(filename_json, 'w', encoding='utf-8') as f1:
         json.dump({ad.id: ad.model_dump(mode='json') for ad in results}, f1, indent=4, ensure_ascii=False)
-    db_handler = DbHandler(parse.urlsplit(tasks[task_id].task_info.title).query, gmail_sender)
+    mail_sender = EmailSender()
+    db_handler = DbHandler(parse.urlsplit(tasks[task_id].task_info.title).query, mail_sender)
     db_handler.create_collection(results)
     # Do some work that only needs to happen once...
     return schedule.CancelJob
