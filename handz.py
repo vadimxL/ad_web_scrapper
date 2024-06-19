@@ -1,14 +1,12 @@
 import hashlib
-from datetime import datetime, timedelta
+from datetime import timedelta
 from typing import List, Dict
-
 import json
 import logging
 import sys
-import requests
+
 import re
 from requests_cache import CachedSession as MyCachedSession
-from handz_payloads import payload_for_handz
 
 logging.getLogger(__name__).addHandler(logging.StreamHandler(stream=sys.stdout))
 logger = logging.getLogger(__name__)
@@ -38,7 +36,7 @@ class Handz:
         # Make the POST request
         # response = requests.post("https://api.handz.co.il/v2.0/entities/vehicles/auth",
         #                          headers=headers, data=json.dumps(data))
-        session = MyCachedSession('yad2_model_cache', backend='sqlite', expire_after=timedelta(hours=2))
+        session = MyCachedSession('handz_cache', backend='sqlite', expire_after=timedelta(hours=2))
         response = session.post(url, headers=headers, data=json.dumps(data), timeout=10)
         #
         # Parse the response as JSON and return it
@@ -66,5 +64,7 @@ class Handz:
 
 if __name__ == '__main__':
     handz = Handz()
-    result = handz.get_prices(payload_for_handz['entities'])
-    print(result)
+    with open('handz_payloads.json', 'r') as f:
+        payload_for_handz = json.load(f)
+        result = handz.get_prices(payload_for_handz['entities'])
+        print(result)

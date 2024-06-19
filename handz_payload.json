@@ -1,0 +1,255 @@
+{
+    "entities": [
+        {
+            "AirConditioner_text": "\u05de\u05d9\u05d6\u05d5\u05d2",
+            "AreaID_text": "\u05d0\u05d6\u05d5\u05e8 \u05d7\u05d9\u05e4\u05d4 \u05d5\u05d4\u05e1\u05d1\u05d9\u05d1\u05d4",
+            "Auto_text": "\u05d0\u05d5\u05d8\u05d5\u05de\u05d8",
+            "DateOnRoad_text": "\u05de\u05e8\u05e5",
+            "EngineTypeID_text": "\u05d1\u05e0\u05d6\u05d9\u05df",
+            "EngineVal_text": 1329,
+            "Hand_text": "\u05d9\u05d3 \u05e8\u05d0\u05e9\u05d5\u05e0\u05d4",
+            "IsVisibleForReco": false,
+            "ModelID": 1470,
+            "ModelID_text": "\u05d8\u05d5\u05d9\u05d5\u05d8\u05d4",
+            "OwnerID_text": "\u05dc\u05d9\u05e1\u05d9\u05e0\u05d2",
+            "PrimaryArea": "north",
+            "PrimaryAreaID": 25,
+            "SecondaryArea": "north",
+            "SubModelID_text": "\u05d9\u05d0\u05e8\u05d9\u05e1",
+            "TradeIn_text": "\u05de\u05d5\u05db\u05df \u05dc\u05d4\u05d7\u05dc\u05e4\u05d4",
+            "Year_text": 2017,
+            "abovePrice": "50000",
+            "ad_highlight_type": "yellow",
+            "ad_number": 82098263,
+            "ad_number_second": 50975575,
+            "ad_type": "ad",
+            "advanced_info": {
+                "items": [
+                    {},
+                    {},
+                    {
+                        "title_text": "\u05d0\u05d1\u05d6\u05d5\u05e8",
+                        "values": [
+                            "\u05de\u05d6\u05d2\u05df",
+                            "ABS",
+                            "4 \u05d7\u05dc\u05d5\u05e0\u05d5\u05ea \u05d7\u05e9\u05de\u05dc",
+                            "\u05d4\u05d2\u05d4 \u05db\u05d5\u05d7",
+                            "7 \u05db\u05e8\u05d9\u05d5\u05ea \u05d0\u05d5\u05d9\u05e8",
+                            "\u05d4\u05e0\u05e2\u05d4 4X2",
+                            "\u05de\u05e6\u05dc\u05de\u05ea \u05e8\u05d5\u05d5\u05e8\u05e1",
+                            "\u05d1\u05e7\u05e8\u05ea \u05d9\u05e6\u05d9\u05d1\u05d5\u05ea",
+                            "\u05de\u05e2\u05e8\u05db\u05ea \u05e2\u05d6\u05e8 \u05dc\u05d1\u05dc\u05de\u05d9\u05dd",
+                            "\u05d7\u05d9\u05d9\u05e9\u05e0\u05d9 \u05dc\u05d7\u05e5 \u05d0\u05d5\u05d9\u05e8 \u05d1\u05e6\u05de\u05d9\u05d2\u05d9\u05dd",
+                            "\u05d7\u05d9\u05d9\u05e9\u05e0\u05d9 \u05d7\u05d2\u05d5\u05e8\u05d5\u05ea",
+                            "\u05ea\u05d0\u05d5\u05e8\u05d4 \u05d0\u05d5\u05d8\u05d5\u05de\u05d8\u05d9\u05ea \u05d1\u05e0\u05e1\u05d9\u05e2\u05d4 \u05e7\u05d3\u05d9\u05de\u05d4"
+                        ]
+                    },
+                    {
+                        "opinions": []
+                    },
+                    {
+                        "values": [
+                            {
+                                "level_pollution": 10
+                            },
+                            {
+                                "safety_points": 0.5
+                            }
+                        ]
+                    }
+                ]
+            },
+            "agency_contact_name": "\u05e9\u05e8\u05d9\u05e3",
+            "api_agency_name": "\u05e8\u05db\u05d1 \u05ea\u05e4\u05d0\u05e8\u05ea",
+            "area_id": 5,
+            "background_color": "fef0a9",
+            "can_change_layout": 1,
+            "can_hide": 0,
+            "car_family_type": [
+                1
+            ],
+            "car_family_type_info": [
+                {
+                    "engTitle": "mini",
+                    "id": 1,
+                    "title": "\u05e7\u05d8\u05e0\u05d9\u05dd"
+                }
+            ],
+            "cat_id": 1,
+            "categoryDic": {
+                "catEn": "vehicles",
+                "subCatEn": "cars"
+            },
+            "city": "\u05d7\u05d9\u05e4\u05d4",
+            "city_text": "\u05d7\u05d9\u05e4\u05d4",
+            "contact_name": "\u05e9\u05e8\u05d9\u05e3",
+            "coordinates": {},
+            "currency": "\u20aa",
+            "currency_text": "\u20aa",
+            "customer_id": 7516034,
+            "date": "2023-07-31 22:07:16",
+            "date_added": "2023-07-26 09:26:05",
+            "deal_info": null,
+            "default_layout": "system",
+            "email": true,
+            "engine_size_text": "1,329 \u05e1\u05de\"\u05e7",
+            "external": [],
+            "feed_source": "commercial",
+            "fromEngineVal_text": 1329,
+            "highlight_text": "",
+            "id": "6w67lalg",
+            "ignition_text": "4X2",
+            "images": [
+                "https://img.yad2.co.il/Pic/202307/26/1_8/o/y2_1_1Er3EHlwG8_20230726.jpg",
+                "https://img.yad2.co.il/Pic/202307/26/1_8/o/y2_5_nGimR7O3ZU_20230726.jpg",
+                "https://img.yad2.co.il/Pic/202307/26/1_8/o/y2_4_vSAa_S45F2_20230726.jpg",
+                "https://img.yad2.co.il/Pic/202307/26/1_8/o/y2_3_tka46zVGQi_20230726.jpg",
+                "https://img.yad2.co.il/Pic/202307/26/1_8/o/y2_2_Gw_HTOlthr_20230726.jpg"
+            ],
+            "images_count": 5,
+            "images_urls": [
+                "https://img.yad2.co.il/Pic/202307/26/1_8/o/y2_1_1Er3EHlwG8_20230726.jpg",
+                "https://img.yad2.co.il/Pic/202307/26/1_8/o/y2_5_nGimR7O3ZU_20230726.jpg",
+                "https://img.yad2.co.il/Pic/202307/26/1_8/o/y2_4_vSAa_S45F2_20230726.jpg",
+                "https://img.yad2.co.il/Pic/202307/26/1_8/o/y2_3_tka46zVGQi_20230726.jpg",
+                "https://img.yad2.co.il/Pic/202307/26/1_8/o/y2_2_Gw_HTOlthr_20230726.jpg"
+            ],
+            "img_url": "https://img.yad2.co.il/Pic/202307/26/1_8/o/y2_1_1Er3EHlwG8_20230726.jpg",
+            "info_bar_items": [
+                {
+                    "key": "km",
+                    "label": "\u05e7\"\u05de",
+                    "title": "80,000 \u05e7\"\u05de",
+                    "titleWithoutLabel": 80000
+                },
+                {
+                    "key": "hand",
+                    "label": null,
+                    "title": "\u05d9\u05d3 \u05e8\u05d0\u05e9\u05d5\u05e0\u05d4",
+                    "titleWithoutLabel": "\u05d9\u05d3 \u05e8\u05d0\u05e9\u05d5\u05e0\u05d4"
+                },
+                {
+                    "key": "gearBox",
+                    "label": null,
+                    "title": "\u05d0\u05d5\u05d8\u05d5\u05de\u05d8",
+                    "titleWithoutLabel": "\u05d0\u05d5\u05d8\u05d5\u05de\u05d8"
+                }
+            ],
+            "info_text": "\u05e9\u05de\u05d5\u05e8 \u05db\u05de\u05d5 \u05d7\u05d3\u05e9 \u05de\u05ea\u05d7\u05d9\u05d1 \u05d1\u05d1\u05d3\u05d9\u05e7\u05d4 \u05d2\u05d9\u05e8 .\u05de\u05e0\u05d5\u05e2.\u05e9\u05dc\u05d3\u05d4 \u05de\u05d8\u05d5\u05e4\u05dc \u05d1\u05de\u05d5\u05e1\u05da \u05de\u05d5\u05e8\u05e9\u05d4 \u05d0\u05e4\u05e9\u05e8\u05d5\u05ea \u05dc\u05d8\u05e8\u05d9\u05d9\u05d3 \u05d0\u05d9\u05df \u05d5\u05de\u05d9\u05de\u05d5\u05df \u05e2\u05d3 100 \u05d0\u05d7\u05d5\u05d6",
+            "isVisibleForReco": true,
+            "is_business": true,
+            "is_hidden": 0,
+            "is_liked": 0,
+            "kilometers": "80,000",
+            "like_count": 0,
+            "line_1": "",
+            "line_1_text_color": "",
+            "line_2": "\u05e8\u05db\u05d1 \u05ea\u05e4\u05d0\u05e8\u05ea",
+            "line_2_text_color": "808080",
+            "line_3": null,
+            "link_token": "6w67lalg",
+            "main_title": "\u05d8\u05d5\u05d9\u05d5\u05d8\u05d4 \u05d9\u05d0\u05e8\u05d9\u05e1 \u05e9\u05e0\u05ea 2017 \u05d9\u05d3 \u05e8\u05d0\u05e9\u05d5\u05e0\u05d4 80,000 \u05e7\"\u05de",
+            "main_title_params": [
+                2017
+            ],
+            "manufacturer": "\u05d8\u05d5\u05d9\u05d5\u05d8\u05d4",
+            "manufacturer_eng": "toyota",
+            "merchant": true,
+            "merchant_name": "\u05e8\u05db\u05d1 \u05ea\u05e4\u05d0\u05e8\u05ea",
+            "model": "\u05d9\u05d0\u05e8\u05d9\u05e1",
+            "more_details": [
+                {
+                    "key": "\u05e7\u05d9\u05dc\u05d5\u05de\u05d8\u05e8\u05d0\u05d6'",
+                    "name": "kilometers",
+                    "value": "80,000"
+                },
+                {
+                    "key": "\u05e1\u05d5\u05d2 \u05de\u05e0\u05d5\u05e2",
+                    "name": "engineType",
+                    "value": "\u05d1\u05e0\u05d6\u05d9\u05df"
+                },
+                {
+                    "key": "\u05ea\u05d9\u05d1\u05ea \u05d4\u05d9\u05dc\u05d5\u05db\u05d9\u05dd",
+                    "name": "gearBox",
+                    "value": "\u05d0\u05d5\u05d8\u05d5\u05de\u05d8"
+                },
+                {
+                    "key": "\u05e6\u05d1\u05e2",
+                    "name": "color",
+                    "value": "\u05db\u05e1\u05d5\u05e3 \u05de\u05d8\u05d0\u05dc\u05d9"
+                },
+                {
+                    "key": "\u05ea\u05d0\u05e8\u05d9\u05da \u05e2\u05dc\u05d9\u05d4 \u05dc\u05db\u05d1\u05d9\u05e9",
+                    "name": "month",
+                    "value": "03/2017"
+                },
+                {
+                    "key": "\u05d8\u05e1\u05d8 \u05e2\u05d3",
+                    "name": "testDate",
+                    "value": "03/2024"
+                },
+                {
+                    "key": "\u05d1\u05e2\u05dc\u05d5\u05ea \u05e0\u05d5\u05db\u05d7\u05d9\u05ea",
+                    "name": "ownerID",
+                    "value": "\u05dc\u05d9\u05e1\u05d9\u05e0\u05d2"
+                },
+                {
+                    "key": "\u05de\u05d5\u05ea\u05d0\u05dd \u05dc\u05e0\u05db\u05d9\u05dd",
+                    "name": "disabledFriendly",
+                    "value": "\u05dc\u05d0"
+                }
+            ],
+            "moving_text": "",
+            "mp4_video_url": null,
+            "order_type_id": 3,
+            "price": "60,000 \u20aa",
+            "pricelist_link_url": "https://www.yad2.co.il/price-list/sub-model/27324/2017",
+            "promotional_ad": 0,
+            "record_id": 50975575,
+            "remove_on_unlike": false,
+            "row_1": "\u05d8\u05d5\u05d9\u05d5\u05d8\u05d4 \u05d9\u05d0\u05e8\u05d9\u05e1",
+            "row_2": "Sol \u05d0\u05d5\u05d8' 1.3 (99 \u05db\"\u05e1) ",
+            "row_3": [
+                2017,
+                "\u05d9\u05d3 \u05e8\u05d0\u05e9\u05d5\u05e0\u05d4",
+                "\u05e7\u05f4\u05de 80,000"
+            ],
+            "row_4": [
+                {
+                    "key": "year",
+                    "label": "\u05e9\u05e0\u05d4",
+                    "value": 2017
+                },
+                {
+                    "key": "hand",
+                    "label": "\u05d9\u05d3",
+                    "value": 1
+                },
+                {
+                    "key": "engine_size",
+                    "label": "\u05e1\u05de\u05f4\u05e7",
+                    "value": "1,329"
+                }
+            ],
+            "row_5": [
+                "2017",
+                "\u05d9\u05d3 1",
+                "\u05e1\u05de\u05f4\u05e7 1329"
+            ],
+            "search_text": "\u05e9\u05dd \u05de\u05d5\u05db\u05e8 \u05e8\u05db\u05d1 \u05ea\u05e4\u05d0\u05e8\u05ea \u05e8\u05db\u05d1 \u05ea\u05e4\u05d0\u05e8\u05ea \u05e9\u05e8\u05d9\u05e3 \u05e8\u05db\u05d1 \u05e1\u05d5\u05db\u05e0\u05d5\u05ea \u05de\u05e1\u05d5\u05d2 \u05d8\u05d5\u05d9\u05d5\u05d8\u05d4 \u05d9\u05d0\u05e8\u05d9\u05e1 Sol \u05d0\u05d5\u05d8' 1.3 (99 \u05db\"\u05e1)  \u05e9\u05e0\u05ea 2017 \u05d1\u05d1\u05e2\u05dc\u05d5\u05ea \u05dc\u05d9\u05e1\u05d9\u05e0\u05d2 \u05d9\u05d3 \u05e8\u05d0\u05e9\u05d5\u05e0\u05d4 \u05d1\u05d0\u05d6\u05d5\u05e8 \u05d0\u05d6\u05d5\u05e8 \u05d7\u05d9\u05e4\u05d4 \u05d5\u05d4\u05e1\u05d1\u05d9\u05d1\u05d4 \u05d1\u05d7\u05d9\u05e4\u05d4\u05d1\u05e2\u05dc \u05ea\u05d9\u05d1\u05ea \u05d4\u05d9\u05dc\u05d5\u05db\u05d9\u05dd \u05d0\u05d5\u05d8\u05d5\u05de\u05d8 \u05de\u05e0\u05d5\u05e2 \u05d1\u05e0\u05d6\u05d9\u05df \u05d1\u05e6\u05d1\u05e2 \u05db\u05e1\u05d5\u05e3 \u05de\u05d8\u05d0\u05dc\u05d9 \u05d4\u05dc\u05e7\u05d5\u05d7 \u05de\u05d5\u05db\u05df \u05dc\u05d4\u05d7\u05dc\u05e4\u05d4 \u05ea\u05d0\u05d5\u05e8 \u05dc\u05e7\u05d5\u05d7 \u05e9\u05de\u05d5\u05e8 \u05db\u05de\u05d5 \u05d7\u05d3\u05e9 \u05de\u05ea\u05d7\u05d9\u05d1 \u05d1\u05d1\u05d3\u05d9\u05e7\u05d4 \u05d2\u05d9\u05e8 .\u05de\u05e0\u05d5\u05e2.\u05e9\u05dc\u05d3\u05d4 \u05de\u05d8\u05d5\u05e4\u05dc \u05d1\u05de\u05d5\u05e1\u05da \u05de\u05d5\u05e8\u05e9\u05d4 \u05d0\u05e4\u05e9\u05e8\u05d5\u05ea \u05dc\u05d8\u05e8\u05d9\u05d9\u05d3 \u05d0\u05d9\u05df \u05d5\u05de\u05d9\u05de\u05d5\u05df \u05e2\u05d3 100 \u05d0\u05d7\u05d5\u05d6 ",
+            "subModelId": 27324,
+            "subcat_id": "21",
+            "title_1": "\u05e9\u05e0\u05ea 2017",
+            "title_2": "",
+            "type": "ad",
+            "uid": null,
+            "updated_at": "\u05e8\u05db\u05d1 \u05ea\u05e4\u05d0\u05e8\u05ea",
+            "video_url": null,
+            "year": 2017
+        }
+    ],
+    "f": "08174adf27",
+    "s": "b7a18",
+    "n": "7ad1c",
+    "t": "62e8c1a08efe2d1fad068684"
+}

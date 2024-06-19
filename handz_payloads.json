@@ -1,0 +1,1562 @@
+{
+    "entities": [
+        {
+            "AirConditioner_text": "\u05de\u05d9\u05d6\u05d5\u05d2",
+            "AreaID_text": "\u05d0\u05d6\u05d5\u05e8 \u05d7\u05d9\u05e4\u05d4 \u05d5\u05d4\u05e1\u05d1\u05d9\u05d1\u05d4",
+            "Auto_text": "\u05d0\u05d5\u05d8\u05d5\u05de\u05d8",
+            "DateOnRoad_text": "\u05de\u05e8\u05e5",
+            "EngineTypeID_text": "\u05d1\u05e0\u05d6\u05d9\u05df",
+            "EngineVal_text": 1329,
+            "Hand_text": "\u05d9\u05d3 \u05e8\u05d0\u05e9\u05d5\u05e0\u05d4",
+            "IsVisibleForReco": false,
+            "ModelID": 1470,
+            "ModelID_text": "\u05d8\u05d5\u05d9\u05d5\u05d8\u05d4",
+            "OwnerID_text": "\u05dc\u05d9\u05e1\u05d9\u05e0\u05d2",
+            "PrimaryArea": "north",
+            "PrimaryAreaID": 25,
+            "SecondaryArea": "north",
+            "SubModelID_text": "\u05d9\u05d0\u05e8\u05d9\u05e1",
+            "TradeIn_text": "\u05de\u05d5\u05db\u05df \u05dc\u05d4\u05d7\u05dc\u05e4\u05d4",
+            "Year_text": 2017,
+            "abovePrice": "50000",
+            "ad_highlight_type": "yellow",
+            "ad_number": 82098263,
+            "ad_number_second": 50975575,
+            "ad_type": "ad",
+            "advanced_info": {
+                "items": [
+                    {},
+                    {},
+                    {
+                        "title_text": "\u05d0\u05d1\u05d6\u05d5\u05e8",
+                        "values": [
+                            "\u05de\u05d6\u05d2\u05df",
+                            "ABS",
+                            "4 \u05d7\u05dc\u05d5\u05e0\u05d5\u05ea \u05d7\u05e9\u05de\u05dc",
+                            "\u05d4\u05d2\u05d4 \u05db\u05d5\u05d7",
+                            "7 \u05db\u05e8\u05d9\u05d5\u05ea \u05d0\u05d5\u05d9\u05e8",
+                            "\u05d4\u05e0\u05e2\u05d4 4X2",
+                            "\u05de\u05e6\u05dc\u05de\u05ea \u05e8\u05d5\u05d5\u05e8\u05e1",
+                            "\u05d1\u05e7\u05e8\u05ea \u05d9\u05e6\u05d9\u05d1\u05d5\u05ea",
+                            "\u05de\u05e2\u05e8\u05db\u05ea \u05e2\u05d6\u05e8 \u05dc\u05d1\u05dc\u05de\u05d9\u05dd",
+                            "\u05d7\u05d9\u05d9\u05e9\u05e0\u05d9 \u05dc\u05d7\u05e5 \u05d0\u05d5\u05d9\u05e8 \u05d1\u05e6\u05de\u05d9\u05d2\u05d9\u05dd",
+                            "\u05d7\u05d9\u05d9\u05e9\u05e0\u05d9 \u05d7\u05d2\u05d5\u05e8\u05d5\u05ea",
+                            "\u05ea\u05d0\u05d5\u05e8\u05d4 \u05d0\u05d5\u05d8\u05d5\u05de\u05d8\u05d9\u05ea \u05d1\u05e0\u05e1\u05d9\u05e2\u05d4 \u05e7\u05d3\u05d9\u05de\u05d4"
+                        ]
+                    },
+                    {
+                        "opinions": []
+                    },
+                    {
+                        "values": [
+                            {
+                                "level_pollution": 10
+                            },
+                            {
+                                "safety_points": 0.5
+                            }
+                        ]
+                    }
+                ]
+            },
+            "agency_contact_name": "\u05e9\u05e8\u05d9\u05e3",
+            "api_agency_name": "\u05e8\u05db\u05d1 \u05ea\u05e4\u05d0\u05e8\u05ea",
+            "area_id": 5,
+            "background_color": "fef0a9",
+            "can_change_layout": 1,
+            "can_hide": 0,
+            "car_family_type": [
+                1
+            ],
+            "car_family_type_info": [
+                {
+                    "engTitle": "mini",
+                    "id": 1,
+                    "title": "\u05e7\u05d8\u05e0\u05d9\u05dd"
+                }
+            ],
+            "cat_id": 1,
+            "categoryDic": {
+                "catEn": "vehicles",
+                "subCatEn": "cars"
+            },
+            "city": "\u05d7\u05d9\u05e4\u05d4",
+            "city_text": "\u05d7\u05d9\u05e4\u05d4",
+            "contact_name": "\u05e9\u05e8\u05d9\u05e3",
+            "coordinates": {},
+            "currency": "\u20aa",
+            "currency_text": "\u20aa",
+            "customer_id": 7516034,
+            "date": "2023-07-31 22:07:16",
+            "date_added": "2023-07-26 09:26:05",
+            "deal_info": null,
+            "default_layout": "system",
+            "email": true,
+            "engine_size_text": "1,329 \u05e1\u05de\"\u05e7",
+            "external": [],
+            "feed_source": "commercial",
+            "fromEngineVal_text": 1329,
+            "highlight_text": "",
+            "id": "6w67lalg",
+            "ignition_text": "4X2",
+            "images": [
+                "https://img.yad2.co.il/Pic/202307/26/1_8/o/y2_1_1Er3EHlwG8_20230726.jpg",
+                "https://img.yad2.co.il/Pic/202307/26/1_8/o/y2_5_nGimR7O3ZU_20230726.jpg",
+                "https://img.yad2.co.il/Pic/202307/26/1_8/o/y2_4_vSAa_S45F2_20230726.jpg",
+                "https://img.yad2.co.il/Pic/202307/26/1_8/o/y2_3_tka46zVGQi_20230726.jpg",
+                "https://img.yad2.co.il/Pic/202307/26/1_8/o/y2_2_Gw_HTOlthr_20230726.jpg"
+            ],
+            "images_count": 5,
+            "images_urls": [
+                "https://img.yad2.co.il/Pic/202307/26/1_8/o/y2_1_1Er3EHlwG8_20230726.jpg",
+                "https://img.yad2.co.il/Pic/202307/26/1_8/o/y2_5_nGimR7O3ZU_20230726.jpg",
+                "https://img.yad2.co.il/Pic/202307/26/1_8/o/y2_4_vSAa_S45F2_20230726.jpg",
+                "https://img.yad2.co.il/Pic/202307/26/1_8/o/y2_3_tka46zVGQi_20230726.jpg",
+                "https://img.yad2.co.il/Pic/202307/26/1_8/o/y2_2_Gw_HTOlthr_20230726.jpg"
+            ],
+            "img_url": "https://img.yad2.co.il/Pic/202307/26/1_8/o/y2_1_1Er3EHlwG8_20230726.jpg",
+            "info_bar_items": [
+                {
+                    "key": "km",
+                    "label": "\u05e7\"\u05de",
+                    "title": "80,000 \u05e7\"\u05de",
+                    "titleWithoutLabel": 80000
+                },
+                {
+                    "key": "hand",
+                    "label": null,
+                    "title": "\u05d9\u05d3 \u05e8\u05d0\u05e9\u05d5\u05e0\u05d4",
+                    "titleWithoutLabel": "\u05d9\u05d3 \u05e8\u05d0\u05e9\u05d5\u05e0\u05d4"
+                },
+                {
+                    "key": "gearBox",
+                    "label": null,
+                    "title": "\u05d0\u05d5\u05d8\u05d5\u05de\u05d8",
+                    "titleWithoutLabel": "\u05d0\u05d5\u05d8\u05d5\u05de\u05d8"
+                }
+            ],
+            "info_text": "\u05e9\u05de\u05d5\u05e8 \u05db\u05de\u05d5 \u05d7\u05d3\u05e9 \u05de\u05ea\u05d7\u05d9\u05d1 \u05d1\u05d1\u05d3\u05d9\u05e7\u05d4 \u05d2\u05d9\u05e8 .\u05de\u05e0\u05d5\u05e2.\u05e9\u05dc\u05d3\u05d4 \u05de\u05d8\u05d5\u05e4\u05dc \u05d1\u05de\u05d5\u05e1\u05da \u05de\u05d5\u05e8\u05e9\u05d4 \u05d0\u05e4\u05e9\u05e8\u05d5\u05ea \u05dc\u05d8\u05e8\u05d9\u05d9\u05d3 \u05d0\u05d9\u05df \u05d5\u05de\u05d9\u05de\u05d5\u05df \u05e2\u05d3 100 \u05d0\u05d7\u05d5\u05d6",
+            "isVisibleForReco": true,
+            "is_business": true,
+            "is_hidden": 0,
+            "is_liked": 0,
+            "kilometers": "80,000",
+            "like_count": 0,
+            "line_1": "",
+            "line_1_text_color": "",
+            "line_2": "\u05e8\u05db\u05d1 \u05ea\u05e4\u05d0\u05e8\u05ea",
+            "line_2_text_color": "808080",
+            "line_3": null,
+            "link_token": "6w67lalg",
+            "main_title": "\u05d8\u05d5\u05d9\u05d5\u05d8\u05d4 \u05d9\u05d0\u05e8\u05d9\u05e1 \u05e9\u05e0\u05ea 2017 \u05d9\u05d3 \u05e8\u05d0\u05e9\u05d5\u05e0\u05d4 80,000 \u05e7\"\u05de",
+            "main_title_params": [
+                2017
+            ],
+            "manufacturer": "\u05d8\u05d5\u05d9\u05d5\u05d8\u05d4",
+            "manufacturer_eng": "toyota",
+            "merchant": true,
+            "merchant_name": "\u05e8\u05db\u05d1 \u05ea\u05e4\u05d0\u05e8\u05ea",
+            "model": "\u05d9\u05d0\u05e8\u05d9\u05e1",
+            "more_details": [
+                {
+                    "key": "\u05e7\u05d9\u05dc\u05d5\u05de\u05d8\u05e8\u05d0\u05d6'",
+                    "name": "kilometers",
+                    "value": "80,000"
+                },
+                {
+                    "key": "\u05e1\u05d5\u05d2 \u05de\u05e0\u05d5\u05e2",
+                    "name": "engineType",
+                    "value": "\u05d1\u05e0\u05d6\u05d9\u05df"
+                },
+                {
+                    "key": "\u05ea\u05d9\u05d1\u05ea \u05d4\u05d9\u05dc\u05d5\u05db\u05d9\u05dd",
+                    "name": "gearBox",
+                    "value": "\u05d0\u05d5\u05d8\u05d5\u05de\u05d8"
+                },
+                {
+                    "key": "\u05e6\u05d1\u05e2",
+                    "name": "color",
+                    "value": "\u05db\u05e1\u05d5\u05e3 \u05de\u05d8\u05d0\u05dc\u05d9"
+                },
+                {
+                    "key": "\u05ea\u05d0\u05e8\u05d9\u05da \u05e2\u05dc\u05d9\u05d4 \u05dc\u05db\u05d1\u05d9\u05e9",
+                    "name": "month",
+                    "value": "03/2017"
+                },
+                {
+                    "key": "\u05d8\u05e1\u05d8 \u05e2\u05d3",
+                    "name": "testDate",
+                    "value": "03/2024"
+                },
+                {
+                    "key": "\u05d1\u05e2\u05dc\u05d5\u05ea \u05e0\u05d5\u05db\u05d7\u05d9\u05ea",
+                    "name": "ownerID",
+                    "value": "\u05dc\u05d9\u05e1\u05d9\u05e0\u05d2"
+                },
+                {
+                    "key": "\u05de\u05d5\u05ea\u05d0\u05dd \u05dc\u05e0\u05db\u05d9\u05dd",
+                    "name": "disabledFriendly",
+                    "value": "\u05dc\u05d0"
+                }
+            ],
+            "moving_text": "",
+            "mp4_video_url": null,
+            "order_type_id": 3,
+            "price": "60,000 \u20aa",
+            "pricelist_link_url": "https://www.yad2.co.il/price-list/sub-model/27324/2017",
+            "promotional_ad": 0,
+            "record_id": 50975575,
+            "remove_on_unlike": false,
+            "row_1": "\u05d8\u05d5\u05d9\u05d5\u05d8\u05d4 \u05d9\u05d0\u05e8\u05d9\u05e1",
+            "row_2": "Sol \u05d0\u05d5\u05d8' 1.3 (99 \u05db\"\u05e1) ",
+            "row_3": [
+                2017,
+                "\u05d9\u05d3 \u05e8\u05d0\u05e9\u05d5\u05e0\u05d4",
+                "\u05e7\u05f4\u05de 80,000"
+            ],
+            "row_4": [
+                {
+                    "key": "year",
+                    "label": "\u05e9\u05e0\u05d4",
+                    "value": 2017
+                },
+                {
+                    "key": "hand",
+                    "label": "\u05d9\u05d3",
+                    "value": 1
+                },
+                {
+                    "key": "engine_size",
+                    "label": "\u05e1\u05de\u05f4\u05e7",
+                    "value": "1,329"
+                }
+            ],
+            "row_5": [
+                "2017",
+                "\u05d9\u05d3 1",
+                "\u05e1\u05de\u05f4\u05e7 1329"
+            ],
+            "search_text": "\u05e9\u05dd \u05de\u05d5\u05db\u05e8 \u05e8\u05db\u05d1 \u05ea\u05e4\u05d0\u05e8\u05ea \u05e8\u05db\u05d1 \u05ea\u05e4\u05d0\u05e8\u05ea \u05e9\u05e8\u05d9\u05e3 \u05e8\u05db\u05d1 \u05e1\u05d5\u05db\u05e0\u05d5\u05ea \u05de\u05e1\u05d5\u05d2 \u05d8\u05d5\u05d9\u05d5\u05d8\u05d4 \u05d9\u05d0\u05e8\u05d9\u05e1 Sol \u05d0\u05d5\u05d8' 1.3 (99 \u05db\"\u05e1)  \u05e9\u05e0\u05ea 2017 \u05d1\u05d1\u05e2\u05dc\u05d5\u05ea \u05dc\u05d9\u05e1\u05d9\u05e0\u05d2 \u05d9\u05d3 \u05e8\u05d0\u05e9\u05d5\u05e0\u05d4 \u05d1\u05d0\u05d6\u05d5\u05e8 \u05d0\u05d6\u05d5\u05e8 \u05d7\u05d9\u05e4\u05d4 \u05d5\u05d4\u05e1\u05d1\u05d9\u05d1\u05d4 \u05d1\u05d7\u05d9\u05e4\u05d4\u05d1\u05e2\u05dc \u05ea\u05d9\u05d1\u05ea \u05d4\u05d9\u05dc\u05d5\u05db\u05d9\u05dd \u05d0\u05d5\u05d8\u05d5\u05de\u05d8 \u05de\u05e0\u05d5\u05e2 \u05d1\u05e0\u05d6\u05d9\u05df \u05d1\u05e6\u05d1\u05e2 \u05db\u05e1\u05d5\u05e3 \u05de\u05d8\u05d0\u05dc\u05d9 \u05d4\u05dc\u05e7\u05d5\u05d7 \u05de\u05d5\u05db\u05df \u05dc\u05d4\u05d7\u05dc\u05e4\u05d4 \u05ea\u05d0\u05d5\u05e8 \u05dc\u05e7\u05d5\u05d7 \u05e9\u05de\u05d5\u05e8 \u05db\u05de\u05d5 \u05d7\u05d3\u05e9 \u05de\u05ea\u05d7\u05d9\u05d1 \u05d1\u05d1\u05d3\u05d9\u05e7\u05d4 \u05d2\u05d9\u05e8 .\u05de\u05e0\u05d5\u05e2.\u05e9\u05dc\u05d3\u05d4 \u05de\u05d8\u05d5\u05e4\u05dc \u05d1\u05de\u05d5\u05e1\u05da \u05de\u05d5\u05e8\u05e9\u05d4 \u05d0\u05e4\u05e9\u05e8\u05d5\u05ea \u05dc\u05d8\u05e8\u05d9\u05d9\u05d3 \u05d0\u05d9\u05df \u05d5\u05de\u05d9\u05de\u05d5\u05df \u05e2\u05d3 100 \u05d0\u05d7\u05d5\u05d6 ",
+            "subModelId": 27324,
+            "subcat_id": "21",
+            "title_1": "\u05e9\u05e0\u05ea 2017",
+            "title_2": "",
+            "type": "ad",
+            "uid": null,
+            "updated_at": "\u05e8\u05db\u05d1 \u05ea\u05e4\u05d0\u05e8\u05ea",
+            "video_url": null,
+            "year": 2017
+        },
+        {
+            "AirConditioner_text": "\u05de\u05d9\u05d6\u05d5\u05d2",
+            "AreaID_text": "\u05d0\u05d6\u05d5\u05e8 \u05d7\u05d5\u05dc\u05d5\u05df \u05d5\u05d1\u05ea \u05d9\u05dd",
+            "Auto_text": "\u05d0\u05d5\u05d8\u05d5\u05de\u05d8",
+            "DateOnRoad_text": "\u05e4\u05d1\u05e8\u05d5\u05d0\u05e8",
+            "EngineTypeID_text": "\u05d1\u05e0\u05d6\u05d9\u05df",
+            "EngineVal_text": 1600,
+            "Hand_text": "\u05d9\u05d3 \u05e9\u05e0\u05d9\u05d4",
+            "IsVisibleForReco": false,
+            "ModelID": 1755,
+            "ModelID_text": "\u05e1\u05d5\u05d1\u05d0\u05e8\u05d5",
+            "OwnerID_text": "\u05e4\u05e8\u05d8\u05d9\u05ea",
+            "PrimaryArea": "hamerkaz_area",
+            "PrimaryAreaID": 2,
+            "SecondaryArea": "hamerkaz_area",
+            "SubModelID_text": "XV",
+            "TradeIn_text": "\u05de\u05d5\u05db\u05df \u05dc\u05d4\u05d7\u05dc\u05e4\u05d4",
+            "Year_text": 2016,
+            "abovePrice": "50000",
+            "ad_highlight_type": "yellow",
+            "ad_number": 69832433,
+            "ad_number_second": 51014834,
+            "ad_type": "ad",
+            "advanced_info": {
+                "items": [
+                    {},
+                    {},
+                    {
+                        "title_text": "\u05d0\u05d1\u05d6\u05d5\u05e8",
+                        "values": [
+                            "\u05de\u05d6\u05d2\u05df",
+                            "ABS",
+                            "4 \u05d7\u05dc\u05d5\u05e0\u05d5\u05ea \u05d7\u05e9\u05de\u05dc",
+                            "\u05d4\u05d2\u05d4 \u05db\u05d5\u05d7",
+                            "7 \u05db\u05e8\u05d9\u05d5\u05ea \u05d0\u05d5\u05d9\u05e8",
+                            "\u05d4\u05e0\u05e2\u05d4 4X4",
+                            "\u05d2\u05dc\u05d2\u05dc\u05d9 \u05de\u05d2\u05e0\u05d6\u05d9\u05d5\u05dd",
+                            "\u05d1\u05e7\u05e8\u05ea \u05d9\u05e6\u05d9\u05d1\u05d5\u05ea",
+                            "\u05d6\u05d9\u05d4\u05d5\u05d9 \u05d4\u05d5\u05dc\u05db\u05d9 \u05e8\u05d2\u05dc",
+                            "\u05de\u05e2\u05e8\u05db\u05ea \u05e2\u05d6\u05e8 \u05dc\u05d1\u05dc\u05de\u05d9\u05dd",
+                            "\u05d7\u05d9\u05d9\u05e9\u05e0\u05d9 \u05dc\u05d7\u05e5 \u05d0\u05d5\u05d9\u05e8 \u05d1\u05e6\u05de\u05d9\u05d2\u05d9\u05dd",
+                            "\u05ea\u05d0\u05d5\u05e8\u05d4 \u05d0\u05d5\u05d8\u05d5\u05de\u05d8\u05d9\u05ea \u05d1\u05e0\u05e1\u05d9\u05e2\u05d4 \u05e7\u05d3\u05d9\u05de\u05d4",
+                            "\u05d6\u05d9\u05d4\u05d5\u05d9 \u05ea\u05de\u05e8\u05d5\u05e8\u05d9 \u05ea\u05e0\u05d5\u05e2\u05d4"
+                        ]
+                    },
+                    {
+                        "opinions": []
+                    },
+                    {
+                        "values": [
+                            {
+                                "level_pollution": 15
+                            },
+                            {
+                                "safety_points": 1
+                            }
+                        ]
+                    }
+                ]
+            },
+            "agency_contact_name": "\u05e9\u05d9",
+            "agency_info": {
+                "has_minisite": 1
+            },
+            "api_agency_name": "\u05d8\u05e8\u05d9\u05d9\u05d3 \u05d0\u05d9\u05df \u05d7\u05d5\u05dc\u05d5\u05df",
+            "area_id": 11,
+            "background_color": "fef0a9",
+            "can_change_layout": 1,
+            "can_hide": 0,
+            "car_family_type": [
+                5,
+                10
+            ],
+            "car_family_type_info": [
+                {
+                    "engTitle": "jeep",
+                    "id": 5,
+                    "title": "\u05d2'\u05d9\u05e4\u05d9\u05dd"
+                },
+                {
+                    "engTitle": "crossover",
+                    "id": 10,
+                    "title": "\u05e7\u05e8\u05d5\u05e1\u05d0\u05d5\u05d1\u05e8\u05d9\u05dd"
+                }
+            ],
+            "cat_id": 1,
+            "categoryDic": {
+                "catEn": "vehicles",
+                "subCatEn": "cars"
+            },
+            "city": "\u05d7\u05d5\u05dc\u05d5\u05df",
+            "city_text": "\u05d7\u05d5\u05dc\u05d5\u05df",
+            "contact_name": "\u05e9\u05d9",
+            "coordinates": {},
+            "currency": "\u20aa",
+            "currency_text": "\u20aa",
+            "customer_id": 3214394,
+            "date": "2023-07-31 22:07:18",
+            "date_added": "2023-07-30 18:05:20",
+            "deal_info": null,
+            "default_layout": "system",
+            "email": true,
+            "engine_size_text": "1,600 \u05e1\u05de\"\u05e7",
+            "external": [],
+            "feed_source": "commercial",
+            "fromEngineVal_text": 1600,
+            "highlight_text": "",
+            "id": "o36ew5xq",
+            "ignition_text": "4X4",
+            "images": [
+                "https://img.yad2.co.il/Pic/202307/31/1_8/o/y2_1_A5i1pTiQBl_20230731.jpg",
+                "https://img.yad2.co.il/Pic/202307/31/1_8/o/y2_2_wU7mrSApBR_20230731.jpg",
+                "https://img.yad2.co.il/Pic/202307/31/1_8/o/y2_3_eVqogFQ5TV_20230731.jpg",
+                "https://img.yad2.co.il/Pic/202307/31/1_8/o/y2_4_kXsr_avi1K_20230731.jpg",
+                "https://img.yad2.co.il/Pic/202307/31/1_8/o/y2_5_6GevacB5Ri_20230731.jpg",
+                "https://img.yad2.co.il/Pic/202307/31/1_8/o/y2_6_RbnFrwDb8I_20230731.jpg",
+                "https://img.yad2.co.il/Pic/202307/31/1_8/o/y2_7_by41BHoHX__20230731.jpg",
+                "https://img.yad2.co.il/Pic/202307/31/1_8/o/y2_8_fUZoeLrAt5_20230731.jpg"
+            ],
+            "images_count": 8,
+            "images_urls": [
+                "https://img.yad2.co.il/Pic/202307/31/1_8/o/y2_1_A5i1pTiQBl_20230731.jpg",
+                "https://img.yad2.co.il/Pic/202307/31/1_8/o/y2_2_wU7mrSApBR_20230731.jpg",
+                "https://img.yad2.co.il/Pic/202307/31/1_8/o/y2_3_eVqogFQ5TV_20230731.jpg",
+                "https://img.yad2.co.il/Pic/202307/31/1_8/o/y2_4_kXsr_avi1K_20230731.jpg",
+                "https://img.yad2.co.il/Pic/202307/31/1_8/o/y2_5_6GevacB5Ri_20230731.jpg",
+                "https://img.yad2.co.il/Pic/202307/31/1_8/o/y2_6_RbnFrwDb8I_20230731.jpg",
+                "https://img.yad2.co.il/Pic/202307/31/1_8/o/y2_7_by41BHoHX__20230731.jpg",
+                "https://img.yad2.co.il/Pic/202307/31/1_8/o/y2_8_fUZoeLrAt5_20230731.jpg"
+            ],
+            "img_url": "https://img.yad2.co.il/Pic/202307/31/1_8/o/y2_1_A5i1pTiQBl_20230731.jpg",
+            "info_bar_items": [
+                {
+                    "key": "km",
+                    "label": "\u05e7\"\u05de",
+                    "title": "112,000 \u05e7\"\u05de",
+                    "titleWithoutLabel": 112000
+                },
+                {
+                    "key": "hand",
+                    "label": null,
+                    "title": "\u05d9\u05d3 \u05e9\u05e0\u05d9\u05d4",
+                    "titleWithoutLabel": "\u05d9\u05d3 \u05e9\u05e0\u05d9\u05d4"
+                },
+                {
+                    "key": "gearBox",
+                    "label": null,
+                    "title": "\u05d0\u05d5\u05d8\u05d5\u05de\u05d8",
+                    "titleWithoutLabel": "\u05d0\u05d5\u05d8\u05d5\u05de\u05d8"
+                }
+            ],
+            "info_text": "\u05dc\u05d1\u05e0\u05d4 ! \u05dc\u05dc\u05d0 \u05ea\u05d0\u05d5\u05e0\u05d5\u05ea ! \u05dc\u05dc\u05d0 \u05e9\u05e8\u05d9\u05d8\u05d4 ! \u05de\u05d8\u05d5\u05e4\u05dc\u05ea \u05d4\u05d9\u05d8\u05d1 ! 4*4 ! \u05dc\u05dc\u05d0 \u05d8\u05d9\u05d5\u05dc\u05d9 \u05e9\u05d8\u05d7 ! \u05e9\u05de\u05d5\u05e8\u05d4 \u05d1\u05de\u05e6\u05d1 \u05d9\u05d5\u05e6\u05d0 \u05d3\u05d5\u05e4\u05df ! \u05d0\u05d7\u05e8\u05d9\u05d5\u05ea \u05de\u05d5\u05e8\u05d7\u05d1\u05ea \u05dc24 \u05d7\u05d5\u05d3\u05e9\u05d9\u05dd \u05db\u05de\u05d5 \u05dc\u05e7\u05e0\u05d5\u05ea \u05d7\u05d3\u05e9 ! \u05d0\u05e4\u05e9\u05e8\u05d5\u05ea \u05de\u05d9\u05de\u05d5\u05df 60 \u05ea\u05e9\u05dc\u05d5\u05de\u05d9\u05dd ! \u05d0\u05e4\u05e9\u05e8\u05d5\u05ea \u05d4\u05d7\u05dc\u05e4\u05d4 ! \u05d8\u05e8\u05d9\u05d9\u05d3 \u05d0\u05d9\u05df \u05d7\u05d5\u05dc\u05d5\u05df \u05d4\u05de\u05e8\u05db\u05d1\u05d4 47 !",
+            "isVisibleForReco": true,
+            "is_business": true,
+            "is_hidden": 0,
+            "is_liked": 0,
+            "kilometers": "112,000",
+            "like_count": 0,
+            "line_1": "",
+            "line_1_text_color": "",
+            "line_2": "\u05d8\u05e8\u05d9\u05d9\u05d3 \u05d0\u05d9\u05df \u05d7\u05d5\u05dc\u05d5\u05df",
+            "line_2_text_color": "808080",
+            "line_3": null,
+            "link_token": "o36ew5xq",
+            "main_title": "\u05e1\u05d5\u05d1\u05d0\u05e8\u05d5 XV \u05e9\u05e0\u05ea 2016 \u05d9\u05d3 \u05e9\u05e0\u05d9\u05d4 112,000 \u05e7\"\u05de",
+            "main_title_params": [
+                2016
+            ],
+            "manufacturer": "\u05e1\u05d5\u05d1\u05d0\u05e8\u05d5",
+            "manufacturer_eng": "subaru",
+            "merchant": true,
+            "merchant_name": "\u05d8\u05e8\u05d9\u05d9\u05d3 \u05d0\u05d9\u05df \u05d7\u05d5\u05dc\u05d5\u05df",
+            "model": "XV",
+            "more_details": [
+                {
+                    "key": "\u05e7\u05d9\u05dc\u05d5\u05de\u05d8\u05e8\u05d0\u05d6'",
+                    "name": "kilometers",
+                    "value": "112,000"
+                },
+                {
+                    "key": "\u05e1\u05d5\u05d2 \u05de\u05e0\u05d5\u05e2",
+                    "name": "engineType",
+                    "value": "\u05d1\u05e0\u05d6\u05d9\u05df"
+                },
+                {
+                    "key": "\u05ea\u05d9\u05d1\u05ea \u05d4\u05d9\u05dc\u05d5\u05db\u05d9\u05dd",
+                    "name": "gearBox",
+                    "value": "\u05d0\u05d5\u05d8\u05d5\u05de\u05d8"
+                },
+                {
+                    "key": "\u05e6\u05d1\u05e2",
+                    "name": "color",
+                    "value": "\u05dc\u05d1\u05df \u05de\u05d8\u05d0\u05dc\u05d9"
+                },
+                {
+                    "key": "\u05ea\u05d0\u05e8\u05d9\u05da \u05e2\u05dc\u05d9\u05d4 \u05dc\u05db\u05d1\u05d9\u05e9",
+                    "name": "month",
+                    "value": "02/2016"
+                },
+                {
+                    "key": "\u05d8\u05e1\u05d8 \u05e2\u05d3",
+                    "name": "testDate",
+                    "value": "02/2024"
+                },
+                {
+                    "key": "\u05d1\u05e2\u05dc\u05d5\u05ea \u05e0\u05d5\u05db\u05d7\u05d9\u05ea",
+                    "name": "ownerID",
+                    "value": "\u05e4\u05e8\u05d8\u05d9\u05ea"
+                },
+                {
+                    "key": "\u05d1\u05e2\u05dc\u05d5\u05ea \u05e7\u05d5\u05d3\u05de\u05ea",
+                    "name": "previousOwner",
+                    "value": "\u05e4\u05e8\u05d8\u05d9\u05ea"
+                },
+                {
+                    "key": "\u05de\u05d5\u05ea\u05d0\u05dd \u05dc\u05e0\u05db\u05d9\u05dd",
+                    "name": "disabledFriendly",
+                    "value": "\u05dc\u05d0"
+                }
+            ],
+            "moving_text": "",
+            "mp4_video_url": null,
+            "order_type_id": 3,
+            "price": "62,800 \u20aa",
+            "pricelist_link_url": "https://www.yad2.co.il/price-list/sub-model/27198/2016",
+            "promotional_ad": 0,
+            "record_id": 51014834,
+            "remove_on_unlike": false,
+            "row_1": "\u05e1\u05d5\u05d1\u05d0\u05e8\u05d5 XV",
+            "row_2": "4X4 1.6i \u05d0\u05d5\u05d8' 1.6 (114 \u05db''\u05e1)",
+            "row_3": [
+                2016,
+                "\u05d9\u05d3 \u05e9\u05e0\u05d9\u05d4",
+                "\u05e7\u05f4\u05de 112,000"
+            ],
+            "row_4": [
+                {
+                    "key": "year",
+                    "label": "\u05e9\u05e0\u05d4",
+                    "value": 2016
+                },
+                {
+                    "key": "hand",
+                    "label": "\u05d9\u05d3",
+                    "value": 2
+                },
+                {
+                    "key": "engine_size",
+                    "label": "\u05e1\u05de\u05f4\u05e7",
+                    "value": "1,600"
+                }
+            ],
+            "row_5": [
+                "2016",
+                "\u05d9\u05d3 2",
+                "\u05e1\u05de\u05f4\u05e7 1600"
+            ],
+            "search_text": "\u05e9\u05dd \u05de\u05d5\u05db\u05e8 \u05d8\u05e8\u05d9\u05d9\u05d3 \u05d0\u05d9\u05df \u05d7\u05d5\u05dc\u05d5\u05df \u05d8\u05e8\u05d9\u05d9\u05d3 \u05d0\u05d9\u05df \u05d7\u05d5\u05dc\u05d5\u05df \u05e9\u05d9 \u05e8\u05db\u05d1 \u05e1\u05d5\u05db\u05e0\u05d5\u05ea \u05de\u05e1\u05d5\u05d2 \u05e1\u05d5\u05d1\u05d0\u05e8\u05d5 XV 4X4 1.6i \u05d0\u05d5\u05d8' 1.6 (114 \u05db''\u05e1) \u05e9\u05e0\u05ea 2016 \u05d1\u05d1\u05e2\u05dc\u05d5\u05ea \u05e4\u05e8\u05d8\u05d9\u05ea \u05d9\u05d3 \u05e9\u05e0\u05d9\u05d4 \u05d1\u05e2\u05dc\u05d5\u05ea \u05e7\u05d5\u05d3\u05de\u05ea \u05e4\u05e8\u05d8\u05d9\u05ea \u05d1\u05d0\u05d6\u05d5\u05e8 \u05d0\u05d6\u05d5\u05e8 \u05d7\u05d5\u05dc\u05d5\u05df \u05d5\u05d1\u05ea \u05d9\u05dd \u05d1\u05d7\u05d5\u05dc\u05d5\u05df\u05d1\u05e2\u05dc \u05ea\u05d9\u05d1\u05ea \u05d4\u05d9\u05dc\u05d5\u05db\u05d9\u05dd \u05d0\u05d5\u05d8\u05d5\u05de\u05d8 \u05de\u05e0\u05d5\u05e2 \u05d1\u05e0\u05d6\u05d9\u05df \u05d1\u05e6\u05d1\u05e2 \u05dc\u05d1\u05df \u05de\u05d8\u05d0\u05dc\u05d9 \u05d4\u05dc\u05e7\u05d5\u05d7 \u05de\u05d5\u05db\u05df \u05dc\u05d4\u05d7\u05dc\u05e4\u05d4 \u05ea\u05d0\u05d5\u05e8 \u05dc\u05e7\u05d5\u05d7 \u05dc\u05d1\u05e0\u05d4 ! \u05dc\u05dc\u05d0 \u05ea\u05d0\u05d5\u05e0\u05d5\u05ea ! \u05dc\u05dc\u05d0 \u05e9\u05e8\u05d9\u05d8\u05d4 ! \u05de\u05d8\u05d5\u05e4\u05dc\u05ea \u05d4\u05d9\u05d8\u05d1 ! 4*4 ! \u05dc\u05dc\u05d0 \u05d8\u05d9\u05d5\u05dc\u05d9 \u05e9\u05d8\u05d7 ! \u05e9\u05de\u05d5\u05e8\u05d4 \u05d1\u05de\u05e6\u05d1 \u05d9\u05d5\u05e6\u05d0 \u05d3\u05d5\u05e4\u05df ! \u05d0\u05d7\u05e8\u05d9\u05d5\u05ea \u05de\u05d5\u05e8\u05d7\u05d1\u05ea \u05dc24 \u05d7\u05d5\u05d3\u05e9\u05d9\u05dd \u05db\u05de\u05d5 \u05dc\u05e7\u05e0\u05d5\u05ea \u05d7\u05d3\u05e9 ! \u05d0\u05e4\u05e9\u05e8\u05d5\u05ea \u05de\u05d9\u05de\u05d5\u05df 60 \u05ea\u05e9\u05dc\u05d5\u05de\u05d9\u05dd ! \u05d0\u05e4\u05e9\u05e8\u05d5\u05ea \u05d4\u05d7\u05dc\u05e4\u05d4 ! \u05d8\u05e8\u05d9\u05d9\u05d3 \u05d0\u05d9\u05df \u05d7\u05d5\u05dc\u05d5\u05df \u05d4\u05de\u05e8\u05db\u05d1\u05d4 47 ! ",
+            "subModelId": 27198,
+            "subcat_id": "21",
+            "title_1": "\u05e9\u05e0\u05ea 2016",
+            "title_2": "",
+            "type": "ad",
+            "uid": null,
+            "updated_at": "\u05d8\u05e8\u05d9\u05d9\u05d3 \u05d0\u05d9\u05df \u05d7\u05d5\u05dc\u05d5\u05df",
+            "video_url": null,
+            "year": 2016
+        },
+        {
+            "AirConditioner_text": "",
+            "AreaID_text": "\u05d0\u05d6\u05d5\u05e8 \u05d7\u05d5\u05dc\u05d5\u05df \u05d5\u05d1\u05ea \u05d9\u05dd",
+            "Auto_text": "\u05d0\u05d5\u05d8\u05d5\u05de\u05d8",
+            "DateOnRoad_text": "\u05d3\u05e6\u05de\u05d1\u05e8",
+            "EngineTypeID_text": "\u05d3\u05d9\u05d6\u05dc",
+            "EngineVal_text": 2776,
+            "Hand_text": "\u05d9\u05d3 \u05e8\u05d0\u05e9\u05d5\u05e0\u05d4",
+            "IsVisibleForReco": false,
+            "ModelID": 2782,
+            "ModelID_text": "\u05e9\u05d1\u05e8\u05d5\u05dc\u05d8",
+            "OwnerID_text": "\u05e4\u05e8\u05d8\u05d9\u05ea",
+            "PrimaryArea": "hamerkaz_area",
+            "PrimaryAreaID": 2,
+            "SecondaryArea": "hamerkaz_area",
+            "SubModelID_text": "\u05e1\u05d5\u05d5\u05d0\u05e0\u05d4 \u05d0\u05e8\u05d5\u05da",
+            "TradeIn_text": "\u05de\u05d5\u05db\u05df \u05dc\u05d4\u05d7\u05dc\u05e4\u05d4",
+            "Year_text": 2020,
+            "abovePrice": "50000",
+            "ad_highlight_type": "yellow",
+            "ad_number": 71966867,
+            "ad_number_second": 50488863,
+            "ad_type": "ad",
+            "advanced_info": {
+                "items": [
+                    {},
+                    {},
+                    {
+                        "title_text": "\u05d0\u05d1\u05d6\u05d5\u05e8",
+                        "values": [
+                            "\u05d4\u05e0\u05e2\u05d4 4X2"
+                        ]
+                    },
+                    {
+                        "opinions": []
+                    },
+                    {
+                        "values": []
+                    }
+                ]
+            },
+            "agency_contact_name": "autotrade",
+            "api_agency_name": "\u05d0\u05d5\u05d8\u05d5 \u05d8\u05e8\u05d9\u05d9\u05d3",
+            "area_id": 11,
+            "background_color": "fef0a9",
+            "can_change_layout": 1,
+            "can_hide": 0,
+            "car_family_type": [
+                7
+            ],
+            "car_family_type_info": [
+                {
+                    "engTitle": "commercial",
+                    "id": 7,
+                    "title": "\u05de\u05e1\u05d7\u05e8\u05d9\u05d9\u05dd"
+                }
+            ],
+            "cat_id": 1,
+            "categoryDic": {
+                "catEn": "vehicles",
+                "subCatEn": "cars"
+            },
+            "city": "\u05d7\u05d5\u05dc\u05d5\u05df",
+            "city_text": "\u05d7\u05d5\u05dc\u05d5\u05df",
+            "contact_name": "autotrade",
+            "coordinates": {},
+            "currency": "\u20aa",
+            "currency_text": "\u20aa",
+            "customer_id": 789621,
+            "date": "2023-07-31 22:07:13",
+            "date_added": "2023-05-31 23:05:20",
+            "deal_info": null,
+            "default_layout": "system",
+            "email": true,
+            "engine_size_text": "2,776 \u05e1\u05de\"\u05e7",
+            "external": [],
+            "feed_source": "commercial",
+            "fromEngineVal_text": 2776,
+            "highlight_text": "",
+            "id": "snmp7tjf",
+            "ignition_text": "4X2",
+            "images": [
+                "https://img.yad2.co.il/Pic/202306/06/1_2/o/y2_6_zR0leSlZgA_20230606.jpeg",
+                "https://img.yad2.co.il/Pic/202306/06/1_2/o/y2_2_mprM5e5CIH_20230606.jpeg",
+                "https://img.yad2.co.il/Pic/202306/06/1_2/o/y2_1_eqLL8Iq4i0_20230606.jpeg",
+                "https://img.yad2.co.il/Pic/202306/06/1_2/o/y2_3_aX6w0o0PD9_20230606.jpeg",
+                "https://img.yad2.co.il/Pic/202306/06/1_2/o/y2_4_uStEbgp9Ge_20230606.jpeg",
+                "https://img.yad2.co.il/Pic/202306/06/1_2/o/y2_5_D7XC9SuZoJ_20230606.jpeg",
+                "https://img.yad2.co.il/Pic/202306/06/1_2/o/y2_7_8iSGc21XGG_20230606.jpeg"
+            ],
+            "images_count": 7,
+            "images_urls": [
+                "https://img.yad2.co.il/Pic/202306/06/1_2/o/y2_6_zR0leSlZgA_20230606.jpeg",
+                "https://img.yad2.co.il/Pic/202306/06/1_2/o/y2_2_mprM5e5CIH_20230606.jpeg",
+                "https://img.yad2.co.il/Pic/202306/06/1_2/o/y2_1_eqLL8Iq4i0_20230606.jpeg",
+                "https://img.yad2.co.il/Pic/202306/06/1_2/o/y2_3_aX6w0o0PD9_20230606.jpeg",
+                "https://img.yad2.co.il/Pic/202306/06/1_2/o/y2_4_uStEbgp9Ge_20230606.jpeg",
+                "https://img.yad2.co.il/Pic/202306/06/1_2/o/y2_5_D7XC9SuZoJ_20230606.jpeg",
+                "https://img.yad2.co.il/Pic/202306/06/1_2/o/y2_7_8iSGc21XGG_20230606.jpeg"
+            ],
+            "img_url": "https://img.yad2.co.il/Pic/202306/06/1_2/o/y2_6_zR0leSlZgA_20230606.jpeg",
+            "info_bar_items": [
+                {
+                    "key": "km",
+                    "label": "\u05e7\"\u05de",
+                    "title": "170,000 \u05e7\"\u05de",
+                    "titleWithoutLabel": 170000
+                },
+                {
+                    "key": "hand",
+                    "label": null,
+                    "title": "\u05d9\u05d3 \u05e8\u05d0\u05e9\u05d5\u05e0\u05d4",
+                    "titleWithoutLabel": "\u05d9\u05d3 \u05e8\u05d0\u05e9\u05d5\u05e0\u05d4"
+                },
+                {
+                    "key": "gearBox",
+                    "label": null,
+                    "title": "\u05d0\u05d5\u05d8\u05d5\u05de\u05d8",
+                    "titleWithoutLabel": "\u05d0\u05d5\u05d8\u05d5\u05de\u05d8"
+                }
+            ],
+            "info_text": "\u05d1\u05de\u05d1\u05e6\u05e2 \u05d7\u05d5\u05d3\u05e9 \u05d9\u05d5\u05dc\u05d9! \u05e9\u05d1\u05e8\u05d5\u05dc\u05d8 \u05e1\u05d5\u05d5\u05d0\u05e0\u05d4 Max \u05d4\u05de\u05d5\u05e6\u05dc\u05d7 \u05e9\u05e0\u05ea 2020, \u05d9\u05d3 \u05e8\u05d0\u05e9\u05d5\u05e0\u05d4 \u05e4\u05e8\u05d8\u05d9\u05ea, \u05de\u05d8\u05d5\u05e4\u05dc \u05d1\u05d7\u05d1\u05e8\u05d4, \u05d9\u05e9 \u05d5\u05d5 \u05d2\u05e8\u05d9\u05e8\u05d4, 5 \u05de\u05e7\u05d5\u05de\u05d5\u05ea \u05d9\u05e9\u05d9\u05d1\u05d4 + \u05de\u05d7\u05d9\u05e6\u05d4 \u05d5\u05e8\u05e6\u05e4\u05ea \u05d0\u05dc\u05d5\u05de\u05d9\u05e0\u05d9\u05d5\u05dd, \u05e8\u05db\u05d1 \u05e9\u05de\u05d5\u05e8 \u05d5\u05de\u05d5\u05db\u05df \u05dc\u05e2\u05d1\u05d5\u05d3\u05d4!!\n\u05d0\u05e4\u05e9\u05e8\u05d5\u05ea \u05dc 100% \u05de\u05d9\u05de\u05d5\u05df \u05d5\u05ea\u05e9\u05dc\u05d5\u05de\u05d9\u05dd \u05e0\u05d5\u05d7\u05d9\u05dd!\n\u05d4\u05ea\u05d7\u05d9\u05d1\u05d5\u05ea \u05de\u05dc\u05d0\u05d4 \u05d1\u05d1\u05d3\u05d9\u05e7\u05ea \u05e7\u05e0\u05d9\u05d4!",
+            "isVisibleForReco": true,
+            "is_business": true,
+            "is_hidden": 0,
+            "is_liked": 0,
+            "kilometers": "170,000",
+            "like_count": 0,
+            "line_1": "",
+            "line_1_text_color": "",
+            "line_2": "\u05d0\u05d5\u05d8\u05d5 \u05d8\u05e8\u05d9\u05d9\u05d3",
+            "line_2_text_color": "808080",
+            "line_3": null,
+            "link_token": "snmp7tjf",
+            "main_title": "\u05e9\u05d1\u05e8\u05d5\u05dc\u05d8 \u05e1\u05d5\u05d5\u05d0\u05e0\u05d4 \u05d0\u05e8\u05d5\u05da \u05e9\u05e0\u05ea 2020 \u05d9\u05d3 \u05e8\u05d0\u05e9\u05d5\u05e0\u05d4 170,000 \u05e7\"\u05de",
+            "main_title_params": [
+                2020
+            ],
+            "manufacturer": "\u05e9\u05d1\u05e8\u05d5\u05dc\u05d8",
+            "manufacturer_eng": "chevrolette",
+            "merchant": true,
+            "merchant_name": "\u05d0\u05d5\u05d8\u05d5 \u05d8\u05e8\u05d9\u05d9\u05d3",
+            "model": "\u05e1\u05d5\u05d5\u05d0\u05e0\u05d4 \u05d0\u05e8\u05d5\u05da",
+            "more_details": [
+                {
+                    "key": "\u05e7\u05d9\u05dc\u05d5\u05de\u05d8\u05e8\u05d0\u05d6'",
+                    "name": "kilometers",
+                    "value": "170,000"
+                },
+                {
+                    "key": "\u05e1\u05d5\u05d2 \u05de\u05e0\u05d5\u05e2",
+                    "name": "engineType",
+                    "value": "\u05d3\u05d9\u05d6\u05dc"
+                },
+                {
+                    "key": "\u05ea\u05d9\u05d1\u05ea \u05d4\u05d9\u05dc\u05d5\u05db\u05d9\u05dd",
+                    "name": "gearBox",
+                    "value": "\u05d0\u05d5\u05d8\u05d5\u05de\u05d8"
+                },
+                {
+                    "key": "\u05e6\u05d1\u05e2",
+                    "name": "color",
+                    "value": "\u05dc\u05d1\u05df \u05de\u05d8\u05d0\u05dc\u05d9"
+                },
+                {
+                    "key": "\u05ea\u05d0\u05e8\u05d9\u05da \u05e2\u05dc\u05d9\u05d4 \u05dc\u05db\u05d1\u05d9\u05e9",
+                    "name": "month",
+                    "value": "12/2020"
+                },
+                {
+                    "key": "\u05d8\u05e1\u05d8 \u05e2\u05d3",
+                    "name": "testDate",
+                    "value": "04/2024"
+                },
+                {
+                    "key": "\u05d1\u05e2\u05dc\u05d5\u05ea \u05e0\u05d5\u05db\u05d7\u05d9\u05ea",
+                    "name": "ownerID",
+                    "value": "\u05e4\u05e8\u05d8\u05d9\u05ea"
+                },
+                {
+                    "key": "\u05de\u05d5\u05ea\u05d0\u05dd \u05dc\u05e0\u05db\u05d9\u05dd",
+                    "name": "disabledFriendly",
+                    "value": "\u05dc\u05d0"
+                }
+            ],
+            "moving_text": "",
+            "mp4_video_url": null,
+            "order_type_id": 3,
+            "price": "99,000 \u20aa",
+            "pricelist_link_url": "https://www.yad2.co.il/price-list/sub-model/31733/2020",
+            "promotional_ad": 0,
+            "record_id": 50488863,
+            "remove_on_unlike": false,
+            "row_1": "\u05e9\u05d1\u05e8\u05d5\u05dc\u05d8 \u05e1\u05d5\u05d5\u05d0\u05e0\u05d4 \u05d0\u05e8\u05d5\u05da",
+            "row_2": "Max \u05e1\u05d2\u05d5\u05e8 \u05d0\u05d5\u05d8' \u05d3\u05d9\u05d6\u05dc 4.5 \u05d8\u05d5\u05df 2.8 (181 \u05db''\u05e1)",
+            "row_3": [
+                2020,
+                "\u05d9\u05d3 \u05e8\u05d0\u05e9\u05d5\u05e0\u05d4",
+                "\u05e7\u05f4\u05de 170,000"
+            ],
+            "row_4": [
+                {
+                    "key": "year",
+                    "label": "\u05e9\u05e0\u05d4",
+                    "value": 2020
+                },
+                {
+                    "key": "hand",
+                    "label": "\u05d9\u05d3",
+                    "value": 1
+                },
+                {
+                    "key": "engine_size",
+                    "label": "\u05e1\u05de\u05f4\u05e7",
+                    "value": "2,776"
+                }
+            ],
+            "row_5": [
+                "2020",
+                "\u05d9\u05d3 1",
+                "\u05e1\u05de\u05f4\u05e7 2776"
+            ],
+            "search_text": "\u05e9\u05dd \u05de\u05d5\u05db\u05e8 \u05d0\u05d5\u05d8\u05d5 \u05d8\u05e8\u05d9\u05d9\u05d3 \u05d0\u05d5\u05d8\u05d5 \u05d8\u05e8\u05d9\u05d9\u05d3 autotrade \u05de\u05e1\u05d7\u05e8\u05d9 \u05de\u05e1\u05d5\u05d2 \u05e9\u05d1\u05e8\u05d5\u05dc\u05d8 \u05e1\u05d5\u05d5\u05d0\u05e0\u05d4 \u05d0\u05e8\u05d5\u05da Max \u05e1\u05d2\u05d5\u05e8 \u05d0\u05d5\u05d8' \u05d3\u05d9\u05d6\u05dc 4.5 \u05d8\u05d5\u05df 2.8 (181 \u05db''\u05e1) \u05e9\u05e0\u05ea 2020 \u05d1\u05d1\u05e2\u05dc\u05d5\u05ea \u05e4\u05e8\u05d8\u05d9\u05ea \u05d9\u05d3 \u05e8\u05d0\u05e9\u05d5\u05e0\u05d4 \u05d1\u05d0\u05d6\u05d5\u05e8 \u05d0\u05d6\u05d5\u05e8 \u05d7\u05d5\u05dc\u05d5\u05df \u05d5\u05d1\u05ea \u05d9\u05dd \u05d1\u05d7\u05d5\u05dc\u05d5\u05df\u05e2\u05dd \u05ea\u05d9\u05d1\u05ea \u05d4\u05d9\u05dc\u05d5\u05db\u05d9\u05dd \u05d0\u05d5\u05d8\u05d5\u05de\u05d8 \u05de\u05e0\u05d5\u05e2 \u05d3\u05d9\u05d6\u05dc \u05d1\u05e6\u05d1\u05e2 \u05dc\u05d1\u05df \u05de\u05d8\u05d0\u05dc\u05d9 \u05d4\u05dc\u05e7\u05d5\u05d7 \u05de\u05d5\u05db\u05df \u05dc\u05d4\u05d7\u05dc\u05e4\u05d4 \u05ea\u05d0\u05d5\u05e8 \u05de\u05d5\u05d3\u05e2\u05d4 \u05d1\u05de\u05d1\u05e6\u05e2 \u05d7\u05d5\u05d3\u05e9 \u05d9\u05d5\u05dc\u05d9! \u05e9\u05d1\u05e8\u05d5\u05dc\u05d8 \u05e1\u05d5\u05d5\u05d0\u05e0\u05d4 Max \u05d4\u05de\u05d5\u05e6\u05dc\u05d7 \u05e9\u05e0\u05ea 2020, \u05d9\u05d3 \u05e8\u05d0\u05e9\u05d5\u05e0\u05d4 \u05e4\u05e8\u05d8\u05d9\u05ea, \u05de\u05d8\u05d5\u05e4\u05dc \u05d1\u05d7\u05d1\u05e8\u05d4, \u05d9\u05e9 \u05d5\u05d5 \u05d2\u05e8\u05d9\u05e8\u05d4, 5 \u05de\u05e7\u05d5\u05de\u05d5\u05ea \u05d9\u05e9\u05d9\u05d1\u05d4 + \u05de\u05d7\u05d9\u05e6\u05d4 \u05d5\u05e8\u05e6\u05e4\u05ea \u05d0\u05dc\u05d5\u05de\u05d9\u05e0\u05d9\u05d5\u05dd, \u05e8\u05db\u05d1 \u05e9\u05de\u05d5\u05e8 \u05d5\u05de\u05d5\u05db\u05df \u05dc\u05e2\u05d1\u05d5\u05d3\u05d4!!\n\u05d0\u05e4\u05e9\u05e8\u05d5\u05ea \u05dc 100% \u05de\u05d9\u05de\u05d5\u05df \u05d5\u05ea\u05e9\u05dc\u05d5\u05de\u05d9\u05dd \u05e0\u05d5\u05d7\u05d9\u05dd!\n\u05d4\u05ea\u05d7\u05d9\u05d1\u05d5\u05ea \u05de\u05dc\u05d0\u05d4 \u05d1\u05d1\u05d3\u05d9\u05e7\u05ea \u05e7\u05e0\u05d9\u05d4! ",
+            "subModelId": 31733,
+            "subcat_id": "21",
+            "title_1": "\u05e9\u05e0\u05ea 2020",
+            "title_2": "",
+            "type": "ad",
+            "uid": null,
+            "updated_at": "\u05d0\u05d5\u05d8\u05d5 \u05d8\u05e8\u05d9\u05d9\u05d3",
+            "video_url": null,
+            "year": 2020
+        },
+        {
+            "AirConditioner_text": "\u05de\u05d9\u05d6\u05d5\u05d2",
+            "AreaID_text": "\u05d0\u05d6\u05d5\u05e8 \u05d7\u05d5\u05dc\u05d5\u05df \u05d5\u05d1\u05ea \u05d9\u05dd",
+            "Auto_text": "\u05d0\u05d5\u05d8\u05d5\u05de\u05d8",
+            "DateOnRoad_text": "\u05de\u05d0\u05d9",
+            "EngineTypeID_text": "\u05d4\u05d9\u05d1\u05e8\u05d9\u05d3\u05d9 \u05d7\u05e9\u05de\u05dc / \u05d1\u05e0\u05d6\u05d9\u05df",
+            "EngineVal_text": 1997,
+            "Hand_text": "\u05d9\u05d3 \u05e8\u05d0\u05e9\u05d5\u05e0\u05d4",
+            "IsVisibleForReco": false,
+            "ModelID": 553,
+            "ModelID_text": "\u05d1.\u05de.\u05d5\u05d5",
+            "OwnerID_text": "\u05e4\u05e8\u05d8\u05d9\u05ea",
+            "PrimaryArea": "hamerkaz_area",
+            "PrimaryAreaID": 2,
+            "SecondaryArea": "hamerkaz_area",
+            "SubModelID_text": "X5",
+            "TradeIn_text": "\u05de\u05d5\u05db\u05df \u05dc\u05d4\u05d7\u05dc\u05e4\u05d4",
+            "Year_text": 2018,
+            "abovePrice": "100000",
+            "ad_highlight_type": "yellow",
+            "ad_number": 62562479,
+            "ad_number_second": 50170003,
+            "ad_type": "ad",
+            "advanced_info": {
+                "items": [
+                    {},
+                    {},
+                    {
+                        "title_text": "\u05d0\u05d1\u05d6\u05d5\u05e8",
+                        "values": [
+                            "\u05de\u05d6\u05d2\u05df",
+                            "ABS",
+                            "4 \u05d7\u05dc\u05d5\u05e0\u05d5\u05ea \u05d7\u05e9\u05de\u05dc",
+                            "\u05d7\u05dc\u05d5\u05df \u05d1\u05d2\u05d2",
+                            "\u05d4\u05d2\u05d4 \u05db\u05d5\u05d7",
+                            "7 \u05db\u05e8\u05d9\u05d5\u05ea \u05d0\u05d5\u05d9\u05e8",
+                            "\u05d4\u05e0\u05e2\u05d4 4X4",
+                            "\u05de\u05e6\u05dc\u05de\u05ea \u05e8\u05d5\u05d5\u05e8\u05e1",
+                            "\u05d2\u05dc\u05d2\u05dc\u05d9 \u05de\u05d2\u05e0\u05d6\u05d9\u05d5\u05dd",
+                            "\u05d1\u05e7\u05e8\u05ea \u05d9\u05e6\u05d9\u05d1\u05d5\u05ea",
+                            "\u05d1\u05e7\u05e8\u05ea \u05e9\u05d9\u05d5\u05d8 \u05d0\u05d3\u05e4\u05d8\u05d9\u05d1\u05d9\u05ea",
+                            "\u05d6\u05d9\u05d4\u05d5\u05d9 \u05d4\u05d5\u05dc\u05db\u05d9 \u05e8\u05d2\u05dc",
+                            "\u05de\u05e2\u05e8\u05db\u05ea \u05e2\u05d6\u05e8 \u05dc\u05d1\u05dc\u05de\u05d9\u05dd",
+                            "\u05d7\u05d9\u05d9\u05e9\u05e0\u05d9 \u05dc\u05d7\u05e5 \u05d0\u05d5\u05d9\u05e8 \u05d1\u05e6\u05de\u05d9\u05d2\u05d9\u05dd",
+                            "\u05d7\u05d9\u05d9\u05e9\u05e0\u05d9 \u05d7\u05d2\u05d5\u05e8\u05d5\u05ea",
+                            "\u05ea\u05d0\u05d5\u05e8\u05d4 \u05d0\u05d5\u05d8\u05d5\u05de\u05d8\u05d9\u05ea \u05d1\u05e0\u05e1\u05d9\u05e2\u05d4 \u05e7\u05d3\u05d9\u05de\u05d4",
+                            "\u05e9\u05dc\u05d9\u05d8\u05d4 \u05d0\u05d5\u05d8\u05d5\u05de\u05d8\u05d9\u05ea \u05d1\u05d0\u05d5\u05e8\u05d5\u05ea \u05d2\u05d1\u05d5\u05d4\u05d9\u05dd",
+                            "\u05d6\u05d9\u05d4\u05d5\u05d9 \u05de\u05e6\u05d1 \u05d4\u05ea\u05e7\u05e8\u05d1\u05d5\u05ea \u05de\u05e1\u05d5\u05db\u05e0\u05ea",
+                            "\u05d6\u05d9\u05d4\u05d5\u05d9 \u05ea\u05de\u05e8\u05d5\u05e8\u05d9 \u05ea\u05e0\u05d5\u05e2\u05d4",
+                            "\u05d6\u05d9\u05d4\u05d5\u05d9 \u05d1\u05e9\u05d8\u05d7 \"\u05de\u05ea\""
+                        ]
+                    },
+                    {
+                        "opinions": []
+                    },
+                    {
+                        "values": [
+                            {
+                                "level_pollution": 3
+                            },
+                            {
+                                "safety_points": 4
+                            }
+                        ]
+                    }
+                ]
+            },
+            "agency_contact_name": "\u05e8\u05d5\u05e0\u05df",
+            "api_agency_name": "RS MOTORS",
+            "area_id": 11,
+            "background_color": "fef0a9",
+            "can_change_layout": 1,
+            "can_hide": 0,
+            "car_family_type": [
+                5,
+                8
+            ],
+            "car_family_type_info": [
+                {
+                    "engTitle": "jeep",
+                    "id": 5,
+                    "title": "\u05d2'\u05d9\u05e4\u05d9\u05dd"
+                },
+                {
+                    "engTitle": "luxury",
+                    "id": 8,
+                    "title": "\u05d9\u05d5\u05e7\u05e8\u05d4"
+                }
+            ],
+            "cat_id": 1,
+            "categoryDic": {
+                "catEn": "vehicles",
+                "subCatEn": "cars"
+            },
+            "city": "\u05d7\u05d5\u05dc\u05d5\u05df",
+            "city_text": "\u05d7\u05d5\u05dc\u05d5\u05df",
+            "contact_name": "\u05e8\u05d5\u05e0\u05df",
+            "coordinates": {},
+            "currency": "\u20aa",
+            "currency_text": "\u20aa",
+            "customer_id": 4016726,
+            "date": "2023-07-31 22:07:15",
+            "date_added": "2023-03-09 13:46:39",
+            "deal_info": {
+                "deal_price": "3750 \u20aa \u05dc\u05d7\u05d5\u05d3\u05e9",
+                "details": [
+                    {
+                        "label": "\u05e1\u05db\u05d5\u05dd \u05de\u05e7\u05d3\u05de\u05d4 \u05de\u05d9\u05e0\u05d9\u05de\u05d0\u05dc\u05d9",
+                        "value": "10,000 \u20aa"
+                    },
+                    {
+                        "label": "\u05d4\u05d7\u05d6\u05e8 \u05d7\u05d5\u05d3\u05e9\u05d9",
+                        "value": "3,750 \u20aa"
+                    },
+                    {
+                        "label": "\u05de\u05e1' \u05ea\u05e9\u05dc\u05d5\u05de\u05d9\u05dd \u05de\u05e7\u05e1\u05d9\u05de\u05d0\u05dc\u05d9",
+                        "value": "60 \u20aa"
+                    },
+                    {
+                        "label": "\u05d9\u05ea\u05e8\u05d4 \u05d1\u05e1\u05d5\u05e3 \u05d4\u05ea\u05e7\u05d5\u05e4\u05d4",
+                        "value": "85,000 \u20aa"
+                    }
+                ]
+            },
+            "default_layout": "system",
+            "email": true,
+            "engine_size_text": "1,997 \u05e1\u05de\"\u05e7",
+            "external": [],
+            "feed_source": "commercial",
+            "fromEngineVal_text": 1997,
+            "highlight_text": "",
+            "id": "tce7qt9z",
+            "ignition_text": "4X4",
+            "images": [
+                "https://img.yad2.co.il/Pic/202307/19/1_3/o/y2_1_EG1tPO5EU0_20230719.jpeg",
+                "https://img.yad2.co.il/Pic/202307/19/1_3/o/y2_7_j58jP52_hw_20230719.jpeg",
+                "https://img.yad2.co.il/Pic/202307/19/1_3/o/y2_9_M0XEG76YQt_20230719.jpeg",
+                "https://img.yad2.co.il/Pic/202307/19/1_3/o/y2_3_niDsLFLRvX_20230719.jpeg",
+                "https://img.yad2.co.il/Pic/202307/19/1_3/o/y2_4_s_qzNifnlh_20230719.jpeg",
+                "https://img.yad2.co.il/Pic/202307/19/1_3/o/y2_2_XWzFa6l9RH_20230719.jpeg",
+                "https://img.yad2.co.il/Pic/202307/19/1_3/o/y2_5_jdciNwmcn0_20230719.jpeg",
+                "https://img.yad2.co.il/Pic/202307/19/1_3/o/y2_6_vWWo7jU42U_20230719.jpeg",
+                "https://img.yad2.co.il/Pic/202307/19/1_3/o/y2_10_SK8s3Zoxu8_20230719.jpeg",
+                "https://img.yad2.co.il/Pic/202307/19/1_3/o/y2_10_itj46xlJC7_20230719.jpeg"
+            ],
+            "images_count": 10,
+            "images_urls": [
+                "https://img.yad2.co.il/Pic/202307/19/1_3/o/y2_1_EG1tPO5EU0_20230719.jpeg",
+                "https://img.yad2.co.il/Pic/202307/19/1_3/o/y2_7_j58jP52_hw_20230719.jpeg",
+                "https://img.yad2.co.il/Pic/202307/19/1_3/o/y2_9_M0XEG76YQt_20230719.jpeg",
+                "https://img.yad2.co.il/Pic/202307/19/1_3/o/y2_3_niDsLFLRvX_20230719.jpeg",
+                "https://img.yad2.co.il/Pic/202307/19/1_3/o/y2_4_s_qzNifnlh_20230719.jpeg",
+                "https://img.yad2.co.il/Pic/202307/19/1_3/o/y2_2_XWzFa6l9RH_20230719.jpeg",
+                "https://img.yad2.co.il/Pic/202307/19/1_3/o/y2_5_jdciNwmcn0_20230719.jpeg",
+                "https://img.yad2.co.il/Pic/202307/19/1_3/o/y2_6_vWWo7jU42U_20230719.jpeg",
+                "https://img.yad2.co.il/Pic/202307/19/1_3/o/y2_10_SK8s3Zoxu8_20230719.jpeg",
+                "https://img.yad2.co.il/Pic/202307/19/1_3/o/y2_10_itj46xlJC7_20230719.jpeg"
+            ],
+            "img_url": "https://img.yad2.co.il/Pic/202307/19/1_3/o/y2_1_EG1tPO5EU0_20230719.jpeg",
+            "info_bar_items": [
+                {
+                    "key": "km",
+                    "label": "\u05e7\"\u05de",
+                    "title": "75,000 \u05e7\"\u05de",
+                    "titleWithoutLabel": 75000
+                },
+                {
+                    "key": "hand",
+                    "label": null,
+                    "title": "\u05d9\u05d3 \u05e8\u05d0\u05e9\u05d5\u05e0\u05d4",
+                    "titleWithoutLabel": "\u05d9\u05d3 \u05e8\u05d0\u05e9\u05d5\u05e0\u05d4"
+                },
+                {
+                    "key": "gearBox",
+                    "label": null,
+                    "title": "\u05d0\u05d5\u05d8\u05d5\u05de\u05d8",
+                    "titleWithoutLabel": "\u05d0\u05d5\u05d8\u05d5\u05de\u05d8"
+                }
+            ],
+            "info_text": "\u05d9 \u05e4 \u05d9 \u05e4 \u05d9 \u05d9 \u05d4 !\u05d0\u05e7\u05e1\u05e7\u05dc\u05d5\u05e1\u05d9\u05d1 \u05d4\u05de\u05e4\u05d5\u05d0\u05e8!! \u05e7\u05d9\u05d8 M \u05de\u05dc\u05d0! \u05d9\u05d3 \u05e8\u05d0\u05e9\u05d5\u05e0\u05d4 \u05e4\u05e8\u05d8\u05d9\u05ea !! \u05e7\u05de \u05e0\u05de\u05d5\u05da ! \u05d5\u05d5\u05d0\u05e7\u05d5\u05dd \u05d1\u05d3\u05dc\u05ea\u05d5\u05ea! \u05de\u05e6\u05dc\u05de\u05d5\u05ea 360 \u05de\u05e2\u05dc\u05d5\u05ea !! \u05de\u05e2\u05e8\u05db\u05ea \u05e9\u05de\u05e2-HARMEN KARDON !! \u05db\u05d9\u05e1\u05d0\u05d5\u05ea \u05e7\u05d5\u05de\u05e4\u05d5\u05e8\u05d8 \u05de\u05e4\u05d5\u05d0\u05e8\u05d9\u05dd \u05db\u05d5\u05dc\u05dc \u05d6\u05db\u05e8\u05d5\u05e0\u05d5\u05ea!! Apple CarPlay! \u05e4\u05dc\u05d0\u05d2 \u05d0\u05d9\u05df \u05d7\u05e1\u05db\u05d5\u05e0\u05d9 ! \u05d2\u05e0\u05d8\u05d9\u05dd 21+ \u05e6\u05de\u05d9\u05d2\u05d9\u05dd \u05d7\u05d3\u05e9\u05d9\u05dd \u05d4\u05d2\u05d4 M ! \u05d2\u05d2 \u05e4\u05e0\u05d5\u05e8\u05de\u05d9 \u05d7\u05e9\u05de\u05dc\u05d9! 313 \u05db\u05d5\u05d7 \u05e1\u05d5\u05e1! \u05d7\u05d9\u05de\u05d5\u05dd + \u05e7\u05d9\u05e8\u05d5\u05e8 \u05d1\u05de\u05d5\u05e9\u05d1\u05d9\u05dd !! \u05ea\u05e6\u05d5\u05d2\u05ea \u05e2\u05d9\u05dc\u05d9\u05ea \u05e2\u05dc \u05d4\u05e9\u05de\u05e9\u05d4! \u05d0\u05e4\u05e9\u05e8\u05d5\u05ea \u05d4\u05d7\u05dc\u05e4\u05d4 /\u05de\u05d9\u05de\u05d5\u05df \u05e2\u05d3 100% \u05dc\u05dc\u05d0 \u05de\u05e7\u05d3\u05de\u05d4! \u05d9\u05e9 \u05d1\u05e0\u05d5\u05e1\u05e3 \u05d2\u05dd \u05dc\u05d1\u05df !\u05d4\u05de\u05dc\u05d0\u05db\u05d4 19, \u05d7\u05d5\u05dc\u05d5\u05df | R.S MOTORS",
+            "isVisibleForReco": true,
+            "is_business": true,
+            "is_hidden": 0,
+            "is_liked": 0,
+            "is_trade_in_button": true,
+            "kilometers": "75,000",
+            "like_count": 0,
+            "line_1": "",
+            "line_1_text_color": "",
+            "line_2": "RS MOTORS",
+            "line_2_text_color": "808080",
+            "line_3": null,
+            "link_token": "tce7qt9z",
+            "main_title": "\u05d1.\u05de.\u05d5\u05d5 X5 \u05e9\u05e0\u05ea 2018 \u05d9\u05d3 \u05e8\u05d0\u05e9\u05d5\u05e0\u05d4 75,000 \u05e7\"\u05de",
+            "main_title_params": [
+                2018
+            ],
+            "manufacturer": "\u05d1.\u05de.\u05d5\u05d5",
+            "manufacturer_eng": "bmw",
+            "merchant": true,
+            "merchant_name": "RS MOTORS",
+            "model": "X5",
+            "more_details": [
+                {
+                    "key": "\u05e7\u05d9\u05dc\u05d5\u05de\u05d8\u05e8\u05d0\u05d6'",
+                    "name": "kilometers",
+                    "value": "75,000"
+                },
+                {
+                    "key": "\u05e1\u05d5\u05d2 \u05de\u05e0\u05d5\u05e2",
+                    "name": "engineType",
+                    "value": "\u05d4\u05d9\u05d1\u05e8\u05d9\u05d3\u05d9 \u05d7\u05e9\u05de\u05dc / \u05d1\u05e0\u05d6\u05d9\u05df"
+                },
+                {
+                    "key": "\u05ea\u05d9\u05d1\u05ea \u05d4\u05d9\u05dc\u05d5\u05db\u05d9\u05dd",
+                    "name": "gearBox",
+                    "value": "\u05d0\u05d5\u05d8\u05d5\u05de\u05d8"
+                },
+                {
+                    "key": "\u05e6\u05d1\u05e2",
+                    "name": "color",
+                    "value": "\u05db\u05e1\u05d5\u05e3 \u05de\u05d8\u05d0\u05dc\u05d9"
+                },
+                {
+                    "key": "\u05ea\u05d0\u05e8\u05d9\u05da \u05e2\u05dc\u05d9\u05d4 \u05dc\u05db\u05d1\u05d9\u05e9",
+                    "name": "month",
+                    "value": "05/2018"
+                },
+                {
+                    "key": "\u05d8\u05e1\u05d8 \u05e2\u05d3",
+                    "name": "testDate",
+                    "value": "05/2024"
+                },
+                {
+                    "key": "\u05d1\u05e2\u05dc\u05d5\u05ea \u05e0\u05d5\u05db\u05d7\u05d9\u05ea",
+                    "name": "ownerID",
+                    "value": "\u05e4\u05e8\u05d8\u05d9\u05ea"
+                },
+                {
+                    "key": "\u05de\u05d5\u05ea\u05d0\u05dd \u05dc\u05e0\u05db\u05d9\u05dd",
+                    "name": "disabledFriendly",
+                    "value": "\u05dc\u05d0"
+                }
+            ],
+            "moving_text": "",
+            "mp4_video_url": null,
+            "order_type_id": 3,
+            "price": "229,900 \u20aa",
+            "pricelist_link_url": "https://www.yad2.co.il/price-list/sub-model/35350/2018",
+            "promotional_ad": 0,
+            "record_id": 50170003,
+            "remove_on_unlike": false,
+            "row_1": "\u05d1.\u05de.\u05d5\u05d5 X5",
+            "row_2": "4X4 XDRIVE40E Exclusive \u05d4\u05d9\u05d1\u05e8\u05d9\u05d3 \u05d0\u05d5\u05d8' 2.0(313\u05db''\u05e1)",
+            "row_3": [
+                2018,
+                "\u05d9\u05d3 \u05e8\u05d0\u05e9\u05d5\u05e0\u05d4",
+                "\u05e7\u05f4\u05de 75,000"
+            ],
+            "row_4": [
+                {
+                    "key": "year",
+                    "label": "\u05e9\u05e0\u05d4",
+                    "value": 2018
+                },
+                {
+                    "key": "hand",
+                    "label": "\u05d9\u05d3",
+                    "value": 1
+                },
+                {
+                    "key": "engine_size",
+                    "label": "\u05e1\u05de\u05f4\u05e7",
+                    "value": "1,997"
+                }
+            ],
+            "row_5": [
+                "2018",
+                "\u05d9\u05d3 1",
+                "\u05e1\u05de\u05f4\u05e7 1997"
+            ],
+            "search_text": "\u05e9\u05dd \u05de\u05d5\u05db\u05e8 RS MOTORS RS MOTORS \u05e8\u05d5\u05e0\u05df \u05d2\u05f3\u05d9\u05e4 \u05de\u05e1\u05d5\u05d2 \u05d1.\u05de.\u05d5\u05d5 X5 4X4 XDRIVE40E Exclusive \u05d4\u05d9\u05d1\u05e8\u05d9\u05d3 \u05d0\u05d5\u05d8' 2.0(313\u05db''\u05e1) \u05e9\u05e0\u05ea 2018 \u05d1\u05d1\u05e2\u05dc\u05d5\u05ea \u05e4\u05e8\u05d8\u05d9\u05ea \u05d9\u05d3 \u05e8\u05d0\u05e9\u05d5\u05e0\u05d4 \u05d1\u05d0\u05d6\u05d5\u05e8 \u05d0\u05d6\u05d5\u05e8 \u05d7\u05d5\u05dc\u05d5\u05df \u05d5\u05d1\u05ea \u05d9\u05dd \u05d1\u05d7\u05d5\u05dc\u05d5\u05df\u05d1\u05e2\u05dc \u05ea\u05d9\u05d1\u05ea \u05d4\u05d9\u05dc\u05d5\u05db\u05d9\u05dd \u05d0\u05d5\u05d8\u05d5\u05de\u05d8 \u05de\u05e0\u05d5\u05e2 \u05d4\u05d9\u05d1\u05e8\u05d9\u05d3\u05d9 \u05d7\u05e9\u05de\u05dc / \u05d1\u05e0\u05d6\u05d9\u05df \u05d1\u05e6\u05d1\u05e2 \u05db\u05e1\u05d5\u05e3 \u05de\u05d8\u05d0\u05dc\u05d9 \u05d4\u05dc\u05e7\u05d5\u05d7 \u05de\u05d5\u05db\u05df \u05dc\u05d4\u05d7\u05dc\u05e4\u05d4 \u05ea\u05d0\u05d5\u05e8 \u05dc\u05e7\u05d5\u05d7 \u05d9 \u05e4 \u05d9 \u05e4 \u05d9 \u05d9 \u05d4 !\u05d0\u05e7\u05e1\u05e7\u05dc\u05d5\u05e1\u05d9\u05d1 \u05d4\u05de\u05e4\u05d5\u05d0\u05e8!! \u05e7\u05d9\u05d8 M \u05de\u05dc\u05d0! \u05d9\u05d3 \u05e8\u05d0\u05e9\u05d5\u05e0\u05d4 \u05e4\u05e8\u05d8\u05d9\u05ea !! \u05e7\u05de \u05e0\u05de\u05d5\u05da ! \u05d5\u05d5\u05d0\u05e7\u05d5\u05dd \u05d1\u05d3\u05dc\u05ea\u05d5\u05ea! \u05de\u05e6\u05dc\u05de\u05d5\u05ea 360 \u05de\u05e2\u05dc\u05d5\u05ea !! \u05de\u05e2\u05e8\u05db\u05ea \u05e9\u05de\u05e2-HARMEN KARDON !! \u05db\u05d9\u05e1\u05d0\u05d5\u05ea \u05e7\u05d5\u05de\u05e4\u05d5\u05e8\u05d8 \u05de\u05e4\u05d5\u05d0\u05e8\u05d9\u05dd \u05db\u05d5\u05dc\u05dc \u05d6\u05db\u05e8\u05d5\u05e0\u05d5\u05ea!! Apple CarPlay! \u05e4\u05dc\u05d0\u05d2 \u05d0\u05d9\u05df \u05d7\u05e1\u05db\u05d5\u05e0\u05d9 ! \u05d2\u05e0\u05d8\u05d9\u05dd 21+ \u05e6\u05de\u05d9\u05d2\u05d9\u05dd \u05d7\u05d3\u05e9\u05d9\u05dd \u05d4\u05d2\u05d4 M ! \u05d2\u05d2 \u05e4\u05e0\u05d5\u05e8\u05de\u05d9 \u05d7\u05e9\u05de\u05dc\u05d9! 313 \u05db\u05d5\u05d7 \u05e1\u05d5\u05e1! \u05d7\u05d9\u05de\u05d5\u05dd + \u05e7\u05d9\u05e8\u05d5\u05e8 \u05d1\u05de\u05d5\u05e9\u05d1\u05d9\u05dd !! \u05ea\u05e6\u05d5\u05d2\u05ea \u05e2\u05d9\u05dc\u05d9\u05ea \u05e2\u05dc \u05d4\u05e9\u05de\u05e9\u05d4! \u05d0\u05e4\u05e9\u05e8\u05d5\u05ea \u05d4\u05d7\u05dc\u05e4\u05d4 /\u05de\u05d9\u05de\u05d5\u05df \u05e2\u05d3 100% \u05dc\u05dc\u05d0 \u05de\u05e7\u05d3\u05de\u05d4! \u05d9\u05e9 \u05d1\u05e0\u05d5\u05e1\u05e3 \u05d2\u05dd \u05dc\u05d1\u05df !\u05d4\u05de\u05dc\u05d0\u05db\u05d4 19, \u05d7\u05d5\u05dc\u05d5\u05df | R.S MOTORS ",
+            "subModelId": 35350,
+            "subcat_id": "21",
+            "title_1": "\u05e9\u05e0\u05ea 2018",
+            "title_2": "",
+            "type": "ad",
+            "uid": null,
+            "updated_at": "RS MOTORS",
+            "video_url": null,
+            "year": 2018
+        },
+        {
+            "AirConditioner_text": "\u05de\u05d9\u05d6\u05d5\u05d2",
+            "AreaID_text": "\u05d0\u05d6\u05d5\u05e8 \u05d7\u05d9\u05e4\u05d4 \u05d5\u05d4\u05e1\u05d1\u05d9\u05d1\u05d4",
+            "Auto_text": "\u05d0\u05d5\u05d8\u05d5\u05de\u05d8",
+            "DateOnRoad_text": "\u05d9\u05e0\u05d5\u05d0\u05e8",
+            "EngineTypeID_text": "\u05d1\u05e0\u05d6\u05d9\u05df",
+            "EngineVal_text": 1199,
+            "Hand_text": "\u05d9\u05d3 \u05e8\u05d0\u05e9\u05d5\u05e0\u05d4",
+            "IsVisibleForReco": false,
+            "ModelID": 3032,
+            "ModelID_text": "\u05e1\u05d9\u05d8\u05e8\u05d5\u05d0\u05df",
+            "OwnerID_text": "\u05d7\u05d1\u05e8\u05d4",
+            "PrimaryArea": "north",
+            "PrimaryAreaID": 25,
+            "SecondaryArea": "north",
+            "SubModelID_text": "C4 \u05e1\u05e4\u05d9\u05d9\u05e1\u05d8\u05d5\u05e8\u05e8",
+            "TradeIn_text": "\u05de\u05d5\u05db\u05df \u05dc\u05d4\u05d7\u05dc\u05e4\u05d4",
+            "Year_text": 2020,
+            "abovePrice": "50000",
+            "ad_highlight_type": "yellow",
+            "ad_number": 52704525,
+            "ad_number_second": 50222367,
+            "ad_type": "ad",
+            "advanced_info": {
+                "items": [
+                    {},
+                    {},
+                    {
+                        "title_text": "\u05d0\u05d1\u05d6\u05d5\u05e8",
+                        "values": [
+                            "\u05de\u05d6\u05d2\u05df",
+                            "ABS",
+                            "4 \u05d7\u05dc\u05d5\u05e0\u05d5\u05ea \u05d7\u05e9\u05de\u05dc",
+                            "\u05d4\u05d2\u05d4 \u05db\u05d5\u05d7",
+                            "6 \u05db\u05e8\u05d9\u05d5\u05ea \u05d0\u05d5\u05d9\u05e8",
+                            "\u05d4\u05e0\u05e2\u05d4 4X2",
+                            "\u05de\u05e6\u05dc\u05de\u05ea \u05e8\u05d5\u05d5\u05e8\u05e1",
+                            "\u05d2\u05dc\u05d2\u05dc\u05d9 \u05de\u05d2\u05e0\u05d6\u05d9\u05d5\u05dd",
+                            "\u05d1\u05e7\u05e8\u05ea \u05d9\u05e6\u05d9\u05d1\u05d5\u05ea",
+                            "\u05d1\u05e7\u05e8\u05ea \u05e9\u05d9\u05d5\u05d8 \u05d0\u05d3\u05e4\u05d8\u05d9\u05d1\u05d9\u05ea",
+                            "\u05d6\u05d9\u05d4\u05d5\u05d9 \u05d4\u05d5\u05dc\u05db\u05d9 \u05e8\u05d2\u05dc",
+                            "\u05de\u05e2\u05e8\u05db\u05ea \u05e2\u05d6\u05e8 \u05dc\u05d1\u05dc\u05de\u05d9\u05dd",
+                            "\u05d7\u05d9\u05d9\u05e9\u05e0\u05d9 \u05dc\u05d7\u05e5 \u05d0\u05d5\u05d9\u05e8 \u05d1\u05e6\u05de\u05d9\u05d2\u05d9\u05dd",
+                            "\u05ea\u05d0\u05d5\u05e8\u05d4 \u05d0\u05d5\u05d8\u05d5\u05de\u05d8\u05d9\u05ea \u05d1\u05e0\u05e1\u05d9\u05e2\u05d4 \u05e7\u05d3\u05d9\u05de\u05d4",
+                            "\u05e9\u05dc\u05d9\u05d8\u05d4 \u05d0\u05d5\u05d8\u05d5\u05de\u05d8\u05d9\u05ea \u05d1\u05d0\u05d5\u05e8\u05d5\u05ea \u05d2\u05d1\u05d5\u05d4\u05d9\u05dd",
+                            "\u05d6\u05d9\u05d4\u05d5\u05d9 \u05de\u05e6\u05d1 \u05d4\u05ea\u05e7\u05e8\u05d1\u05d5\u05ea \u05de\u05e1\u05d5\u05db\u05e0\u05ea",
+                            "\u05d6\u05d9\u05d4\u05d5\u05d9 \u05ea\u05de\u05e8\u05d5\u05e8\u05d9 \u05ea\u05e0\u05d5\u05e2\u05d4",
+                            "\u05d6\u05d9\u05d4\u05d5\u05d9 \u05d1\u05e9\u05d8\u05d7 \"\u05de\u05ea\""
+                        ]
+                    },
+                    {
+                        "opinions": []
+                    },
+                    {
+                        "values": [
+                            {
+                                "level_pollution": 14
+                            },
+                            {
+                                "safety_points": 7
+                            }
+                        ]
+                    }
+                ]
+            },
+            "agency_contact_name": "\u05d0\u05dc\u05d9\u05e8\u05df",
+            "agency_info": {
+                "has_minisite": 1
+            },
+            "api_agency_name": "\u05d0\u05d5\u05e4\u05e8\u05d9\u05d9\u05d8",
+            "area_id": 5,
+            "background_color": "fef0a9",
+            "can_change_layout": 1,
+            "can_hide": 0,
+            "car_family_type": [
+                9
+            ],
+            "car_family_type_info": [
+                {
+                    "engTitle": "minivan",
+                    "id": 9,
+                    "title": "\u05de\u05d9\u05e0\u05d9\u05d5\u05d5\u05d0\u05e0\u05d9\u05dd"
+                }
+            ],
+            "cat_id": 1,
+            "categoryDic": {
+                "catEn": "vehicles",
+                "subCatEn": "cars"
+            },
+            "city": "\u05d7\u05d9\u05e4\u05d4",
+            "city_text": "\u05d7\u05d9\u05e4\u05d4",
+            "contact_name": "\u05d0\u05dc\u05d9\u05e8\u05df",
+            "coordinates": {},
+            "currency": "\u20aa",
+            "currency_text": "\u20aa",
+            "customer_id": 6023595,
+            "date": "2023-07-31 22:07:16",
+            "date_added": "2023-05-09 10:54:04",
+            "deal_info": null,
+            "default_layout": "system",
+            "email": false,
+            "engine_size_text": "1,199 \u05e1\u05de\"\u05e7",
+            "external": [],
+            "feed_source": "xml",
+            "fromEngineVal_text": 1199,
+            "highlight_text": "",
+            "id": "y3mgxlt8",
+            "ignition_text": "4X2",
+            "images": [
+                "https://img.yad2.co.il/Pic/202305/09/1_8/o/y2_1_cUDZbHJe9W_20230509.jpg",
+                "https://img.yad2.co.il/Pic/202305/09/1_8/o/y2_2_wCmSrtnSAy_20230509.jpg",
+                "https://img.yad2.co.il/Pic/202305/09/1_8/o/y2_3_2aHe2qvNSm_20230509.jpg",
+                "https://img.yad2.co.il/Pic/202305/09/1_8/o/y2_4_1JJwiq72SX_20230509.jpg",
+                "https://img.yad2.co.il/Pic/202305/09/1_8/o/y2_5_hhKyvgdmIE_20230509.jpg"
+            ],
+            "images_count": 5,
+            "images_urls": [
+                "https://img.yad2.co.il/Pic/202305/09/1_8/o/y2_1_cUDZbHJe9W_20230509.jpg",
+                "https://img.yad2.co.il/Pic/202305/09/1_8/o/y2_2_wCmSrtnSAy_20230509.jpg",
+                "https://img.yad2.co.il/Pic/202305/09/1_8/o/y2_3_2aHe2qvNSm_20230509.jpg",
+                "https://img.yad2.co.il/Pic/202305/09/1_8/o/y2_4_1JJwiq72SX_20230509.jpg",
+                "https://img.yad2.co.il/Pic/202305/09/1_8/o/y2_5_hhKyvgdmIE_20230509.jpg"
+            ],
+            "img_url": "https://img.yad2.co.il/Pic/202305/09/1_8/o/y2_1_cUDZbHJe9W_20230509.jpg",
+            "info_bar_items": [
+                {
+                    "key": "km",
+                    "label": "\u05e7\"\u05de",
+                    "title": "87,000 \u05e7\"\u05de",
+                    "titleWithoutLabel": 87000
+                },
+                {
+                    "key": "hand",
+                    "label": null,
+                    "title": "\u05d9\u05d3 \u05e8\u05d0\u05e9\u05d5\u05e0\u05d4",
+                    "titleWithoutLabel": "\u05d9\u05d3 \u05e8\u05d0\u05e9\u05d5\u05e0\u05d4"
+                },
+                {
+                    "key": "gearBox",
+                    "label": null,
+                    "title": "\u05d0\u05d5\u05d8\u05d5\u05de\u05d8",
+                    "titleWithoutLabel": "\u05d0\u05d5\u05d8\u05d5\u05de\u05d8"
+                }
+            ],
+            "info_text": "\u05e8\u05db\u05d1 7 \u05de\u05e7\u05d5\u05de\u05d5\u05ea \u05de\u05d0\u05d5\u05d3 \u05de\u05e8\u05d5\u05d5\u05d7 \u05e2\u05dd \u05de\u05d6\u05d2\u05e0\u05d9\u05dd \u05de\u05d0\u05d7\u05d5\u05e8\u05d4 \u05d5\u05d1\u05d9\u05df \u05d4\u05e8\u05db\u05d1\u05d9\u05dd \u05d4\u05d9\u05d7\u05d9\u05d3\u05d9\u05dd \u05e9\u05d0\u05dd \u05e4\u05d5\u05ea\u05d7\u05d9\u05dd \u05d0\u05ea \u05e9\u05e0\u05d9 \u05d4\u05db\u05d9\u05e1\u05d0\u05d5\u05ea \u05de\u05d0\u05d7\u05d5\u05e8 \u05d0\u05d6 \u05d9\u05e9 \u05e2\u05d5\u05d3 \u05de\u05e7\u05d5\u05dd \u05d1\u05ea\u05d0 \u05de\u05d8\u05e2\u05df \u05dc\u05d0\u05db\u05dc\u05d5\u05e1 \u05d3\u05d1\u05e8\u05d9\u05dd.\n\u05d2\u05d9\u05dc\u05d5\u05d9 \u05e0\u05d0\u05d5\u05ea \u05e7\u05e6\u05e8 ( \u05d1\u05e8\u05db\u05d1 \u05d4\u05d5\u05d7\u05dc\u05e3 \u05de\u05e0\u05d5\u05e2 \u05d1\u05de\u05e1\u05d2\u05e8\u05ea \u05d0\u05d7\u05e8\u05d9\u05d5\u05ea \u05d9\u05e6\u05e8\u05df \u05d1\u05dc\u05d5\u05e7 \u05de\u05e0\u05d5\u05e2 \u05d7\u05d3\u05e9)\n\u05d1\u05d2\u05dc\u05dc \u05d6\u05d4 \u05d4\u05de\u05d7\u05d9\u05e8 \u05d4\u05e0\u05de\u05d5\u05da \u05d1\u05e8\u05db\u05d1 \u05dc\u05de\u05d9 \u05e9\u05dc\u05d0 \u05de\u05e4\u05e8\u05d9\u05e2 \u05d0\u05d6 \u05de\u05e8\u05d5\u05d5\u05d9\u05d7 \u05d0\u05d7\u05dc\u05d4 \u05e8\u05db\u05d1 \u05d5\u05d0\u05d7\u05dc\u05d4 \u05de\u05d7\u05d9\u05e8.\n\u05d4\u05e8\u05db\u05d1 \u05e0\u05de\u05db\u05e8 \u05e2\u05dd \u05e9\u05e0\u05ea\u05d9\u05d9\u05dd \u05d0\u05d7\u05e8\u05d9\u05d5\u05ea \u05d0\u05d5 20k \u05e7\"\u05de \u05e2\u05dc 10 \u05de\u05db\u05dc\u05d5\u05dc\u05d9\u05dd.",
+            "isVisibleForReco": true,
+            "is_business": true,
+            "is_hidden": 0,
+            "is_liked": 0,
+            "is_trade_in_button": true,
+            "kilometers": "87,000",
+            "like_count": 0,
+            "line_1": "",
+            "line_1_text_color": "",
+            "line_2": "\u05d0\u05d5\u05e4\u05e8\u05d9\u05d9\u05d8",
+            "line_2_text_color": "808080",
+            "line_3": null,
+            "link_token": "y3mgxlt8",
+            "main_title": "\u05e1\u05d9\u05d8\u05e8\u05d5\u05d0\u05df C4 \u05e1\u05e4\u05d9\u05d9\u05e1\u05d8\u05d5\u05e8\u05e8 \u05e9\u05e0\u05ea 2020 \u05d9\u05d3 \u05e8\u05d0\u05e9\u05d5\u05e0\u05d4 87,000 \u05e7\"\u05de",
+            "main_title_params": [
+                2020
+            ],
+            "manufacturer": "\u05e1\u05d9\u05d8\u05e8\u05d5\u05d0\u05df",
+            "manufacturer_eng": "citroen",
+            "merchant": true,
+            "merchant_name": "\u05d0\u05d5\u05e4\u05e8\u05d9\u05d9\u05d8",
+            "model": "C4 \u05e1\u05e4\u05d9\u05d9\u05e1\u05d8\u05d5\u05e8\u05e8",
+            "more_details": [
+                {
+                    "key": "\u05e7\u05d9\u05dc\u05d5\u05de\u05d8\u05e8\u05d0\u05d6'",
+                    "name": "kilometers",
+                    "value": "87,000"
+                },
+                {
+                    "key": "\u05e1\u05d5\u05d2 \u05de\u05e0\u05d5\u05e2",
+                    "name": "engineType",
+                    "value": "\u05d1\u05e0\u05d6\u05d9\u05df"
+                },
+                {
+                    "key": "\u05ea\u05d9\u05d1\u05ea \u05d4\u05d9\u05dc\u05d5\u05db\u05d9\u05dd",
+                    "name": "gearBox",
+                    "value": "\u05d0\u05d5\u05d8\u05d5\u05de\u05d8"
+                },
+                {
+                    "key": "\u05e6\u05d1\u05e2",
+                    "name": "color",
+                    "value": "\u05dc\u05d1\u05df \u05e9\u05e0\u05d4\u05d1"
+                },
+                {
+                    "key": "\u05ea\u05d0\u05e8\u05d9\u05da \u05e2\u05dc\u05d9\u05d4 \u05dc\u05db\u05d1\u05d9\u05e9",
+                    "name": "month",
+                    "value": "01/2020"
+                },
+                {
+                    "key": "\u05d8\u05e1\u05d8 \u05e2\u05d3",
+                    "name": "testDate",
+                    "value": "01/2024"
+                },
+                {
+                    "key": "\u05d1\u05e2\u05dc\u05d5\u05ea \u05e0\u05d5\u05db\u05d7\u05d9\u05ea",
+                    "name": "ownerID",
+                    "value": "\u05d7\u05d1\u05e8\u05d4"
+                },
+                {
+                    "key": "\u05de\u05d5\u05ea\u05d0\u05dd \u05dc\u05e0\u05db\u05d9\u05dd",
+                    "name": "disabledFriendly",
+                    "value": "\u05dc\u05d0"
+                }
+            ],
+            "moving_text": "",
+            "mp4_video_url": null,
+            "order_type_id": 3,
+            "price": "80,900 \u20aa",
+            "pricelist_link_url": "https://www.yad2.co.il/price-list/sub-model/32927/2020",
+            "promotional_ad": 0,
+            "record_id": 50222367,
+            "remove_on_unlike": false,
+            "row_1": "\u05e1\u05d9\u05d8\u05e8\u05d5\u05d0\u05df C4 \u05e1\u05e4\u05d9\u05d9\u05e1\u05d8\u05d5\u05e8\u05e8",
+            "row_2": "Exclusive PureTech \u05d0\u05d5\u05d8' 7 \u05de\u05e7' 1.2 (130 \u05db''\u05e1)",
+            "row_3": [
+                2020,
+                "\u05d9\u05d3 \u05e8\u05d0\u05e9\u05d5\u05e0\u05d4",
+                "\u05e7\u05f4\u05de 87,000"
+            ],
+            "row_4": [
+                {
+                    "key": "year",
+                    "label": "\u05e9\u05e0\u05d4",
+                    "value": 2020
+                },
+                {
+                    "key": "hand",
+                    "label": "\u05d9\u05d3",
+                    "value": 1
+                },
+                {
+                    "key": "engine_size",
+                    "label": "\u05e1\u05de\u05f4\u05e7",
+                    "value": "1,199"
+                }
+            ],
+            "row_5": [
+                "2020",
+                "\u05d9\u05d3 1",
+                "\u05e1\u05de\u05f4\u05e7 1199"
+            ],
+            "search_text": "\u05e9\u05dd \u05de\u05d5\u05db\u05e8 \u05d0\u05d5\u05e4\u05e8\u05d9\u05d9\u05d8 \u05d0\u05d5\u05e4\u05e8\u05d9\u05d9\u05d8 \u05d0\u05dc\u05d9\u05e8\u05df \u05e8\u05db\u05d1 \u05e1\u05d5\u05db\u05e0\u05d5\u05ea \u05de\u05e1\u05d5\u05d2 \u05e1\u05d9\u05d8\u05e8\u05d5\u05d0\u05df C4 \u05e1\u05e4\u05d9\u05d9\u05e1\u05d8\u05d5\u05e8\u05e8 Exclusive PureTech \u05d0\u05d5\u05d8' 7 \u05de\u05e7' 1.2 (130 \u05db''\u05e1) \u05e9\u05e0\u05ea 2020 \u05d1\u05d1\u05e2\u05dc\u05d5\u05ea \u05d7\u05d1\u05e8\u05d4 \u05d9\u05d3 \u05e8\u05d0\u05e9\u05d5\u05e0\u05d4 \u05d1\u05d0\u05d6\u05d5\u05e8 \u05d0\u05d6\u05d5\u05e8 \u05d7\u05d9\u05e4\u05d4 \u05d5\u05d4\u05e1\u05d1\u05d9\u05d1\u05d4 \u05d1\u05d7\u05d9\u05e4\u05d4\u05d1\u05e2\u05dc \u05ea\u05d9\u05d1\u05ea \u05d4\u05d9\u05dc\u05d5\u05db\u05d9\u05dd \u05d0\u05d5\u05d8\u05d5\u05de\u05d8 \u05de\u05e0\u05d5\u05e2 \u05d1\u05e0\u05d6\u05d9\u05df \u05d1\u05e6\u05d1\u05e2 \u05dc\u05d1\u05df \u05e9\u05e0\u05d4\u05d1 \u05d4\u05dc\u05e7\u05d5\u05d7 \u05de\u05d5\u05db\u05df \u05dc\u05d4\u05d7\u05dc\u05e4\u05d4 \u05ea\u05d0\u05d5\u05e8 \u05dc\u05e7\u05d5\u05d7 \u05e8\u05db\u05d1 7 \u05de\u05e7\u05d5\u05de\u05d5\u05ea \u05de\u05d0\u05d5\u05d3 \u05de\u05e8\u05d5\u05d5\u05d7 \u05e2\u05dd \u05de\u05d6\u05d2\u05e0\u05d9\u05dd \u05de\u05d0\u05d7\u05d5\u05e8\u05d4 \u05d5\u05d1\u05d9\u05df \u05d4\u05e8\u05db\u05d1\u05d9\u05dd \u05d4\u05d9\u05d7\u05d9\u05d3\u05d9\u05dd \u05e9\u05d0\u05dd \u05e4\u05d5\u05ea\u05d7\u05d9\u05dd \u05d0\u05ea \u05e9\u05e0\u05d9 \u05d4\u05db\u05d9\u05e1\u05d0\u05d5\u05ea \u05de\u05d0\u05d7\u05d5\u05e8 \u05d0\u05d6 \u05d9\u05e9 \u05e2\u05d5\u05d3 \u05de\u05e7\u05d5\u05dd \u05d1\u05ea\u05d0 \u05de\u05d8\u05e2\u05df \u05dc\u05d0\u05db\u05dc\u05d5\u05e1 \u05d3\u05d1\u05e8\u05d9\u05dd.\n\u05d2\u05d9\u05dc\u05d5\u05d9 \u05e0\u05d0\u05d5\u05ea \u05e7\u05e6\u05e8 ( \u05d1\u05e8\u05db\u05d1 \u05d4\u05d5\u05d7\u05dc\u05e3 \u05de\u05e0\u05d5\u05e2 \u05d1\u05de\u05e1\u05d2\u05e8\u05ea \u05d0\u05d7\u05e8\u05d9\u05d5\u05ea \u05d9\u05e6\u05e8\u05df \u05d1\u05dc\u05d5\u05e7 \u05de\u05e0\u05d5\u05e2 \u05d7\u05d3\u05e9)\n\u05d1\u05d2\u05dc\u05dc \u05d6\u05d4 \u05d4\u05de\u05d7\u05d9\u05e8 \u05d4\u05e0\u05de\u05d5\u05da \u05d1\u05e8\u05db\u05d1 \u05dc\u05de\u05d9 \u05e9\u05dc\u05d0 \u05de\u05e4\u05e8\u05d9\u05e2 \u05d0\u05d6 \u05de\u05e8\u05d5\u05d5\u05d9\u05d7 \u05d0\u05d7\u05dc\u05d4 \u05e8\u05db\u05d1 \u05d5\u05d0\u05d7\u05dc\u05d4 \u05de\u05d7\u05d9\u05e8.\n\u05d4\u05e8\u05db\u05d1 \u05e0\u05de\u05db\u05e8 \u05e2\u05dd \u05e9\u05e0\u05ea\u05d9\u05d9\u05dd \u05d0\u05d7\u05e8\u05d9\u05d5\u05ea \u05d0\u05d5 20k \u05e7\"\u05de \u05e2\u05dc 10 \u05de\u05db\u05dc\u05d5\u05dc\u05d9\u05dd. ",
+            "subModelId": 32927,
+            "subcat_id": "21",
+            "title_1": "\u05e9\u05e0\u05ea 2020",
+            "title_2": "",
+            "type": "ad",
+            "uid": null,
+            "updated_at": "\u05d0\u05d5\u05e4\u05e8\u05d9\u05d9\u05d8",
+            "video_url": null,
+            "year": 2020
+        },
+        {
+            "AirConditioner_text": "\u05de\u05d9\u05d6\u05d5\u05d2",
+            "AreaID_text": "\u05d0\u05d6\u05d5\u05e8 \u05d1\u05d0\u05e8 \u05e9\u05d1\u05e2 \u05d5\u05d4\u05e1\u05d1\u05d9\u05d1\u05d4",
+            "Auto_text": "\u05d0\u05d5\u05d8\u05d5\u05de\u05d8",
+            "DateOnRoad_text": "\u05e1\u05e4\u05d8\u05de\u05d1\u05e8",
+            "EngineTypeID_text": "\u05d1\u05e0\u05d6\u05d9\u05df",
+            "EngineVal_text": 1197,
+            "Hand_text": "\u05d9\u05d3 \u05e9\u05e0\u05d9\u05d4",
+            "IsVisibleForReco": false,
+            "ModelID": 1293,
+            "ModelID_text": "\u05e7\u05d9\u05d4",
+            "OwnerID_text": "\u05e4\u05e8\u05d8\u05d9\u05ea",
+            "PrimaryArea": "south_area",
+            "PrimaryAreaID": 43,
+            "SecondaryArea": "south_area",
+            "SubModelID_text": "\u05e4\u05d9\u05e7\u05e0\u05d8\u05d5",
+            "TradeIn_text": "\u05de\u05d5\u05db\u05df \u05dc\u05d4\u05d7\u05dc\u05e4\u05d4",
+            "Year_text": 2020,
+            "abovePrice": "40000",
+            "ad_highlight_type": "yellow",
+            "ad_number": 66874024,
+            "ad_number_second": 50847249,
+            "ad_type": "ad",
+            "advanced_info": {
+                "items": [
+                    {},
+                    {},
+                    {
+                        "title_text": "\u05d0\u05d1\u05d6\u05d5\u05e8",
+                        "values": [
+                            "\u05de\u05d6\u05d2\u05df",
+                            "ABS",
+                            "4 \u05d7\u05dc\u05d5\u05e0\u05d5\u05ea \u05d7\u05e9\u05de\u05dc",
+                            "\u05d4\u05d2\u05d4 \u05db\u05d5\u05d7",
+                            "7 \u05db\u05e8\u05d9\u05d5\u05ea \u05d0\u05d5\u05d9\u05e8",
+                            "\u05d4\u05e0\u05e2\u05d4 4X2",
+                            "\u05de\u05e6\u05dc\u05de\u05ea \u05e8\u05d5\u05d5\u05e8\u05e1",
+                            "\u05d2\u05dc\u05d2\u05dc\u05d9 \u05de\u05d2\u05e0\u05d6\u05d9\u05d5\u05dd",
+                            "\u05d1\u05e7\u05e8\u05ea \u05d9\u05e6\u05d9\u05d1\u05d5\u05ea",
+                            "\u05d6\u05d9\u05d4\u05d5\u05d9 \u05d4\u05d5\u05dc\u05db\u05d9 \u05e8\u05d2\u05dc",
+                            "\u05de\u05e2\u05e8\u05db\u05ea \u05e2\u05d6\u05e8 \u05dc\u05d1\u05dc\u05de\u05d9\u05dd",
+                            "\u05d7\u05d9\u05d9\u05e9\u05e0\u05d9 \u05dc\u05d7\u05e5 \u05d0\u05d5\u05d9\u05e8 \u05d1\u05e6\u05de\u05d9\u05d2\u05d9\u05dd",
+                            "\u05d7\u05d9\u05d9\u05e9\u05e0\u05d9 \u05d7\u05d2\u05d5\u05e8\u05d5\u05ea",
+                            "\u05ea\u05d0\u05d5\u05e8\u05d4 \u05d0\u05d5\u05d8\u05d5\u05de\u05d8\u05d9\u05ea \u05d1\u05e0\u05e1\u05d9\u05e2\u05d4 \u05e7\u05d3\u05d9\u05de\u05d4",
+                            "\u05d6\u05d9\u05d4\u05d5\u05d9 \u05de\u05e6\u05d1 \u05d4\u05ea\u05e7\u05e8\u05d1\u05d5\u05ea \u05de\u05e1\u05d5\u05db\u05e0\u05ea"
+                        ]
+                    },
+                    {
+                        "opinions": []
+                    },
+                    {
+                        "values": [
+                            {
+                                "level_pollution": 7
+                            },
+                            {
+                                "safety_points": 4
+                            }
+                        ]
+                    }
+                ]
+            },
+            "agency_contact_name": "aviad",
+            "api_agency_name": "\u05d0. \u05d3\u05d4\u05df \u05de\u05d5\u05d8\u05d5\u05e8\u05e1",
+            "area_id": 22,
+            "background_color": "fef0a9",
+            "can_change_layout": 1,
+            "can_hide": 0,
+            "car_family_type": [
+                1
+            ],
+            "car_family_type_info": [
+                {
+                    "engTitle": "mini",
+                    "id": 1,
+                    "title": "\u05e7\u05d8\u05e0\u05d9\u05dd"
+                }
+            ],
+            "cat_id": 1,
+            "categoryDic": {
+                "catEn": "vehicles",
+                "subCatEn": "cars"
+            },
+            "city": "\u05dc\u05d4\u05d1\u05d9\u05dd",
+            "city_text": "\u05dc\u05d4\u05d1\u05d9\u05dd",
+            "contact_name": "aviad",
+            "coordinates": {},
+            "currency": "\u20aa",
+            "currency_text": "\u20aa",
+            "customer_id": 4843951,
+            "date": "2023-07-31 22:07:16",
+            "date_added": "2023-07-12 17:34:38",
+            "deal_info": null,
+            "default_layout": "system",
+            "email": true,
+            "engine_size_text": "1,197 \u05e1\u05de\"\u05e7",
+            "external": [],
+            "feed_source": "commercial",
+            "fromEngineVal_text": 1197,
+            "highlight_text": "",
+            "id": "yrp1eq3x",
+            "ignition_text": "4X2",
+            "images": [
+                "https://img.yad2.co.il/Pic/202307/12/1_8/o/y2_1_KaGW1nMyEe_20230712.jpg",
+                "https://img.yad2.co.il/Pic/202307/12/1_8/o/y2_2_ycCPwtZypR_20230712.jpg",
+                "https://img.yad2.co.il/Pic/202307/12/1_8/o/y2_3_mAsj__rGc2_20230712.jpg",
+                "https://img.yad2.co.il/Pic/202307/12/1_8/o/y2_4_rImjCc78Lg_20230712.jpg",
+                "https://img.yad2.co.il/Pic/202307/12/1_8/o/y2_5_ULjJcyoOc6_20230712.jpg",
+                "https://img.yad2.co.il/Pic/202307/12/1_8/o/y2_6_oqgb9hsvaV_20230712.jpg"
+            ],
+            "images_count": 6,
+            "images_urls": [
+                "https://img.yad2.co.il/Pic/202307/12/1_8/o/y2_1_KaGW1nMyEe_20230712.jpg",
+                "https://img.yad2.co.il/Pic/202307/12/1_8/o/y2_2_ycCPwtZypR_20230712.jpg",
+                "https://img.yad2.co.il/Pic/202307/12/1_8/o/y2_3_mAsj__rGc2_20230712.jpg",
+                "https://img.yad2.co.il/Pic/202307/12/1_8/o/y2_4_rImjCc78Lg_20230712.jpg",
+                "https://img.yad2.co.il/Pic/202307/12/1_8/o/y2_5_ULjJcyoOc6_20230712.jpg",
+                "https://img.yad2.co.il/Pic/202307/12/1_8/o/y2_6_oqgb9hsvaV_20230712.jpg"
+            ],
+            "img_url": "https://img.yad2.co.il/Pic/202307/12/1_8/o/y2_1_KaGW1nMyEe_20230712.jpg",
+            "info_bar_items": [
+                {
+                    "key": "km",
+                    "label": "\u05e7\"\u05de",
+                    "title": "121,000 \u05e7\"\u05de",
+                    "titleWithoutLabel": 121000
+                },
+                {
+                    "key": "hand",
+                    "label": null,
+                    "title": "\u05d9\u05d3 \u05e9\u05e0\u05d9\u05d4",
+                    "titleWithoutLabel": "\u05d9\u05d3 \u05e9\u05e0\u05d9\u05d4"
+                },
+                {
+                    "key": "gearBox",
+                    "label": null,
+                    "title": "\u05d0\u05d5\u05d8\u05d5\u05de\u05d8",
+                    "titleWithoutLabel": "\u05d0\u05d5\u05d8\u05d5\u05de\u05d8"
+                }
+            ],
+            "info_text": "\u05e8\u05db\u05d1 \u05d1\u05de\u05e6\u05d1 \u05de\u05e6\u05d5\u05d9\u05d9\u05df \u05de\u05ea\u05d7\u05d9\u05d9\u05d1 \u05dc\u05d1\u05d3\u05d9\u05e7\u05d4.\n\u05de\u05e0\u05d5\u05e2 \u05d2\u05d9\u05e8 \u05e9\u05d9\u05dc\u05d3\u05d4.\n\u05d0\u05e4\u05e9\u05e8\u05d5\u05ea \u05de\u05d9\u05de\u05d5\u05df 100%",
+            "isVisibleForReco": true,
+            "is_business": true,
+            "is_hidden": 0,
+            "is_liked": 0,
+            "kilometers": "121,000",
+            "like_count": 0,
+            "line_1": "",
+            "line_1_text_color": "",
+            "line_2": "\u05d0. \u05d3\u05d4\u05df \u05de\u05d5\u05d8\u05d5\u05e8\u05e1",
+            "line_2_text_color": "808080",
+            "line_3": null,
+            "link_token": "yrp1eq3x",
+            "main_title": "\u05e7\u05d9\u05d4 \u05e4\u05d9\u05e7\u05e0\u05d8\u05d5 \u05e9\u05e0\u05ea 2020 \u05d9\u05d3 \u05e9\u05e0\u05d9\u05d4 121,000 \u05e7\"\u05de",
+            "main_title_params": [
+                2020
+            ],
+            "manufacturer": "\u05e7\u05d9\u05d4",
+            "manufacturer_eng": "kia",
+            "merchant": true,
+            "merchant_name": "\u05d0. \u05d3\u05d4\u05df \u05de\u05d5\u05d8\u05d5\u05e8\u05e1",
+            "model": "\u05e4\u05d9\u05e7\u05e0\u05d8\u05d5",
+            "more_details": [
+                {
+                    "key": "\u05e7\u05d9\u05dc\u05d5\u05de\u05d8\u05e8\u05d0\u05d6'",
+                    "name": "kilometers",
+                    "value": "121,000"
+                },
+                {
+                    "key": "\u05e1\u05d5\u05d2 \u05de\u05e0\u05d5\u05e2",
+                    "name": "engineType",
+                    "value": "\u05d1\u05e0\u05d6\u05d9\u05df"
+                },
+                {
+                    "key": "\u05ea\u05d9\u05d1\u05ea \u05d4\u05d9\u05dc\u05d5\u05db\u05d9\u05dd",
+                    "name": "gearBox",
+                    "value": "\u05d0\u05d5\u05d8\u05d5\u05de\u05d8"
+                },
+                {
+                    "key": "\u05e6\u05d1\u05e2",
+                    "name": "color",
+                    "value": "\u05d0\u05e4\u05d5\u05e8 \u05e2\u05db\u05d1\u05e8"
+                },
+                {
+                    "key": "\u05ea\u05d0\u05e8\u05d9\u05da \u05e2\u05dc\u05d9\u05d4 \u05dc\u05db\u05d1\u05d9\u05e9",
+                    "name": "month",
+                    "value": "09/2020"
+                },
+                {
+                    "key": "\u05d8\u05e1\u05d8 \u05e2\u05d3",
+                    "name": "testDate",
+                    "value": "09/2023"
+                },
+                {
+                    "key": "\u05d1\u05e2\u05dc\u05d5\u05ea \u05e0\u05d5\u05db\u05d7\u05d9\u05ea",
+                    "name": "ownerID",
+                    "value": "\u05e4\u05e8\u05d8\u05d9\u05ea"
+                },
+                {
+                    "key": "\u05d1\u05e2\u05dc\u05d5\u05ea \u05e7\u05d5\u05d3\u05de\u05ea",
+                    "name": "previousOwner",
+                    "value": "\u05d4\u05e9\u05db\u05e8\u05d4"
+                },
+                {
+                    "key": "\u05de\u05d5\u05ea\u05d0\u05dd \u05dc\u05e0\u05db\u05d9\u05dd",
+                    "name": "disabledFriendly",
+                    "value": "\u05dc\u05d0"
+                }
+            ],
+            "moving_text": "",
+            "mp4_video_url": null,
+            "order_type_id": 3,
+            "price": "48,700 \u20aa",
+            "pricelist_link_url": "https://www.yad2.co.il/price-list/sub-model/29846/2020",
+            "promotional_ad": 0,
+            "record_id": 50847249,
+            "remove_on_unlike": false,
+            "row_1": "\u05e7\u05d9\u05d4 \u05e4\u05d9\u05e7\u05e0\u05d8\u05d5",
+            "row_2": "LX \u05d0\u05d5\u05d8' 1.2 (84 \u05db\"\u05e1)",
+            "row_3": [
+                2020,
+                "\u05d9\u05d3 \u05e9\u05e0\u05d9\u05d4",
+                "\u05e7\u05f4\u05de 121,000"
+            ],
+            "row_4": [
+                {
+                    "key": "year",
+                    "label": "\u05e9\u05e0\u05d4",
+                    "value": 2020
+                },
+                {
+                    "key": "hand",
+                    "label": "\u05d9\u05d3",
+                    "value": 2
+                },
+                {
+                    "key": "engine_size",
+                    "label": "\u05e1\u05de\u05f4\u05e7",
+                    "value": "1,197"
+                }
+            ],
+            "row_5": [
+                "2020",
+                "\u05d9\u05d3 2",
+                "\u05e1\u05de\u05f4\u05e7 1197"
+            ],
+            "search_text": "\u05e9\u05dd \u05de\u05d5\u05db\u05e8 \u05d0. \u05d3\u05d4\u05df \u05de\u05d5\u05d8\u05d5\u05e8\u05e1 \u05d0. \u05d3\u05d4\u05df \u05de\u05d5\u05d8\u05d5\u05e8\u05e1 aviad \u05e8\u05db\u05d1 \u05e1\u05d5\u05db\u05e0\u05d5\u05ea \u05de\u05e1\u05d5\u05d2 \u05e7\u05d9\u05d4 \u05e4\u05d9\u05e7\u05e0\u05d8\u05d5 LX \u05d0\u05d5\u05d8' 1.2 (84 \u05db\"\u05e1) \u05e9\u05e0\u05ea 2020 \u05d1\u05d1\u05e2\u05dc\u05d5\u05ea \u05e4\u05e8\u05d8\u05d9\u05ea \u05d9\u05d3 \u05e9\u05e0\u05d9\u05d4 \u05d1\u05e2\u05dc\u05d5\u05ea \u05e7\u05d5\u05d3\u05de\u05ea \u05d4\u05e9\u05db\u05e8\u05d4 \u05d1\u05d0\u05d6\u05d5\u05e8 \u05d0\u05d6\u05d5\u05e8 \u05d1\u05d0\u05e8 \u05e9\u05d1\u05e2 \u05d5\u05d4\u05e1\u05d1\u05d9\u05d1\u05d4 \u05d1\u05dc\u05d4\u05d1\u05d9\u05dd\u05d1\u05e2\u05dc \u05ea\u05d9\u05d1\u05ea \u05d4\u05d9\u05dc\u05d5\u05db\u05d9\u05dd \u05d0\u05d5\u05d8\u05d5\u05de\u05d8 \u05de\u05e0\u05d5\u05e2 \u05d1\u05e0\u05d6\u05d9\u05df \u05d1\u05e6\u05d1\u05e2 \u05d0\u05e4\u05d5\u05e8 \u05e2\u05db\u05d1\u05e8 \u05d4\u05dc\u05e7\u05d5\u05d7 \u05de\u05d5\u05db\u05df \u05dc\u05d4\u05d7\u05dc\u05e4\u05d4 \u05ea\u05d0\u05d5\u05e8 \u05dc\u05e7\u05d5\u05d7 \u05e8\u05db\u05d1 \u05d1\u05de\u05e6\u05d1 \u05de\u05e6\u05d5\u05d9\u05d9\u05df \u05de\u05ea\u05d7\u05d9\u05d9\u05d1 \u05dc\u05d1\u05d3\u05d9\u05e7\u05d4.\n\u05de\u05e0\u05d5\u05e2 \u05d2\u05d9\u05e8 \u05e9\u05d9\u05dc\u05d3\u05d4.\n\u05d0\u05e4\u05e9\u05e8\u05d5\u05ea \u05de\u05d9\u05de\u05d5\u05df 100% ",
+            "subModelId": 29846,
+            "subcat_id": "21",
+            "title_1": "\u05e9\u05e0\u05ea 2020",
+            "title_2": "",
+            "type": "ad",
+            "uid": null,
+            "updated_at": "\u05d0. \u05d3\u05d4\u05df \u05de\u05d5\u05d8\u05d5\u05e8\u05e1",
+            "video_url": null,
+            "year": 2020
+        }
+    ],
+    "f": "08174adf27",
+    "s": "b7a18",
+    "n": "7ad1c",
+    "t": "62e8c1a08efe2d1fad068684"
+}

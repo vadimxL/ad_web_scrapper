@@ -1,10 +1,8 @@
 import asyncio
 import sys
-from dataclasses import asdict
-from datetime import datetime, timedelta, date
+from datetime import datetime, timedelta
 import re
-from typing import List, Tuple
-import jinja2
+from typing import List
 import json
 import time
 from aiohttp_client_cache import CachedSession, SQLiteBackend, CachedResponse
@@ -89,7 +87,7 @@ class Scraper:
             logger.info(
                 f'cache created_at: {r.created_at.strftime("%H:%M")}, last_used: {r.last_used.strftime("%H:%M:%S")} for page: {q.get("page")}, '
                 f'expires: {datetime.fromisoformat(r.expires.isoformat()).strftime("%H:%M:%S") if r.expires else "Never"} ,'
-                f'query: {q}')
+                f'url: {url}, query: {q}')
 
         return r
 

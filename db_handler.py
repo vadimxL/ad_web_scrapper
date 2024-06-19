@@ -1,13 +1,10 @@
 import json
 import logging
-from dataclasses import asdict
 from typing import List, Dict
-import jinja2
 from firebase_admin import db
-from firebase_admin.db import Reference
+import models
 from car_details import CarDetails
 from email_sender.email_sender import EmailSender
-from gmail_sender.gmail_sender import GmailSender
 
 logger = logging.getLogger("ad_web_scrapper")
 
@@ -21,6 +18,22 @@ class DbHandler:
         self.path = f'{self.ref_path}/{self.user_path}'
         self.sold_path = f'{self.ref_path_sold}/{self.user_path}'
         self.gmail_sender = mail_sender
+
+    @classmethod
+    def insert_task(cls, task: models.Task):
+        task_dict = task.model_dump(mode='json')
+        db.reference('tasks').child(task.id).set(task_dict)
+        logger.info(f"Task {task.id} is created successfully, {task}")
+
+    @classmethod
+    def delete_task(cls, task_id: str):
+        db.reference('tasks').child(task_id).delete()
+        logger.info(f"Task {task_id} is deleted successfully")
+
+    @classmethod
+    def load_tasks(cls) -> Dict:
+        tasks: Dict = db.reference('tasks').get()
+        return tasks
 
     def insert_car_ad(self, new_ad: CarDetails):
         ad_dict = new_ad.model_dump(mode='json')

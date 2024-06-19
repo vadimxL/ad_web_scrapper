@@ -1,6 +1,7 @@
 import asyncio
 import hashlib
 import logging
+import os
 import threading
 import time
 from dataclasses import dataclass
@@ -30,7 +31,6 @@ import models
 
 app = FastAPI()
 
-
 # Allow all origins with appropriate methods, headers, and credentials if needed
 app.add_middleware(
     CORSMiddleware,
@@ -41,10 +41,11 @@ app.add_middleware(
     expose_headers=["*"]
 )
 
-
 # Replace this with your actual data source or logic
 manufacturers = {}
 manufs_unaltered = []
+
+
 # gmail_sender = GmailSender(credentials_path="gmail_sender/credentials.json", token_path="gmail_sender/token.json")
 
 
@@ -62,7 +63,10 @@ def startup_event():
         manufacturers[manuf['value']] = manuf['text']
     with open("manufacturers.json", "w") as manufs:
         json.dump(manufacturers, manufs)
-    # print(manufacturers)
+    tasks_ = DbHandler.load_tasks()
+    for id_, task in tasks_.items():
+        task_info = models.Task(**task)
+        asyncio.run_coroutine_threadsafe(schedule_task(task_info), asyncio.get_event_loop())
 
 
 @app.get("/manufacturers")
@@ -87,18 +91,13 @@ def extract_query_params(url: str) -> dict:
     return params
 
 
-@dataclass
-class InternalTask:
-    event: threading.Event
-    task_info: models.Task
-
-
-tasks: Dict[str, InternalTask] = dict()
+tasks: Dict[str, models.Task] = dict()
+scheduled_task_events: Dict[str, threading.Event] = dict()
 
 
 @app.get("/tasks", response_model=List[models.Task])
 async def read_items():
-    return [task.task_info for task in tasks.values()]
+    return [task for task in tasks.values()]
 
 
 @app.get("/scrape")
@@ -133,6 +132,7 @@ async def scrape_excel(url: str):
         media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         headers={"Content-Disposition": f"attachment; filename={filename}"})
 
+
 def run_continuously(interval=1):
     """Continuously run, while executing pending jobs at each
     elapsed time interval.
@@ -161,23 +161,27 @@ def run_continuously(interval=1):
 def recurrent_scrape(task_id: str, params: dict, loop):
     scraper = Scraper(cache_timeout_min=30)
     mail_sender = EmailSender()
-    db_handler = DbHandler(parse.urlsplit(tasks[task_id].task_info.title).query, mail_sender)
+    db_handler = DbHandler(parse.urlsplit(tasks[task_id].title).query, mail_sender)
     results = scraper.run(params, loop)
     logger.info(f"Recurrence task: {task_id}: {tasks[task_id]}")
     db_handler.handle_results(results)
 
 
 def scrape_task(task_id: str, loop):
-    params = extract_query_params(tasks[task_id].task_info.title)
-    logger.info(f"Scraping task: {task_id}: {tasks[task_id]}")
+    params = extract_query_params(tasks[task_id].title)
+    logger.info(f"Scraping task: {tasks[task_id]}")
     scraper = Scraper(cache_timeout_min=30)
     results: List[CarDetails] = scraper.run(params, loop)
     time_now = datetime.now().strftime("%d_%m_%Y_%H_%M_%S")
+
     filename_json = f'json/car_ads_{task_id}' + time_now + '.json'
+    directory = os.path.dirname(filename_json)
+    if not os.path.exists(directory):
+        os.makedirs(directory)
     with open(filename_json, 'w', encoding='utf-8') as f1:
         json.dump({ad.id: ad.model_dump(mode='json') for ad in results}, f1, indent=4, ensure_ascii=False)
     mail_sender = EmailSender()
-    db_handler = DbHandler(parse.urlsplit(tasks[task_id].task_info.title).query, mail_sender)
+    db_handler = DbHandler(parse.urlsplit(tasks[task_id].title).query, mail_sender)
     db_handler.create_collection(results)
     # Do some work that only needs to happen once...
     return schedule.CancelJob
@@ -199,42 +203,54 @@ async def create_item(email: EmailStr, url: str):
 
     id_ = hashlib.sha256(url.encode()).hexdigest()
     if id_ in tasks:
-        return tasks[id_].task_info
+        return tasks[id_]
 
     car_models = []
     car_models_dict = await get_models(params['manufacturer'])
     for car_model in params['model'].split(","):
         car_models.append(search_by_model(car_models_dict, car_model))
 
-    task_info = models.Task(id=id_, title=url, mail=email,
-                            created_at=datetime.now().strftime("%d_%m_%Y_%H_%M_%S"),
-                            duration=6,
-                            manufacturer=manufacturers[params['manufacturer']],
-                            car_models=car_models)
+    task = models.Task(id=id_, title=url, mail=email,
+                       created_at=datetime.now().strftime("%d_%m_%Y_%H_%M_%S"),
+                       duration=6,
+                       manufacturer=manufacturers[params['manufacturer']],
+                       car_models=car_models)
+    # create task in database
+    DbHandler.insert_task(task)
+    await schedule_task(task)
+    return task
+
+
+async def schedule_task(task: models.Task):
+    params: dict = extract_query_params(task.title)
     loop = asyncio.get_event_loop()
-    schedule.every(1).seconds.do(scrape_task, id_, loop)
-    schedule.every(6).hours.do(recurrent_scrape, id_, params, loop)
-    event_ = run_continuously()
-    tasks[id_] = InternalTask(event=event_, task_info=task_info)
-    return task_info
+    schedule.every(1).seconds.do(scrape_task, task.id, loop)
+    schedule.every(6).hours.do(recurrent_scrape, task.id, params, loop)
+    event_: threading.Event = run_continuously()
+    tasks[task.id] = task
+    scheduled_task_events[task.id] = event_
 
 
 @app.on_event("shutdown")
 def shutdown_event():
     print("Application shutdown")
-    for task_id in tasks:
-        tasks[task_id].event.set()
-        print("Cleared task with task id: " + task_id)
+    for task in tasks.values():
+        scheduled_task_events[task.id].set()
+        scheduled_task_events.pop(task.id)
+        print("Cleared task with task id: " + task.id)
 
 
 @app.delete("/tasks/{task_id}")
 async def delete_item(task_id: str):
     if task_id not in tasks:
         return {"message": f"Task: {task_id} not found"}
-    task: InternalTask = tasks.pop(task_id)
+    task: models.Task = tasks.pop(task_id)
     # Stop the background thread
-    task.event.set()
-    return {"message": f"Task: {task.task_info} deleted"}
+    scheduled_task_events[task_id].set()
+    scheduled_task_events.pop(task_id)
+    # delete from database
+    DbHandler.delete_task(task_id)
+    return {"message": f"Task: {task} deleted"}
 
 
 def get_range(data: str) -> models.Range:
