@@ -190,7 +190,10 @@ def scrape_task(task_id: str, loop):
         json.dump({ad.id: ad.model_dump(mode='json') for ad in results}, f1, indent=4, ensure_ascii=False)
     mail_sender = EmailSender()
     db_handler = DbHandler(parse.urlsplit(tasks[task_id].title).query, mail_sender)
-    db_handler.create_collection(results)
+    if db_handler.collection_exists():
+        db_handler.handle_results(results)
+    else:
+        db_handler.create_collection(results)
     # Do some work that only needs to happen once...
     return schedule.CancelJob
 

@@ -90,6 +90,9 @@ class DbHandler:
             except Exception as e:
                 logger.error(f"Error sending email: {e}")
 
+    def collection_exists(self):
+        return db.reference(self.path).get() is not None
+
     def create_collection(self, results: List[CarDetails]):
         try:
             data: dict = {ad.id: ad.model_dump(mode='json') for ad in results}
