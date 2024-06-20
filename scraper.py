@@ -179,11 +179,9 @@ class Scraper:
             handz_result = handz.get_prices(divided_feed_item)
             handz_results.extend(handz_result['data']['entities'])
 
-        # logger.info(handz_results)
         for res in handz_results:
             result_filter: CarDetails = next(filter(lambda x: x.id == res['id'], car_ads_to_save), None)
             if result_filter:
-                prices = []
                 result_filter.prices_handz = self.convert_data_to_string(res['prices'])
 
         return car_ads_to_save, filtered_feed_items
