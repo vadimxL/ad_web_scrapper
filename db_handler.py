@@ -4,6 +4,7 @@ from typing import List, Dict
 from firebase_admin import db
 import models
 from car_details import CarDetails
+from criteria_model import html_criteria_mail
 from email_sender.email_sender import EmailSender
 
 logger = logging.getLogger("ad_web_scrapper")
@@ -24,6 +25,12 @@ class DbHandler:
         task_dict = task.model_dump(mode='json')
         db.reference('tasks').child(task.id).set(task_dict)
         logger.info(f"Task {task.id} is created successfully, {task}")
+
+    @classmethod
+    def update_task(cls, task: models.Task):
+        task_dict = task.model_dump(mode='json')
+        db.reference('tasks').child(task.id).update(task_dict)
+        logger.info(f"Task {task.id} is updated successfully, {task}")
 
     @classmethod
     def delete_task(cls, task_id: str):

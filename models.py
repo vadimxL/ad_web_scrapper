@@ -1,3 +1,5 @@
+from datetime import date, datetime, time, timedelta
+
 from typing import Optional, List
 
 from mongoengine import Document, ListField, EmbeddedDocumentField, DictField, StringField, IntField, EmbeddedDocument
@@ -55,8 +57,9 @@ class Task(BaseModel):
     id: str
     title: str
     mail: str
-    created_at: str
-    duration: Optional[int] = None
+    created_at: datetime
+    next_scrape_time: datetime
+    repeat_interval: int
     manufacturer: Optional[str] = None
     car_models: Optional[List[str]] = None
     # criteria: CarCriteria

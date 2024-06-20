@@ -10,7 +10,7 @@ from io import BytesIO
 import pandas as pd
 import schedule
 
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import List, Dict
 from urllib import parse
 from pydantic import EmailStr
@@ -64,6 +64,8 @@ def startup_event():
     with open("manufacturers.json", "w") as manufs:
         json.dump(manufacturers, manufs)
     tasks_ = DbHandler.load_tasks()
+    if tasks_ is None:
+        return
     for id_, task in tasks_.items():
         task_info = models.Task(**task)
         asyncio.run_coroutine_threadsafe(schedule_task(task_info), asyncio.get_event_loop())
@@ -164,12 +166,18 @@ def recurrent_scrape(task_id: str, params: dict, loop):
     db_handler = DbHandler(parse.urlsplit(tasks[task_id].title).query, mail_sender)
     results = scraper.run(params, loop)
     logger.info(f"Recurrence task: {task_id}: {tasks[task_id]}")
+    # update the next scrape time
+    tasks[task_id].next_scrape_time = datetime.now() + timedelta(hours=tasks[task_id].repeat_interval)
+    logger.info(f'Updated next_scrape_time: {tasks[task_id].next_scrape_time}')
+    db_handler.update_task(tasks[task_id])
     db_handler.handle_results(results)
 
 
 def scrape_task(task_id: str, loop):
     params = extract_query_params(tasks[task_id].title)
-    logger.info(f"Scraping task: {tasks[task_id]}")
+    logger.info(f'Scraping task: {tasks[task_id]}')
+    logger.info(f'created_at: {tasks[task_id].created_at}, '
+                f'next_scrape_time: {tasks[task_id].next_scrape_time}')
     scraper = Scraper(cache_timeout_min=30)
     results: List[CarDetails] = scraper.run(params, loop)
     time_now = datetime.now().strftime("%d_%m_%Y_%H_%M_%S")
@@ -210,9 +218,11 @@ async def create_item(email: EmailStr, url: str):
     for car_model in params['model'].split(","):
         car_models.append(search_by_model(car_models_dict, car_model))
 
+    repeat_interval_hours = 6
     task = models.Task(id=id_, title=url, mail=email,
-                       created_at=datetime.now().strftime("%d_%m_%Y_%H_%M_%S"),
-                       duration=6,
+                       created_at=datetime.now(),
+                       next_scrape_time=datetime.now() + timedelta(hours=repeat_interval_hours),
+                       repeat_interval=repeat_interval_hours,
                        manufacturer=manufacturers[params['manufacturer']],
                        car_models=car_models)
     # create task in database
@@ -221,11 +231,11 @@ async def create_item(email: EmailStr, url: str):
     return task
 
 
-async def schedule_task(task: models.Task):
+async def schedule_task(task: models.Task, repeat_interval_hr=6):
     params: dict = extract_query_params(task.title)
     loop = asyncio.get_event_loop()
     schedule.every(1).seconds.do(scrape_task, task.id, loop)
-    schedule.every(6).hours.do(recurrent_scrape, task.id, params, loop)
+    schedule.every(repeat_interval_hr).hours.do(recurrent_scrape, task.id, params, loop)
     event_: threading.Event = run_continuously()
     tasks[task.id] = task
     scheduled_task_events[task.id] = event_
