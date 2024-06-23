@@ -4,12 +4,9 @@ import logging
 import os
 import threading
 import time
-from dataclasses import dataclass
 from io import BytesIO
-
 import pandas as pd
 import schedule
-
 from datetime import datetime, timedelta
 from typing import List, Dict
 from urllib import parse
@@ -17,17 +14,17 @@ from pydantic import EmailStr
 from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import StreamingResponse
 
+import db_handler
 import firebase_db
 import json
 from fastapi import FastAPI, HTTPException
-
 from car_details import CarDetails
 from db_handler import DbHandler
 from email_sender.email_sender import EmailSender
-from gmail_sender.gmail_sender import GmailSender
 from persistence import dump_to_excel_car_details
-from scraper import Scraper, logger
 import models
+from logger_setup import internal_info_logger
+from scraper import Scraper
 
 app = FastAPI()
 
@@ -55,7 +52,7 @@ def startup_event():
     try:
         firebase_db.init_firebase_db()
     except Exception as e:
-        logger.error(f"Error initializing firebase db: {e}")
+        internal_info_logger.error(f"Error initializing firebase db: {e}")
     # scraper = Scraper(cache_timeout_min=5)
     search_opts = Scraper.get_search_options()
     manufs_unaltered = search_opts['data']['manufacturer']
@@ -165,18 +162,18 @@ def recurrent_scrape(task_id: str, params: dict, loop):
     mail_sender = EmailSender()
     db_handler = DbHandler(parse.urlsplit(tasks[task_id].title).query, mail_sender)
     results = scraper.run(params, loop)
-    logger.info(f"Recurrence task: {task_id}: {tasks[task_id]}")
+    internal_info_logger.info(f"Recurrence task: {task_id}: {tasks[task_id]}")
     # update the next scrape time
     tasks[task_id].next_scrape_time = datetime.now() + timedelta(hours=tasks[task_id].repeat_interval)
-    logger.info(f'Updated next_scrape_time: {tasks[task_id].next_scrape_time}')
+    internal_info_logger.info(f'Updated next_scrape_time: {tasks[task_id].next_scrape_time}')
     db_handler.update_task(tasks[task_id])
     db_handler.handle_results(results)
 
 
 def scrape_task(task_id: str, loop):
     params = extract_query_params(tasks[task_id].title)
-    logger.info(f'Scraping task: {tasks[task_id]}')
-    logger.info(f'created_at: {tasks[task_id].created_at}, '
+    internal_info_logger.info(f'Scraping task: {tasks[task_id]}')
+    internal_info_logger.info(f'created_at: {tasks[task_id].created_at}, '
                 f'next_scrape_time: {tasks[task_id].next_scrape_time}')
     scraper = Scraper(cache_timeout_min=30)
     results: List[CarDetails] = scraper.run(params, loop)
@@ -204,6 +201,22 @@ def search_by_model(car_list, target_value):
             return car["text"]
     return None  # Return None if the value is not found
 
+
+# Update (PUT)
+@app.put("/items/{item_id}", response_model=models.Task)
+async def update_item(item_id: str, email: EmailStr, repeat_interval: int):
+    task = tasks.get(item_id)
+    if task is None:
+        raise HTTPException(status_code=404, detail="Item not found")
+    task.mail = email
+    task.repeat_interval = repeat_interval
+    new_scrape_time = datetime.now() + timedelta(hours=repeat_interval)
+    if task.next_scrape_time < new_scrape_time:
+        task.next_scrape_time = datetime.now() + timedelta(hours=repeat_interval)
+    else:
+        task.next_scrape_time = new_scrape_time
+    DbHandler.update_task(task)
+    return task
 
 @app.post("/tasks", response_model=models.Task)
 async def create_item(email: EmailStr, url: str):

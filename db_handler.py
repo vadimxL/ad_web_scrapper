@@ -6,8 +6,7 @@ import models
 from car_details import CarDetails
 from criteria_model import html_criteria_mail
 from email_sender.email_sender import EmailSender
-
-logger = logging.getLogger("ad_web_scrapper")
+from logger_setup import ads_updates_logger, internal_info_logger
 
 
 class DbHandler:
@@ -24,18 +23,18 @@ class DbHandler:
     def insert_task(cls, task: models.Task):
         task_dict = task.model_dump(mode='json')
         db.reference('tasks').child(task.id).set(task_dict)
-        logger.info(f"Task {task.id} is created successfully, {task}")
+        internal_info_logger.info(f"Task {task.id} is created successfully, {task}")
 
     @classmethod
     def update_task(cls, task: models.Task):
         task_dict = task.model_dump(mode='json')
         db.reference('tasks').child(task.id).update(task_dict)
-        logger.info(f"Task {task.id} is updated successfully, {task}")
+        internal_info_logger.info(f"Task {task.id} is updated successfully, {task}")
 
     @classmethod
     def delete_task(cls, task_id: str):
         db.reference('tasks').child(task_id).delete()
-        logger.info(f"Task {task_id} is deleted successfully")
+        internal_info_logger.info(f"Task {task_id} is deleted successfully")
 
     @classmethod
     def load_tasks(cls) -> Dict:
@@ -45,7 +44,7 @@ class DbHandler:
     def insert_car_ad(self, new_ad: CarDetails):
         ad_dict = new_ad.model_dump(mode='json')
         db.reference(self.path).child(new_ad.id).set(ad_dict)
-        logger.info(f"{new_ad.id} is created successfully, "
+        internal_info_logger.info(f"{new_ad.id} is created successfully, "
                     f"{new_ad.manuf_en} "
                     f"{new_ad.car_model}, "
                     f"current_price: {new_ad.price}, "
@@ -58,23 +57,23 @@ class DbHandler:
             self.gmail_sender.send(message,
                                    f'🎁 [New] - {new_ad.manufacturer_he} {new_ad.car_model} {new_ad.city}')
         except Exception as e:
-            logger.error(f"Error sending email: {e}")
+            internal_info_logger.error(f"Error sending email: {e}")
 
     def update_car_ad(self, new_ad: CarDetails, data: dict):
         try:
             ad: dict = data[new_ad.id]
         except Exception as e:
-            logger.error(f"Error updating car ad: {e}")
+            internal_info_logger.error(f"Error updating car ad: {e}")
             return
 
         db_ad: CarDetails = CarDetails(**ad)
         if new_ad.prices and db_ad.prices[-1].price != new_ad.prices[-1].price:
             db_ad.prices.append(new_ad.prices[-1])
             db_ad.price = new_ad.price
-            logger.info(f"{new_ad.id} is changed, {new_ad.manuf_en}  {new_ad.car_model}, "
+            ads_updates_logger.info(f"{new_ad.id} is changed, {new_ad.manuf_en}  {new_ad.car_model}, "
                         f"current_price: {new_ad.price}, "
                         f"{new_ad.kilometers} [km], year: {new_ad.year}, hand: {new_ad.hand}")
-            logger.info(f"price changed: {db_ad.prices[-2].price} ===> {db_ad.prices[-1].price}")
+            ads_updates_logger.info(f"price changed: {db_ad.prices[-2].price} ===> {db_ad.prices[-1].price}")
             db.reference(self.path).child(new_ad.id).update(db_ad.model_dump(mode='json'))
 
             try:
@@ -88,7 +87,7 @@ class DbHandler:
 
                 self.gmail_sender.send(message, subject)
             except Exception as e:
-                logger.error(f"Error sending email: {e}")
+                internal_info_logger.error(f"Error sending email: {e}")
 
     def collection_exists(self):
         return db.reference(self.path).get() is not None
@@ -98,7 +97,7 @@ class DbHandler:
             data: dict = {ad.id: ad.model_dump(mode='json') for ad in results}
             db.reference(self.path).set(data)
         except Exception as e:
-            logger.error(f"Error adding new cars to db: {e}")
+            internal_info_logger.error(f"Error adding new cars to db: {e}")
 
     def handle_results(self, results: List[CarDetails]):
         data: dict = db.reference(self.path).get()
@@ -109,13 +108,13 @@ class DbHandler:
                 else:
                     self.update_car_ad(ad, data)
         except Exception as e:
-            logger.error(f"Error updating database: {e}")
+            internal_info_logger.error(f"Error updating database: {e}")
 
         db_data_dict = {}
         try:
             db_data_dict = {ad: CarDetails(**data[ad]) for ad in data}
         except Exception as e:
-            logger.error(f"Error creating CarDetails: {e}")
+            internal_info_logger.error(f"Error creating CarDetails: {e}")
             return
 
         self.handle_sold_items({ad.id: ad for ad in results}, db_data_dict)
@@ -123,12 +122,12 @@ class DbHandler:
     def handle_sold_items(self, new_ads: Dict[str, CarDetails], ads_db: Dict[str, CarDetails]):
         for id_, ad_db in ads_db.items():
             if id_ not in new_ads:
-                logger.info(f"sold car: {json.dumps(ad_db.model_dump(mode='json'), ensure_ascii=False)}")
+                ads_updates_logger.info(f"sold car: {json.dumps(ad_db.model_dump(mode='json'), ensure_ascii=False)}")
                 message = html_criteria_mail(ad_db)
                 self.gmail_sender.send(message,
                                        f'💸 [Sold] - {ad_db.manufacturer_he} {ad_db.car_model} {ad_db.city}')
                 db.reference(self.sold_path).child(ad_db.id).set(ad_db.model_dump(mode='json'))
-                logger.info(f"removing item {ad_db.id} from main db")
+                ads_updates_logger.info(f"removing item {ad_db.id} from main db")
                 db.reference(self.path).child(ad_db.id).delete()
 
 

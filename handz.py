@@ -2,20 +2,8 @@ import hashlib
 from datetime import timedelta
 from typing import List, Dict
 import json
-import logging
-import sys
-
 import re
 from requests_cache import CachedSession as MyCachedSession
-
-logging.getLogger(__name__).addHandler(logging.StreamHandler(stream=sys.stdout))
-logger = logging.getLogger(__name__)
-logging.basicConfig(
-    filename='example.log',
-    format='%(asctime)s %(levelname)-8s %(message)s',
-    level=logging.INFO,
-    datefmt='%Y-%m-%d %H:%M:%S',
-    encoding='utf-8')
 
 
 class Handz:

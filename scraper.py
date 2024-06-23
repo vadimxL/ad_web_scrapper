@@ -1,5 +1,4 @@
 import asyncio
-import sys
 from datetime import datetime, timedelta
 import re
 from typing import List
@@ -8,19 +7,11 @@ import time
 from aiohttp_client_cache import CachedSession, SQLiteBackend, CachedResponse
 from requests_cache import CachedSession as MyCachedSession
 from rich import print
-import logging
 from car_details import CarDetails, PriceHistory
 from handz import Handz
 from headers import scrape_headers, model_headers
+from logger_setup import internal_info_logger
 
-logging.getLogger("ad_web_scrapper").addHandler(logging.StreamHandler(stream=sys.stdout))
-logger = logging.getLogger("ad_web_scrapper")
-logging.basicConfig(
-    filename='ad_web_scrapper.log',
-    format='%(asctime)s %(levelname)-8s %(message)s',
-    level=logging.INFO,
-    datefmt='%Y-%m-%d %H:%M:%S',
-    encoding='utf-8')
 
 BASE_URL = "https://gw.yad2.co.il/feed-search-legacy/vehicles/cars"
 
@@ -84,7 +75,7 @@ class Scraper:
         await session.close()
 
         if r.from_cache:
-            logger.info(
+            internal_info_logger.info(
                 f'cache created_at: {r.created_at.strftime("%H:%M")}, last_used: {r.last_used.strftime("%H:%M:%S")} for page: {q.get("page")}, '
                 f'expires: {datetime.fromisoformat(r.expires.isoformat()).strftime("%H:%M:%S") if r.expires else "Never"} ,'
                 f'url: {url}, query: {q}')
@@ -140,7 +131,7 @@ class Scraper:
             try:
                 feed_items = scraped_page['data']['feed']['feed_items']
             except KeyError as e:
-                logger.error(f"Error scraping page: {e}")
+                internal_info_logger.error(f"Error scraping page: {e}")
                 with open('json/error_page.json', 'w', encoding='utf-8') as f:
                     json.dump(scraped_page, f, indent=4, ensure_ascii=False)
                 raise e
@@ -169,8 +160,8 @@ class Scraper:
             car_details: CarDetails = self.extract_car_details(item)
             car_ads_to_save.append(car_details)
 
-        logger.info(f"Skipped {no_id_items_num} items because they don't have an id")
-        logger.info(f"Skipped {incompatible_feed_sources_items_num} items because they are not in {feed_sources} list")
+        internal_info_logger.info(f"Skipped {no_id_items_num} items because they don't have an id")
+        internal_info_logger.info(f"Skipped {incompatible_feed_sources_items_num} items because they are not in {feed_sources} list")
 
         handz = Handz()
         divided_feed_items = list(self.divide_chunks(filtered_feed_items, 50))
@@ -286,7 +277,7 @@ class Scraper:
                 gear_type=self.gear_type(feed_item),
             )
         except Exception as e:
-            logger.error(f"Error extracting car details: {e}")
+            internal_info_logger.error(f"Error extracting car details: {e}")
             with open('json/error_feed_item.json', 'w', encoding='utf-8') as f:
                 json.dump(feed_item, f, indent=4, ensure_ascii=False)
             raise e
@@ -342,11 +333,11 @@ class Scraper:
     async def scrape_criteria(self, query_str: dict):
         first_page = await self.first_page(query_str)
         total_items_to_scrape = self.get_total_items(first_page)
-        logger.info(f"Total items to be scraped: {total_items_to_scrape} for query: {query_str}")
+        internal_info_logger.info(f"Total items to be scraped: {total_items_to_scrape} for query: {query_str}")
         last_page = self.get_number_of_pages(first_page)
         feed_sources = FEED_SOURCES_PRIVATE
         car_ads_to_save, feed_items = await self.yad2_scrape(query_str, feed_sources=feed_sources, last_page=last_page)
-        logger.info(f"Scraped {len(car_ads_to_save)} items for query: {query_str}, feed_sources: {feed_sources}")
+        internal_info_logger.info(f"Scraped {len(car_ads_to_save)} items for query: {query_str}, feed_sources: {feed_sources}")
         return car_ads_to_save
 
 
