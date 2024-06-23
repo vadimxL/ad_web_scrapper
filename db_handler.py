@@ -26,15 +26,25 @@ class DbHandler:
         internal_info_logger.info(f"Task {task.id} is created successfully, {task}")
 
     @classmethod
+    def get_task(cls, task_id: str) -> models.Task:
+        task_dict = db.reference('tasks').child(task_id).get()
+        if task_dict is None:
+            return None
+        task = models.Task(**task_dict)
+        return task
+
+    @classmethod
     def update_task(cls, task: models.Task):
         task_dict = task.model_dump(mode='json')
         db.reference('tasks').child(task.id).update(task_dict)
         internal_info_logger.info(f"Task {task.id} is updated successfully, {task}")
 
     @classmethod
-    def delete_task(cls, task_id: str):
-        db.reference('tasks').child(task_id).delete()
+    def delete_task(cls, task_id: str) -> models.Task:
+        task_dict = db.reference('tasks').child(task_id).delete()
         internal_info_logger.info(f"Task {task_id} is deleted successfully")
+        task = models.Task(**task_dict)
+        return task
 
     @classmethod
     def load_tasks(cls) -> Dict:

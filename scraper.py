@@ -327,8 +327,18 @@ class Scraper:
 
     def run(self, query: dict, loop):
         # Assuming results is a list of tuples, where each tuple contains a list of CarDetails and a query string
-        future = asyncio.run_coroutine_threadsafe(self.scrape_criteria(query.copy()), loop)
-        return future.result()
+        q: dict = query.copy()
+        future = asyncio.run_coroutine_threadsafe(self.scrape_criteria(q), loop)
+        try:
+            result = future.result(timeout=60)
+        except TimeoutError:
+            print('The coroutine took too long, cancelling the task...')
+            future.cancel()
+        except Exception as exc:
+            print(f'The coroutine raised an exception: {exc!r}')
+        else:
+            print(f'The coroutine returned successfully')
+        return result
 
     async def scrape_criteria(self, query_str: dict):
         first_page = await self.first_page(query_str)

@@ -1,9 +1,9 @@
 import asyncio
 import hashlib
 import logging
-import os
 import threading
 import time
+from asyncio import AbstractEventLoop
 from io import BytesIO
 import pandas as pd
 import schedule
@@ -13,8 +13,6 @@ from urllib import parse
 from pydantic import EmailStr
 from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import StreamingResponse
-
-import db_handler
 import firebase_db
 import json
 from fastapi import FastAPI, HTTPException
@@ -60,13 +58,6 @@ def startup_event():
         manufacturers[manuf['value']] = manuf['text']
     with open("manufacturers.json", "w") as manufs:
         json.dump(manufacturers, manufs)
-    tasks_ = DbHandler.load_tasks()
-    if tasks_ is None:
-        return
-    for id_, task in tasks_.items():
-        task_info = models.Task(**task)
-        asyncio.run_coroutine_threadsafe(schedule_task(task_info), asyncio.get_event_loop())
-
 
 @app.get("/manufacturers")
 async def get_manufacturers():
@@ -90,12 +81,9 @@ def extract_query_params(url: str) -> dict:
     return params
 
 
-tasks: Dict[str, models.Task] = dict()
-scheduled_task_events: Dict[str, threading.Event] = dict()
-
-
 @app.get("/tasks", response_model=List[models.Task])
 async def read_items():
+    tasks = DbHandler.load_tasks()
     return [task for task in tasks.values()]
 
 
@@ -132,67 +120,30 @@ async def scrape_excel(url: str):
         headers={"Content-Disposition": f"attachment; filename={filename}"})
 
 
-def run_continuously(interval=1):
-    """Continuously run, while executing pending jobs at each
-    elapsed time interval.
-    @return cease_continuous_run: threading. Event which can
-    be set to cease continuous run. Please note that it is
-    *intended behavior that run_continuously() does not run
-    missed jobs*. For example, if you've registered a job that
-    should run every minute and you set a continuous run
-    interval of one hour then your job won't be run 60 times
-    at each interval but only once.
-    """
-    cease_continuous_run = threading.Event()
-
-    class ScheduleThread(threading.Thread):
-        @classmethod
-        def run(cls):
-            while not cease_continuous_run.is_set():
-                schedule.run_pending()
-                time.sleep(interval)
-
-    continuous_thread = ScheduleThread()
-    continuous_thread.start()
-    return cease_continuous_run
-
-
-def recurrent_scrape(task_id: str, params: dict, loop):
+def recurrent_scrape(task_id: str, loop: AbstractEventLoop):
     scraper = Scraper(cache_timeout_min=30)
     mail_sender = EmailSender()
-    db_handler = DbHandler(parse.urlsplit(tasks[task_id].title).query, mail_sender)
-    results = scraper.run(params, loop)
-    internal_info_logger.info(f"Recurrence task: {task_id}: {tasks[task_id]}")
+    task = DbHandler.get_task(task_id)
+    if task is None:
+        internal_info_logger.error(f"Task {task_id} not found")
+        return
+    db_handler = DbHandler(parse.urlsplit(task.title).query, mail_sender)
+    results = scraper.run(extract_query_params(task.title), loop)
+    internal_info_logger.info(f"Recurrence task: {task_id}: {task}")
     # update the next scrape time
-    tasks[task_id].next_scrape_time = datetime.now() + timedelta(hours=tasks[task_id].repeat_interval)
-    internal_info_logger.info(f'Updated next_scrape_time: {tasks[task_id].next_scrape_time}')
-    db_handler.update_task(tasks[task_id])
-    db_handler.handle_results(results)
-
-
-def scrape_task(task_id: str, loop):
-    params = extract_query_params(tasks[task_id].title)
-    internal_info_logger.info(f'Scraping task: {tasks[task_id]}')
-    internal_info_logger.info(f'created_at: {tasks[task_id].created_at}, '
-                f'next_scrape_time: {tasks[task_id].next_scrape_time}')
-    scraper = Scraper(cache_timeout_min=30)
-    results: List[CarDetails] = scraper.run(params, loop)
-    time_now = datetime.now().strftime("%d_%m_%Y_%H_%M_%S")
-
-    filename_json = f'json/car_ads_{task_id}' + time_now + '.json'
-    directory = os.path.dirname(filename_json)
-    if not os.path.exists(directory):
-        os.makedirs(directory)
-    with open(filename_json, 'w', encoding='utf-8') as f1:
-        json.dump({ad.id: ad.model_dump(mode='json') for ad in results}, f1, indent=4, ensure_ascii=False)
-    mail_sender = EmailSender()
-    db_handler = DbHandler(parse.urlsplit(tasks[task_id].title).query, mail_sender)
-    if db_handler.collection_exists():
+    jobs = schedule.get_jobs(task_id)
+    if jobs:
+        task.next_scrape_time = jobs[0].next_run
+        internal_info_logger.info(f'Updated next_scrape_time: {task.next_scrape_time}')
+    db_handler.update_task(task)
+    if db_handler.collection_exists() and recent_task(task):
         db_handler.handle_results(results)
     else:
         db_handler.create_collection(results)
-    # Do some work that only needs to happen once...
-    return schedule.CancelJob
+
+
+def recent_task(task):
+    return (datetime.now() - task.created_at) < timedelta(days=1)
 
 
 def search_by_model(car_list, target_value):
@@ -203,9 +154,9 @@ def search_by_model(car_list, target_value):
 
 
 # Update (PUT)
-@app.put("/items/{item_id}", response_model=models.Task)
-async def update_item(item_id: str, email: EmailStr, repeat_interval: int):
-    task = tasks.get(item_id)
+@app.put("/tasks/{task_id}", response_model=models.Task)
+async def update_task(task_id: str, email: EmailStr, repeat_interval: int):
+    task = DbHandler.get_task(task_id)
     if task is None:
         raise HTTPException(status_code=404, detail="Item not found")
     task.mail = email
@@ -218,16 +169,34 @@ async def update_item(item_id: str, email: EmailStr, repeat_interval: int):
     DbHandler.update_task(task)
     return task
 
+@app.get("/run")
+async def run_tasks():
+    """
+    Run all tasks
+    and Scrape the data
+    """
+    tasks = DbHandler.load_tasks()
+    for id_, task_dict in tasks.items():
+        task_ = models.Task(**task_dict)
+        loop = asyncio.get_event_loop()
+        threading.Thread(target=recurrent_scrape, args=(task_.id, loop)).start()
+    return {"message": "All tasks run successfully"}
+
+
 @app.post("/tasks", response_model=models.Task)
-async def create_item(email: EmailStr, url: str):
+async def create_task(email: EmailStr, url: str):
+    """
+    Create a new task
+    """
     params: dict = extract_query_params(url)
 
     if 'manufacturer' not in params or 'model' not in params or 'year' not in params or 'km' not in params:
         raise HTTPException(status_code=400, detail="Invalid URL")
 
     id_ = hashlib.sha256(url.encode()).hexdigest()
-    if id_ in tasks:
-        return tasks[id_]
+    task = DbHandler.get_task(id_)
+    if task is not None:
+        raise HTTPException(status_code=400, detail="Task already exists")
 
     car_models = []
     car_models_dict = await get_models(params['manufacturer'])
@@ -243,38 +212,19 @@ async def create_item(email: EmailStr, url: str):
                        car_models=car_models)
     # create task in database
     DbHandler.insert_task(task)
-    await schedule_task(task)
     return task
-
-
-async def schedule_task(task: models.Task, repeat_interval_hr=6):
-    params: dict = extract_query_params(task.title)
-    loop = asyncio.get_event_loop()
-    schedule.every(1).seconds.do(scrape_task, task.id, loop)
-    schedule.every(repeat_interval_hr).hours.do(recurrent_scrape, task.id, params, loop)
-    event_: threading.Event = run_continuously()
-    tasks[task.id] = task
-    scheduled_task_events[task.id] = event_
 
 
 @app.on_event("shutdown")
 def shutdown_event():
     print("Application shutdown")
-    for task in tasks.values():
-        scheduled_task_events[task.id].set()
-        scheduled_task_events.pop(task.id)
-        print("Cleared task with task id: " + task.id)
 
 
 @app.delete("/tasks/{task_id}")
-async def delete_item(task_id: str):
-    if task_id not in tasks:
+async def delete_task(task_id: str):
+    task: models.Task = DbHandler.get_task(task_id)
+    if not task:
         return {"message": f"Task: {task_id} not found"}
-    task: models.Task = tasks.pop(task_id)
-    # Stop the background thread
-    scheduled_task_events[task_id].set()
-    scheduled_task_events.pop(task_id)
-    # delete from database
     DbHandler.delete_task(task_id)
     return {"message": f"Task: {task} deleted"}
 
