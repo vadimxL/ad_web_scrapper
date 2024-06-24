@@ -124,7 +124,7 @@ class Scraper:
 
         for page in pages:
             if not page.from_cache:
-                print(f'Not from cache, sleeping for {secs_to_sleep} second')
+                internal_info_logger.info(f'Not from cache, sleeping for {secs_to_sleep} second')
                 time.sleep(secs_to_sleep)
 
             scraped_page = await page.json()
@@ -330,7 +330,7 @@ class Scraper:
         q: dict = query.copy()
         future = asyncio.run_coroutine_threadsafe(self.scrape_criteria(q), loop)
         try:
-            result = future.result(timeout=60)
+            result = future.result(timeout=20)
         except TimeoutError:
             print('The coroutine took too long, cancelling the task...')
             future.cancel()

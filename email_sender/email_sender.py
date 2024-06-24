@@ -6,14 +6,15 @@ from dotenv import load_dotenv
 
 from car_details import CarDetails
 from criteria_model import html_criteria_mail
+from logger_setup import ads_updates_logger
 
 # If modifying these scopes, delete the file token.json.
 SCOPES = ["https://www.googleapis.com/auth/gmail.send"]
 
 
 class EmailSender:
-    def __init__(self) -> None:
-        pass
+    def __init__(self, recipient: str) -> None:
+        self.recipients = [recipient]
 
     def send(self, msg_content: str, subject: str = "Automated draft"):
         load_dotenv()
@@ -22,7 +23,7 @@ class EmailSender:
         # Define the sender's email address.
         sender: str = os.environ.get("SENDER_EMAIL")
         # List of recipients to whom the email will be sent.
-        recipients: list = json.loads(os.environ.get("RECIPIENTS_EMAIL"))
+        recipients: list = self.recipients
         # Password for the sender's email account.
         password = os.environ.get("EMAIL_PASSWORD")
 
@@ -42,11 +43,11 @@ class EmailSender:
             # Send the email. The sendmail function requires the sender's email, the list of recipients, and the email message as a string.
             smtp_server.sendmail(sender, recipients, msg.as_string())
         # Print a message to console after successfully sending the email.
-        print("Message sent!")
+        ads_updates_logger.info("Message sent!, check your inbox for the email.")
 
 
 if __name__ == "__main__":
-    gmail_sender = EmailSender()
+    gmail_sender = EmailSender("vadimski30@gmail.com")
     car_ad_db = {
         "manufacturer": "Toyota",
         "car_model": "Corolla",

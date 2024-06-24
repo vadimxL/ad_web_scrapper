@@ -65,6 +65,7 @@ class DbHandler:
         try:
             message = html_criteria_mail(new_ad)
             self.gmail_sender.send(message,
+
                                    f'🎁 [New] - {new_ad.manufacturer_he} {new_ad.car_model} {new_ad.city}')
         except Exception as e:
             internal_info_logger.error(f"Error sending email: {e}")
@@ -98,6 +99,11 @@ class DbHandler:
                 self.gmail_sender.send(message, subject)
             except Exception as e:
                 internal_info_logger.error(f"Error sending email: {e}")
+        else: # Nothing changed
+            ads_updates_logger.info(f"{new_ad.id} is unchanged, {new_ad.manuf_en}  {new_ad.car_model}, "
+                        f"current_price: {new_ad.price}, "
+                        f"{new_ad.kilometers} [km], year: {new_ad.year}, hand: {new_ad.hand}")
+
 
     def collection_exists(self):
         return db.reference(self.path).get() is not None

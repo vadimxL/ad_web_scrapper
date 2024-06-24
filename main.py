@@ -122,8 +122,8 @@ async def scrape_excel(url: str):
 
 def recurrent_scrape(task_id: str, loop: AbstractEventLoop):
     scraper = Scraper(cache_timeout_min=30)
-    mail_sender = EmailSender()
     task = DbHandler.get_task(task_id)
+    mail_sender = EmailSender(task.mail)
     if task is None:
         internal_info_logger.error(f"Task {task_id} not found")
         return
