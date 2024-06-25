@@ -51,13 +51,20 @@ criteria_mail = """
                                         <li><span
                                                 style="font-family:arial,helvetica neue,helvetica,sans-serif">mileage: {{km}} [km]</span>
                                         </li>
-                                        <ul>
+                                        <li>
                                             {% for item in free_text.split('\n') %}
                                             <li><span
                                                     style="font-family:arial,helvetica neue,helvetica,sans-serif">{{item}}</span>
                                             </li>
                                             {% endfor %}
-                                        </ul>
+                                        </li>
+                                        <li>
+                                            {% for item in prices_handz.split('|') %}
+                                            <li><span
+                                                    style="font-family:arial,helvetica neue,helvetica,sans-serif">{{item}}</span>
+                                            </li>
+                                            {% endfor %}
+                                        </li>
                                     </ul>
                                     <div>
                                         <span style="font-family:arial,helvetica neue,helvetica,sans-serif">
@@ -133,5 +140,6 @@ def html_criteria_mail(car_details: CarDetails):
                            gear_type=car_details.gear_type,
                            free_text=human_readable_str.strip(),
                            initial_price=initial_price,
-                           date_created=car_details.date_added)
+                           date_created=car_details.date_added,
+                           prices_handz=car_details.prices_handz)
 

@@ -10,7 +10,7 @@ from rich import print
 from car_details import CarDetails, PriceHistory
 from handz import Handz
 from headers import scrape_headers, model_headers
-from logger_setup import internal_info_logger
+from logger_setup import internal_info_logger as logger
 
 
 BASE_URL = "https://gw.yad2.co.il/feed-search-legacy/vehicles/cars"
@@ -75,7 +75,7 @@ class Scraper:
         await session.close()
 
         if r.from_cache:
-            internal_info_logger.info(
+            logger.info(
                 f'cache created_at: {r.created_at.strftime("%H:%M")}, last_used: {r.last_used.strftime("%H:%M:%S")} for page: {q.get("page")}, '
                 f'expires: {datetime.fromisoformat(r.expires.isoformat()).strftime("%H:%M:%S") if r.expires else "Never"} ,'
                 f'url: {url}, query: {q}')
@@ -124,14 +124,14 @@ class Scraper:
 
         for page in pages:
             if not page.from_cache:
-                internal_info_logger.info(f'Not from cache, sleeping for {secs_to_sleep} second')
+                logger.info(f'Not from cache, sleeping for {secs_to_sleep} second')
                 time.sleep(secs_to_sleep)
 
             scraped_page = await page.json()
             try:
                 feed_items = scraped_page['data']['feed']['feed_items']
             except KeyError as e:
-                internal_info_logger.error(f"Error scraping page: {e}")
+                logger.error(f"Error scraping page: {e}")
                 with open('json/error_page.json', 'w', encoding='utf-8') as f:
                     json.dump(scraped_page, f, indent=4, ensure_ascii=False)
                 raise e
@@ -160,8 +160,8 @@ class Scraper:
             car_details: CarDetails = self.extract_car_details(item)
             car_ads_to_save.append(car_details)
 
-        internal_info_logger.info(f"Skipped {no_id_items_num} items because they don't have an id")
-        internal_info_logger.info(f"Skipped {incompatible_feed_sources_items_num} items because they are not in {feed_sources} list")
+        logger.info(f"Skipped {no_id_items_num} items because they don't have an id")
+        logger.info(f"Skipped {incompatible_feed_sources_items_num} items because they are not in {feed_sources} list")
 
         handz = Handz()
         divided_feed_items = list(self.divide_chunks(filtered_feed_items, 50))
@@ -277,7 +277,7 @@ class Scraper:
                 gear_type=self.gear_type(feed_item),
             )
         except Exception as e:
-            internal_info_logger.error(f"Error extracting car details: {e}")
+            logger.error(f"Error extracting car details: {e}")
             with open('json/error_feed_item.json', 'w', encoding='utf-8') as f:
                 json.dump(feed_item, f, indent=4, ensure_ascii=False)
             raise e
@@ -328,26 +328,27 @@ class Scraper:
     def run(self, query: dict, loop):
         # Assuming results is a list of tuples, where each tuple contains a list of CarDetails and a query string
         q: dict = query.copy()
+        result = None
         future = asyncio.run_coroutine_threadsafe(self.scrape_criteria(q), loop)
         try:
             result = future.result(timeout=20)
         except TimeoutError:
-            print('The coroutine took too long, cancelling the task...')
+            logger.info('The coroutine took too long, cancelling the task...')
             future.cancel()
         except Exception as exc:
             print(f'The coroutine raised an exception: {exc!r}')
         else:
-            print(f'The coroutine returned successfully')
+            logger.info(f'The coroutine returned successfully')
         return result
 
     async def scrape_criteria(self, query_str: dict):
         first_page = await self.first_page(query_str)
         total_items_to_scrape = self.get_total_items(first_page)
-        internal_info_logger.info(f"Total items to be scraped: {total_items_to_scrape} for query: {query_str}")
+        logger.info(f"Total items to be scraped: {total_items_to_scrape} for query: {query_str}")
         last_page = self.get_number_of_pages(first_page)
         feed_sources = FEED_SOURCES_PRIVATE
         car_ads_to_save, feed_items = await self.yad2_scrape(query_str, feed_sources=feed_sources, last_page=last_page)
-        internal_info_logger.info(f"Scraped {len(car_ads_to_save)} items for query: {query_str}, feed_sources: {feed_sources}")
+        logger.info(f"Scraped {len(car_ads_to_save)} items for query: {query_str}, feed_sources: {feed_sources}")
         return car_ads_to_save
 
 

@@ -33,36 +33,26 @@ class Range(BaseModel):
     min: int
     max: int
 
-
-# A Pydantic model
-# class CarCriteria(BaseModel):
-#     manufacturer: int
-#     models: List[int]
-#     year: Optional[Range] = {"min": -1, "max": -1}
-#     km: Optional[Range] = {"min": -1, "max": -1}
-#     top_area: Optional[int] = 2
-
-
-# class Task(Document):
-#     id = StringField(primary_key=True)
-#     # title = StringField(max_length=100)
-#     manufacturer = StringField(max_length=50)
-#
-#     mail = EmailField(max_length=100)
-#     # complete = BooleanField(default=False)
-#     created_at = DateTimeField(default=datetime.datetime.utcnow)
-#     criteria = EmbeddedDocumentField(Criteria)
-#
 class Task(BaseModel):
     id: str
     title: str
     mail: str
+    active: bool
     created_at: datetime
     next_scrape_time: datetime
+    last_scrape_time: datetime
     repeat_interval: int
     manufacturer: Optional[str] = None
     car_models: Optional[List[str]] = None
     # criteria: CarCriteria
+
+def create_task_from_dict(task_dict: dict) -> Task:
+    # if 'last_scrape_time' not in task_dict:
+    #     task_dict['last_scrape_time'] = datetime.now()
+    # if 'active' not in task_dict:
+    #     task_dict['active'] = True
+    task_ = Task(**task_dict)
+    return task_
 
 
 class PriceHistory(EmbeddedDocument):

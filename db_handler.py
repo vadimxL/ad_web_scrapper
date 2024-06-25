@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import json
 import logging
 from typing import List, Dict
@@ -27,11 +29,16 @@ class DbHandler:
 
     @classmethod
     def get_task(cls, task_id: str) -> models.Task:
-        task_dict = db.reference('tasks').child(task_id).get()
+        task_dict: Dict = db.reference('tasks').child(task_id).get()
         if task_dict is None:
             return None
-        task = models.Task(**task_dict)
+        task = models.create_task_from_dict(task_dict)
         return task
+
+    @classmethod
+    def create_listener(cls, callback):
+        ref = db.reference('tasks')
+        ref.listen(callback)
 
     @classmethod
     def update_task(cls, task: models.Task):
@@ -43,7 +50,7 @@ class DbHandler:
     def delete_task(cls, task_id: str) -> models.Task:
         task_dict = db.reference('tasks').child(task_id).delete()
         internal_info_logger.info(f"Task {task_id} is deleted successfully")
-        task = models.Task(**task_dict)
+        task = models.create_task_from_dict(task_dict)
         return task
 
     @classmethod

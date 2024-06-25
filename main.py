@@ -8,7 +8,7 @@ from io import BytesIO
 import pandas as pd
 import schedule
 from datetime import datetime, timedelta
-from typing import List, Dict
+from typing import List, Dict, Optional
 from urllib import parse
 from pydantic import EmailStr
 from starlette.middleware.cors import CORSMiddleware
@@ -120,7 +120,7 @@ async def scrape_excel(url: str):
         headers={"Content-Disposition": f"attachment; filename={filename}"})
 
 
-def recurrent_scrape(task_id: str, loop: AbstractEventLoop):
+def execute(task_id: str, loop: AbstractEventLoop):
     scraper = Scraper(cache_timeout_min=30)
     task = DbHandler.get_task(task_id)
     mail_sender = EmailSender(task.mail)
@@ -128,22 +128,21 @@ def recurrent_scrape(task_id: str, loop: AbstractEventLoop):
         internal_info_logger.error(f"Task {task_id} not found")
         return
     db_handler = DbHandler(parse.urlsplit(task.title).query, mail_sender)
-    results = scraper.run(extract_query_params(task.title), loop)
+    results: List[CarDetails] = scraper.run(extract_query_params(task.title), loop)
     internal_info_logger.info(f"Recurrence task: {task_id}: {task}")
     # update the next scrape time
-    jobs = schedule.get_jobs(task_id)
-    if jobs:
-        task.next_scrape_time = jobs[0].next_run
-        internal_info_logger.info(f'Updated next_scrape_time: {task.next_scrape_time}')
+    task.last_scrape_time = datetime.now()
+    task.next_scrape_time = datetime.now() + timedelta(hours=task.repeat_interval)
     db_handler.update_task(task)
-    if db_handler.collection_exists() and recent_task(task):
-        db_handler.handle_results(results)
-    else:
-        db_handler.create_collection(results)
+    if results:
+        if db_handler.collection_exists() and recent_task(task):
+            db_handler.handle_results(results)
+        else:
+            db_handler.create_collection(results)
 
 
-def recent_task(task):
-    return (datetime.now() - task.created_at) < timedelta(days=1)
+def recent_task(task: models.Task):
+    return (datetime.now() - task.last_scrape_time) < timedelta(days=1)
 
 
 def search_by_model(car_list, target_value):
@@ -155,17 +154,17 @@ def search_by_model(car_list, target_value):
 
 # Update (PUT)
 @app.put("/tasks/{task_id}", response_model=models.Task)
-async def update_task(task_id: str, email: EmailStr, repeat_interval: int):
+async def update_task(task_id: str, email: Optional[EmailStr] = None, repeat_interval: Optional[int] = None,
+                      title: Optional[str] = None):
     task = DbHandler.get_task(task_id)
     if task is None:
         raise HTTPException(status_code=404, detail="Item not found")
-    task.mail = email
-    task.repeat_interval = repeat_interval
-    new_scrape_time = datetime.now() + timedelta(hours=repeat_interval)
-    if task.next_scrape_time < new_scrape_time:
-        task.next_scrape_time = datetime.now() + timedelta(hours=repeat_interval)
-    else:
-        task.next_scrape_time = new_scrape_time
+    if email is not None:
+        task.mail = email
+    if repeat_interval is not None:
+        task.repeat_interval = repeat_interval
+    if title is not None:
+        task.title = title
     DbHandler.update_task(task)
     return task
 
@@ -177,9 +176,9 @@ async def run_tasks():
     """
     tasks = DbHandler.load_tasks()
     for id_, task_dict in tasks.items():
-        task_ = models.Task(**task_dict)
+        task_ = models.create_task_from_dict(task_dict)
         loop = asyncio.get_event_loop()
-        threading.Thread(target=recurrent_scrape, args=(task_.id, loop)).start()
+        threading.Thread(target=execute, args=(task_.id, loop)).start()
     return {"message": "All tasks run successfully"}
 
 
@@ -207,8 +206,10 @@ async def create_task(email: EmailStr, url: str):
     task = models.Task(id=id_, title=url, mail=email,
                        created_at=datetime.now(),
                        next_scrape_time=datetime.now() + timedelta(hours=repeat_interval_hours),
+                       last_scrape_time=datetime.now(),
                        repeat_interval=repeat_interval_hours,
                        manufacturer=manufacturers[params['manufacturer']],
+                       active=False,
                        car_models=car_models)
     # create task in database
     DbHandler.insert_task(task)

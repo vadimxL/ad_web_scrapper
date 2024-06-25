@@ -6,10 +6,11 @@ from typing import Dict
 import schedule
 import models
 from db_handler import DbHandler
-from logger_setup import internal_info_logger
-from main import recurrent_scrape, extract_query_params
+from logger_setup import internal_info_logger as logger
+from main import execute
 import firebase_db
 scheduled_task_events: Dict[str, threading.Event] = dict()
+
 
 def run_continuously(interval=1):
     """Continuously run, while executing pending jobs at each
@@ -37,46 +38,56 @@ def run_continuously(interval=1):
 
 
 def schedule_task(task: models.Task):
-    print("Scheduling task", task.id, task.title)
-    job = schedule.every(task.repeat_interval).hours.do(recurrent_scrape,
-                                                      task_id=task.id,
-                                                      loop=asyncio.get_event_loop())
+    logger.info(f"Scheduling task: {task.id=}, {task.title=}")
+    job = schedule.every(task.repeat_interval).hours.do(execute,
+                                                        task_id=task.id,
+                                                        loop=asyncio.get_event_loop())
     job.tag(task.id)
     return job
+
+
+def reschedule_task(task_: models.Task):
+    jobs = schedule.get_jobs(task_.id)
+    schedule.cancel_job(jobs[0])
+    scheduled_job: schedule.Job = schedule_task(task_)
+    threading.Thread(target=scheduled_job.run).start()
+    logger.info(f"Rescheduling task {task_.id}, next_run: {scheduled_job.next_run.strftime('%Y-%m-%d %H:%M:%S')}")
+
+def tasks_changed_listener(event):
+    logger.info(f"Tasks changed, {event}")
+    if event.event_type == 'patch':
+        task: models.Task = DbHandler.get_task(event.path.lstrip('/'))
+        if 'title' in event.data:
+            reschedule_task(task)
+        if 'repeat_interval' in event.data:
+            reschedule_task(task)
 
 event_: threading.Event
 async def run():
     global event_
     event_ = run_continuously()
-    while True:
-        tasks_ = DbHandler.load_tasks()
-        if tasks_:
-            for id_, task_dict in tasks_.items():
-                task_ = models.Task(**task_dict)
-                jobs = schedule.get_jobs(task_.id)
-                if jobs:
-                    print(f"Task {jobs[0]} already scheduled, next_run: {jobs[0].next_run.strftime('%Y-%m-%d %H:%M:%S')}")
-                    # User updated repeat_interval
-                    if jobs[0].interval != task_.repeat_interval:
-                        schedule.cancel_job(jobs[0])
-                        scheduled_job: schedule.Job = schedule_task(task_)
-                        threading.Thread(target=scheduled_job.run).start()
-                        print(f"Rescheduling task {task_.id}, next_run: {jobs[0].next_run.strftime('%Y-%m-%d %H:%M:%S')}")
-                    continue
+    DbHandler.create_listener(tasks_changed_listener)
+    if tasks_ := DbHandler.load_tasks():
+        for task_dict in tasks_.values():
+            task_ = models.create_task_from_dict(task_dict)
+            if task_.active:
                 scheduled_job: schedule.Job = schedule_task(task_)
                 threading.Thread(target=scheduled_job.run).start()
+    while not event_.is_set():
+        logger.info(f"Running scheduled tasks/jobs: {schedule.get_jobs()}")
         await asyncio.sleep(5)
+    logger.info("Exiting run loop")
 
 def shutdown():
-    print("Shutting down...")
+    logger.info("Shutting down...")
     event_.set()
     schedule.clear()
 
 if __name__ == '__main__':
     try:
         firebase_db.init_firebase_db()
-    except Exception as e:
-        print(f"Error initializing firebase db: {e}")
+    except Exception:
+        logger.exception(f"Error initializing firebase db")
         exit(1)
     asyncio.run(run())
     atexit.register(shutdown)
