@@ -20,30 +20,9 @@ urls_expire_after = {
     'yad2.co.il': timedelta(minutes=30),  # Requests for this base URL will expire in a week
 }
 
-FEED_SOURCES_PRIVATE = ['private']
-FEED_SOURCES_COMMERCIAL = ['commercial', 'xml']
 FEED_SOURCES_ALL = ['xml', 'commercial', 'private']
-
-manufacturers_dict = {
-    "hyundai": "21",
-    "kia": "48",
-    "seat": "37",
-    "mazda": "27",
-    "toyota": "19"
-}
-num_to_manuf_dict = {value: key for key, value in manufacturers_dict.items()}
-
-models_dict = {
-    "tucson": "578",
-    "cx5": "2333",
-    "ateca": "2842",
-    "niro_hybrid": "2829",
-    "niro_phev": "3484",
-    "niro_plus": "3866",
-    "corolla_gli_2013_2016": "1428"
-}
-
-num_to_model_dict = {value: key for key, value in models_dict.items()}
+FEED_SOURCES_PRIVATE = FEED_SOURCES_ALL[2]
+FEED_SOURCES_COMMERCIAL = FEED_SOURCES_ALL[1:2]
 
 secs_to_sleep = 0.1
 
