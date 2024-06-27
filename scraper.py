@@ -13,15 +13,9 @@ from headers import scrape_headers, model_headers
 from logger_setup import internal_info_logger as logger
 
 
-BASE_URL = "https://gw.yad2.co.il/feed-search-legacy/vehicles/cars"
-
-urls = [
-    "https://www.yad2.co.il/vehicles/cars?manufacturer=48&model=3866,2829,3484&year=2019--1&km=-1-80000",  # Kia Niro
-    "https://www.yad2.co.il/vehicles/cars?manufacturer=27&model=2333&year=2020--1&km=-1-100000",  # Mazda CX-5
-    "https://www.yad2.co.il/vehicles/cars?manufacturer=37&model=2842&year=2020--1&km=-1-100000",  # Seat Ateca
-    "https://www.yad2.co.il/vehicles/cars?manufacturer=19&model=1428&year=2013-2014&km=0-120000",  # Corola 2013-2014
-    "https://www.yad2.co.il/vehicles/cars?manufacturer=21&model=578&year=2020--1&km=-1-100000"  # Hyunadi Tucson
-]
+BASE_API_URL = "https://gw.yad2.co.il/feed-search-legacy/vehicles/cars"
+BASE_OPTIONS_API_URL = "https://gw.yad2.co.il/search-options/vehicles/cars"
+BASE_URL = "https://www.yad2.co.il"
 
 urls_expire_after = {
     'yad2.co.il': timedelta(minutes=30),  # Requests for this base URL will expire in a week
@@ -64,7 +58,7 @@ class Scraper:
         )
 
     async def scrape(self, q: dict) -> CachedResponse:
-        url = BASE_URL
+        url = BASE_API_URL
 
         session = CachedSession(cache=SQLiteBackend(
             cache_name='demo_cache2',
@@ -108,7 +102,7 @@ class Scraper:
     def get_total_items(self, first_page):
         return first_page['data']['pagination']['total_items']
 
-    async def yad2_scrape(self, q: dict, feed_sources, last_page: int = 1):
+    async def _scrape(self, q: dict, feed_sources, last_page: int = 1):
         filtered_feed_items = []  # type: list
         parsed_feed_items = []
         car_ads_to_save = []
@@ -309,36 +303,66 @@ class Scraper:
         return hand
 
     @staticmethod
+    def search_by_value(data, target_value):
+        for item in data:
+            if item["value"] == target_value:
+                return item["text"]
+        return None  # Return None if the value is not found
+
+    @staticmethod
+    async def get_meta(manufacturers_: str, models_: str, submodels: str):
+        models_list: List[str] = models_.split(",")
+        submodels_list: List[str] = submodels.split(",")
+        manufacturers_list: List[str] = manufacturers_.split(",")
+        model_names = []
+        submodel_names = []
+        manufacturers_names = []
+        data = await Scraper.get_search_options(manufacturers_)
+        for manufacturer in manufacturers_list:
+            manufacturer_name = Scraper.search_by_value(data['data']['manufacturer'], manufacturer)
+            if manufacturer_name:
+                manufacturers_names.append(manufacturer_name)
+        for model_value in models_list:
+            model_name = Scraper.search_by_value(data['data']['model'], model_value)
+            if model_name:
+                model_names.append(model_name)
+        for submodel_value in submodels_list:
+            submodel_name = Scraper.search_by_value(data['data']['subModel'], submodel_value)
+            if submodel_name:
+                submodel_names.append(submodel_name)
+
+        return manufacturers_names, model_names, submodel_names
+
+    @staticmethod
     async def get_model(manufacturer_id: str):
-        session = MyCachedSession('yad2_model_cache', backend='sqlite', expire_after=timedelta(hours=48))
-        url = f"https://gw.yad2.co.il/search-options/vehicles/cars?fields=model&manufacturer={manufacturer_id}"
+        session = MyCachedSession('model_cache', backend='sqlite', expire_after=timedelta(days=4))
+        url = f"{BASE_OPTIONS_API_URL}?fields=model&manufacturer={manufacturer_id}"
 
         response = session.get(url, headers=model_headers, data={}, timeout=10)
         return response.json()
 
     @staticmethod
-    def get_search_options():
-        session = MyCachedSession('yad2_search_options_cache', backend='sqlite', expire_after=timedelta(hours=48))
-        url = ("https://gw.yad2.co.il/search-options/vehicles/cars?fields=manufacturer,year,area,km,ownerID,seats,"
-               "engineval,engineType,group_color,gearBox")
+    async def get_submodel(model_id: str):
+        session = MyCachedSession('model_cache', backend='sqlite', expire_after=timedelta(days=4))
+        url = f"{BASE_OPTIONS_API_URL}?fields=subModel&model={model_id}"
 
         response = session.get(url, headers=model_headers, data={}, timeout=10)
         return response.json()
 
-    def run(self, query: dict, loop):
+    @staticmethod
+    async def get_search_options(manufacturers: str): # a comma separated string of manufacturers,
+        # example: "21,48,37,27,19"
+        session = MyCachedSession('search_options_cache', backend='sqlite', expire_after=timedelta(days=4))
+        url = f"{BASE_OPTIONS_API_URL}?fields=manufacturer,model,subModel&manufacturer={manufacturers}"
+
+        response = session.get(url, headers=model_headers, data={}, timeout=10)
+        return response.json()
+
+    def run(self, query: dict):
         # Assuming results is a list of tuples, where each tuple contains a list of CarDetails and a query string
         q: dict = query.copy()
         result = None
-        future = asyncio.run_coroutine_threadsafe(self.scrape_criteria(q), loop)
-        try:
-            result = future.result(timeout=20)
-        except TimeoutError:
-            logger.info('The coroutine took too long, cancelling the task...')
-            future.cancel()
-        except Exception as exc:
-            print(f'The coroutine raised an exception: {exc!r}')
-        else:
-            logger.info(f'The coroutine returned successfully')
+        result = asyncio.new_event_loop().run_until_complete(self.scrape_criteria(q))
         return result
 
     async def scrape_criteria(self, query_str: dict):
@@ -347,7 +371,7 @@ class Scraper:
         logger.info(f"Total items to be scraped: {total_items_to_scrape} for query: {query_str}")
         last_page = self.get_number_of_pages(first_page)
         feed_sources = FEED_SOURCES_PRIVATE
-        car_ads_to_save, feed_items = await self.yad2_scrape(query_str, feed_sources=feed_sources, last_page=last_page)
+        car_ads_to_save, feed_items = await self._scrape(query_str, feed_sources=feed_sources, last_page=last_page)
         logger.info(f"Scraped {len(car_ads_to_save)} items for query: {query_str}, feed_sources: {feed_sources}")
         return car_ads_to_save
 

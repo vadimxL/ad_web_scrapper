@@ -71,7 +71,7 @@ class GmailSender:
                 service.users()
                 .messages()
                 .send(userId="me", body=create_message)
-                .execute()
+                .execute_tasks()
             )
             print(f'Message Id: {send_message["id"]}')
         except HttpError as error:

@@ -48,15 +48,11 @@ class DbHandler:
 
     @classmethod
     def delete_task(cls, task_id: str) -> models.Task:
-        task_dict = db.reference('tasks').child(task_id).delete()
-        internal_info_logger.info(f"Task {task_id} is deleted successfully")
-        task = models.create_task_from_dict(task_dict)
-        return task
+        db.reference('tasks').child(task_id).delete()
 
     @classmethod
     def load_tasks(cls) -> Dict:
-        tasks: Dict = db.reference('tasks').get()
-        return tasks
+        return db.reference('tasks').get()
 
     def insert_car_ad(self, new_ad: CarDetails):
         ad_dict = new_ad.model_dump(mode='json')

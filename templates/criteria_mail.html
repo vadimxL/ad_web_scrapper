@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+    <!--    <link rel="stylesheet" href="../static/style.css">-->
+    <meta charset="UTF-8">
+    <title>Scraped Ad</title>
+
+    <style>
+        p { margin:0 }
+    </style>
+
+    {% endblock %}
+</head>
+<body>
+
+<h3>Prices Handz</h3>
+<section>
+    <ul>
+    {% for item in prices_handz.split('|') %}
+    <li><span>{{item}}</span></li>
+    {% endfor %}
+</ul>
+</section>
+
+<h3>Manufacturer: {{manufacturer}}</h3>
+<section>
+    <p>
+        <strong>ID:</strong>
+        <span>{{id}}</span>
+    </p>
+    <p>
+        <strong>Created at:</strong>
+        <span>{{date_created}}</span>
+    </p>
+    <p>
+        <strong>Hand:</strong>
+        <span>{{hand}}</span>
+    </p>
+    <p>
+        <strong>Year:</strong>
+        <span>{{year}}</span>
+    </p>
+    <p>
+        <strong>Gear Type:</strong>
+        <span>{{gear_type}}</span>
+    </p>
+    <p>
+        <strong>Car Model:</strong>
+        <span>{{model}}</span>
+    </p>
+    <p>
+        <strong>Mileage:</strong>
+        <span>{{km}} [km]</span>
+    </p>
+    <p>
+        <strong>Other:</strong>
+        {% for item in free_text.split('\n') %}
+        <span>{{item}}</span>
+        {% endfor %}
+    </p>
+</section>
+<div>
+                <span>
+                   <span>
+                       <strong>price: {{price}}&nbsp;</strong>
+                       <span>initial price: {{initial_price}}</span>
+                   </span>
+               </span>
+</div>
+<table>
+    <tbody>
+    <tr>
+        <td>
+            <table>
+                <tbody>
+                <tr>
+                    <td>
+                        <a title="צפיה בפרטים המלאים"
+                           href="https://www.yad2.co.il/vehicles/item/{{id}}"
+                           target="_blank"
+                        >צפיה בפרטים המלאים</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

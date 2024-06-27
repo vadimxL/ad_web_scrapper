@@ -8,7 +8,7 @@ import json
 from datetime import datetime
 
 from car_details import CarDetails
-from scraper import FEED_SOURCES_PRIVATE, urls, Scraper
+from scraper import FEED_SOURCES_PRIVATE, urls, Scraper, BASE_URL
 
 
 def dump_to_json(car_ads_to_save: dict, feed_sources: list):
@@ -25,16 +25,14 @@ def dump_to_json(car_ads_to_save: dict, feed_sources: list):
     with open(filename_json, 'w', encoding='utf-8') as f1:
         json.dump(car_ads_to_save, f1, indent=4, ensure_ascii=False)
 
+def make_hyperlink(value):
+    url_ = f"{BASE_URL}/item/{value}"
+    hyperlink = '=HYPERLINK("%s", "%s")' % (url_, value)
+    return hyperlink
 
 def dump_to_excel_car_details(car_ads_: List[CarDetails]) -> pd.DataFrame:
     car_ads_dict = {ad.id: ad.model_dump(mode='json') for ad in car_ads_}
     df = pd.json_normalize(car_ads_dict.values())
-
-    def make_hyperlink(value):
-        url_ = "https://yad2.co.il/item/{}"
-        hyperlink = '=HYPERLINK("%s", "%s")' % (url_.format(value), value)
-        return hyperlink
-
     df['id'] = df['id'].apply(make_hyperlink)
     return df
 
@@ -50,11 +48,6 @@ def dump_to_excel(car_ads_to_save: dict, feed_sources: list):
 
     time_now = datetime.now().strftime("%d_%m_%Y_%H_%M_%S")
     df = pd.json_normalize(car_ads_to_save.values())
-
-    def make_hyperlink(value):
-        url = "https://yad2.co.il/item/{}"
-        hyperlink = '=HYPERLINK("%s", "%s")' % (url.format(value), value)
-        return hyperlink
 
     df['id'] = df['id'].apply(make_hyperlink)
     df.to_excel(f'excel/car_ads_{manufacturer}_{"_".join(feed_sources)}_' + time_now + ".xlsx")

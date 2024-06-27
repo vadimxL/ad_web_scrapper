@@ -3,6 +3,7 @@ from urllib import parse
 
 import models
 from main import extract_query_params
+from scraper import BASE_API_URL
 
 
 class MyTestCase(unittest.TestCase):
@@ -10,7 +11,7 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(True, False)  # add assertion here
 
     def test_extract_query(self):
-        url_to_scrape = "https://www.yad2.co.il/vehicles/cars?manufacturer=48&model=3866,2829,3484&year=2019--1&km=-1-80000"
+        url_to_scrape = f"{BASE_API_URL}?manufacturer=48&model=3866,2829,3484&year=2019--1&km=-1-80000"
         params = extract_query_params(url_to_scrape)
         self.assertEqual(params, {"manufacturer": "48", "model": "3866,2829,3484", "year": "2019--1", "km": "-1-80000"})
 
@@ -41,7 +42,7 @@ class MyTestCase(unittest.TestCase):
         return range
 
     def test_create_criteria_from_query(self):
-        url_to_scrape = "https://www.yad2.co.il/vehicles/cars?manufacturer=48&model=3866,2829,3484&year=2019--1&km=-1-80000"
+        url_to_scrape = f"{BASE_API_URL}?manufacturer=48&model=3866,2829,3484&year=2019--1&km=-1-80000"
         params = extract_query_params(url_to_scrape)
         criteria = models.CarCriteria(manufacturer=params['manufacturer'],
                                       models=params['model'].split(','),
@@ -50,7 +51,7 @@ class MyTestCase(unittest.TestCase):
         print(criteria)
 
     def test_url_split(self):
-        url = "https://www.yad2.co.il/vehicles/cars?manufacturer=48&model=3866,2829,3484&year=2019--1&km=-1-80000"
+        url = f"{BASE_API_URL}?manufacturer=48&model=3866,2829,3484&year=2019--1&km=-1-80000"
 
         print(parse.urlsplit(url).query)
 

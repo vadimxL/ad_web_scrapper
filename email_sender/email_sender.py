@@ -56,7 +56,8 @@ if __name__ == "__main__":
 
     # msg = gmail_sender.create_html_msg("Toyota", "פרטי", "Corolla", "2019", "50", "100000", "120000", "2021-09-01")
     car_details = CarDetails(id="123456", manuf_en="Toyota", manuf_he="טויוטה", car_model="Corolla", year="2019", price="100000", prices=[],
-                             date_added_epoch="2323232", date_added="2021-09-01", feed_source="yad2")
+                             date_added_epoch="2323232", date_added="2021-09-01", feed_source="private",
+                             prices_handz="2024-06-17 123500| 2024-06-17 23500| 2024-06-15 118000| 2024-06-13 122000| 2024-06-11 None")
     msg = html_criteria_mail(car_details)
     gmail_sender.send(msg, f'🎁 [New] - {car_ad_db["manufacturer"]} {car_ad_db["car_model"]} {car_ad_db["city"]}')
     # gmail_sender.send(msg, f'⬇️ [Update] - {car_ad_db["manufacturer"]} {car_ad_db["car_model"]} {car_ad_db["city"]}')

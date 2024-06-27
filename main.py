@@ -2,11 +2,9 @@ import asyncio
 import hashlib
 import logging
 import threading
-import time
 from asyncio import AbstractEventLoop
 from io import BytesIO
 import pandas as pd
-import schedule
 from datetime import datetime, timedelta
 from typing import List, Dict, Optional
 from urllib import parse
@@ -74,6 +72,15 @@ async def get_models(manufacturer_id: str):
         return []
     return car_models['data']['model']
 
+@app.get("/submodels/{model_id}")
+async def get_submodels(model_id: str):
+    logging.info(f"Getting models for manufacturer: {model_id}")
+    # scraper = Scraper(cache_timeout_min=5)
+    car_models = await Scraper.get_model(model_id)
+    if 'data' not in car_models:
+        return []
+    return car_models['data']['model']
+
 
 def extract_query_params(url: str) -> dict:
     # Extract query parameters from the URL
@@ -104,7 +111,9 @@ async def scrape_excel(url: str):
     filename = "car_ads_"
     for param in params.values():
         filename += param + "_"
-    filename = filename + ".xlsx"
+    # filename = filename + ".xlsx"
+    filename = filename.replace(",", "_") + ".xlsx"
+
     # return StreamingResponse(
     #     iter([df.to_csv(index=False)]),
     #     media_type="text/csv",
@@ -120,7 +129,8 @@ async def scrape_excel(url: str):
         headers={"Content-Disposition": f"attachment; filename={filename}"})
 
 
-def execute(task_id: str, loop: AbstractEventLoop):
+def execute_tasks(task_id: str):
+    internal_info_logger.info(f"Executing task: {task_id}")
     scraper = Scraper(cache_timeout_min=30)
     task = DbHandler.get_task(task_id)
     mail_sender = EmailSender(task.mail)
@@ -128,7 +138,7 @@ def execute(task_id: str, loop: AbstractEventLoop):
         internal_info_logger.error(f"Task {task_id} not found")
         return
     db_handler = DbHandler(parse.urlsplit(task.title).query, mail_sender)
-    results: List[CarDetails] = scraper.run(extract_query_params(task.title), loop)
+    results: List[CarDetails] = scraper.run(extract_query_params(task.title))
     internal_info_logger.info(f"Recurrence task: {task_id}: {task}")
     # update the next scrape time
     task.last_scrape_time = datetime.now()
@@ -143,13 +153,6 @@ def execute(task_id: str, loop: AbstractEventLoop):
 
 def recent_task(task: models.Task):
     return (datetime.now() - task.last_scrape_time) < timedelta(days=1)
-
-
-def search_by_model(car_list, target_value):
-    for car in car_list:
-        if car["value"] == target_value:
-            return car["text"]
-    return None  # Return None if the value is not found
 
 
 # Update (PUT)
@@ -178,7 +181,7 @@ async def run_tasks():
     for id_, task_dict in tasks.items():
         task_ = models.create_task_from_dict(task_dict)
         loop = asyncio.get_event_loop()
-        threading.Thread(target=execute, args=(task_.id, loop)).start()
+        threading.Thread(target=execute_tasks, args=(task_.id,)).start()
     return {"message": "All tasks run successfully"}
 
 
@@ -197,10 +200,11 @@ async def create_task(email: EmailStr, url: str):
     if task is not None:
         raise HTTPException(status_code=400, detail="Task already exists")
 
-    car_models = []
-    car_models_dict = await get_models(params['manufacturer'])
-    for car_model in params['model'].split(","):
-        car_models.append(search_by_model(car_models_dict, car_model))
+    car_manufacturers = []
+    for manuf in params['manufacturer'].split(","):
+        car_manufacturers.append(manufacturers[manuf])
+
+    car_models, car_submodels = await Scraper.get_meta(params['manufacturer'])
 
     repeat_interval_hours = 6
     task = models.Task(id=id_, title=url, mail=email,
@@ -208,9 +212,10 @@ async def create_task(email: EmailStr, url: str):
                        next_scrape_time=datetime.now() + timedelta(hours=repeat_interval_hours),
                        last_scrape_time=datetime.now(),
                        repeat_interval=repeat_interval_hours,
-                       manufacturer=manufacturers[params['manufacturer']],
+                       manufacturers=car_manufacturers,
                        active=False,
-                       car_models=car_models)
+                       car_models=car_models,
+                       car_submodels=car_submodels)
     # create task in database
     DbHandler.insert_task(task)
     return task

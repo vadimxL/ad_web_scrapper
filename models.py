@@ -42,8 +42,9 @@ class Task(BaseModel):
     next_scrape_time: datetime
     last_scrape_time: datetime
     repeat_interval: int
-    manufacturer: Optional[str] = None
+    manufacturers: Optional[List[str]] = None
     car_models: Optional[List[str]] = None
+    car_submodels: Optional[List[str]] = None
     # criteria: CarCriteria
 
 def create_task_from_dict(task_dict: dict) -> Task:
