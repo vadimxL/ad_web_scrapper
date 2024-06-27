@@ -6,9 +6,7 @@ scrape_headers = {
     "Accept-Encoding": "gzip, deflate, br",
     "mainsite_version_commit": "7c9a9c5c1fe45ec28c16bc473d25aad7141f53bd",
     "mobile-app": "false",
-    # "Origin": "https://www.yad2.co.il",
     "Connection": "keep-alive",
-    # "Referer": "https://www.yad2.co.il/",
     "Sec-Fetch-Dest": "empty",
     "Sec-Fetch-Mode": "cors",
     "Sec-Fetch-Site": "same-site"

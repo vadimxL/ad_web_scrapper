@@ -6,7 +6,6 @@ import json
 import time
 from aiohttp_client_cache import CachedSession, SQLiteBackend, CachedResponse
 from requests_cache import CachedSession as MyCachedSession
-from rich import print
 from car_details import CarDetails, PriceHistory
 from handz import Handz
 from headers import scrape_headers, model_headers
