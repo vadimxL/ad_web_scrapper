@@ -39,19 +39,14 @@ class Task(BaseModel):
     mail: str
     active: bool
     created_at: datetime
-    next_scrape_time: datetime
-    last_scrape_time: datetime
-    repeat_interval: int
+    last_run: datetime
+    params: dict
     manufacturers: Optional[List[str]] = None
     car_models: Optional[List[str]] = None
     car_submodels: Optional[List[str]] = None
     # criteria: CarCriteria
 
 def create_task_from_dict(task_dict: dict) -> Task:
-    # if 'last_scrape_time' not in task_dict:
-    #     task_dict['last_scrape_time'] = datetime.now()
-    # if 'active' not in task_dict:
-    #     task_dict['active'] = True
     task_ = Task(**task_dict)
     return task_
 

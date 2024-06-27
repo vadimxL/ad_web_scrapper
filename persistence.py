@@ -8,7 +8,7 @@ import json
 from datetime import datetime
 
 from car_details import CarDetails
-from scraper import FEED_SOURCES_PRIVATE, urls, Scraper, BASE_URL
+from scraper import FEED_SOURCES_PRIVATE, Scraper, BASE_URL
 
 
 def dump_to_json(car_ads_to_save: dict, feed_sources: list):

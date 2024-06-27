@@ -36,6 +36,15 @@ class DbHandler:
         return task
 
     @classmethod
+    def get_tasks(cls) -> List[models.Task]:
+        tasks_list = []
+        tasks: Dict = db.reference('tasks').get()
+        for task_id, task_dict in tasks.items():
+            tasks_list.append(models.create_task_from_dict(task_dict))
+        return tasks_list
+
+
+    @classmethod
     def create_listener(cls, callback):
         ref = db.reference('tasks')
         ref.listen(callback)

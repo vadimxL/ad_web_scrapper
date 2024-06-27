@@ -44,26 +44,11 @@ manufs_unaltered = []
 
 @app.on_event("startup")
 def startup_event():
-    global manufs_unaltered
     try:
         firebase_db.init_firebase_db()
     except Exception as e:
         internal_info_logger.error(f"Error initializing firebase db: {e}")
-    # scraper = Scraper(cache_timeout_min=5)
-    search_opts = Scraper.get_search_options()
-    manufs_unaltered = search_opts['data']['manufacturer']
-    for manuf in search_opts['data']['manufacturer']:
-        manufacturers[manuf['value']] = manuf['text']
-    with open("manufacturers.json", "w") as manufs:
-        json.dump(manufacturers, manufs)
 
-@app.get("/manufacturers")
-async def get_manufacturers():
-    logging.info(f"Getting manufacturer list")
-    return manufs_unaltered
-
-
-@app.get("/models/{manufacturer_id}")
 async def get_models(manufacturer_id: str):
     logging.info(f"Getting models for manufacturer: {manufacturer_id}")
     # scraper = Scraper(cache_timeout_min=5)
@@ -137,12 +122,13 @@ def execute_tasks(task_id: str):
     if task is None:
         internal_info_logger.error(f"Task {task_id} not found")
         return
-    db_handler = DbHandler(parse.urlsplit(task.title).query, mail_sender)
-    results: List[CarDetails] = scraper.run(extract_query_params(task.title))
+    if not task.active:
+        internal_info_logger.info(f"Task {task_id} is not active")
+        return
+    db_handler = DbHandler(task.title, mail_sender)
+    results: List[CarDetails] = scraper.run(task.params)
     internal_info_logger.info(f"Recurrence task: {task_id}: {task}")
-    # update the next scrape time
-    task.last_scrape_time = datetime.now()
-    task.next_scrape_time = datetime.now() + timedelta(hours=task.repeat_interval)
+    task.last_run = datetime.now()
     db_handler.update_task(task)
     if results:
         if db_handler.collection_exists() and recent_task(task):
@@ -152,7 +138,7 @@ def execute_tasks(task_id: str):
 
 
 def recent_task(task: models.Task):
-    return (datetime.now() - task.last_scrape_time) < timedelta(days=1)
+    return (datetime.now() - task.last_run) < timedelta(days=1)
 
 
 # Update (PUT)
@@ -200,20 +186,16 @@ async def create_task(email: EmailStr, url: str):
     if task is not None:
         raise HTTPException(status_code=400, detail="Task already exists")
 
-    car_manufacturers = []
-    for manuf in params['manufacturer'].split(","):
-        car_manufacturers.append(manufacturers[manuf])
+    car_manufacturers, car_models, car_submodels = await Scraper.get_meta(params['manufacturer'],
+                                                                          params.get('model', ""),
+                                                                          params.get('subModel', ""))
 
-    car_models, car_submodels = await Scraper.get_meta(params['manufacturer'])
-
-    repeat_interval_hours = 6
-    task = models.Task(id=id_, title=url, mail=email,
+    task = models.Task(id=id_, title=parse.urlsplit(url).query, mail=email,
+                       params=params,
                        created_at=datetime.now(),
-                       next_scrape_time=datetime.now() + timedelta(hours=repeat_interval_hours),
-                       last_scrape_time=datetime.now(),
-                       repeat_interval=repeat_interval_hours,
+                       last_run=datetime.now(),
                        manufacturers=car_manufacturers,
-                       active=False,
+                       active=True,
                        car_models=car_models,
                        car_submodels=car_submodels)
     # create task in database
