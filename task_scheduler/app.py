@@ -6,7 +6,6 @@ from datetime import timedelta, datetime
 from random import randint
 from typing import Dict, List
 import schedule
-
 import models
 from db_handler import DbHandler
 from logger_setup import internal_info_logger as logger
@@ -25,10 +24,10 @@ def run_task(task_id: str):
     now = datetime.now()
 
     # Replace the hour, minute, second, and microsecond to set the time to 21:00
-    today_at_21 = now.replace(hour=21, minute=0, second=0, microsecond=0)
-    today_at_8 = now.replace(hour=8, minute=0, second=0, microsecond=0)
+    today_at_22 = now.replace(hour=22, minute=0, second=0, microsecond=0)
+    today_at_7 = now.replace(hour=7, minute=0, second=0, microsecond=0)
 
-    if today_at_8 < now < today_at_21:
+    if today_at_7 < now < today_at_22:
         # If the current time is between 8 AM and 9 PM, schedule the task for 9 PM
         threading.Thread(target=_run_task, args=(task_id,)).start()
     else:
@@ -71,7 +70,7 @@ async def run():
                         f"last_run: {task.last_run}, "
                         f"next_run: {task.last_run + timedelta(hours=1)}, "
                         f"active: {task.active}, "
-                        f"manufactuers: {task.manufacturers}, "
+                        f"manufacturers: {task.manufacturers}, "
                         f"models: {task.car_models} ")
             await asyncio.sleep(0.1)
         await asyncio.sleep(timedelta(minutes=5).seconds)

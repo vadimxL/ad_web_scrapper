@@ -1,7 +1,4 @@
-from datetime import datetime
-
 import json
-import logging
 from typing import List, Dict
 from firebase_admin import db
 import models
@@ -111,10 +108,6 @@ class DbHandler:
                 self.gmail_sender.send(message, subject)
             except Exception as e:
                 internal_info_logger.error(f"Error sending email: {e}")
-        else: # Nothing changed
-            ads_updates_logger.info(f"{new_ad.id} is unchanged, {new_ad.manuf_en}  {new_ad.car_model}, "
-                        f"current_price: {new_ad.price}, "
-                        f"{new_ad.kilometers} [km], year: {new_ad.year}, hand: {new_ad.hand}")
 
 
     def collection_exists(self):

@@ -5,21 +5,21 @@ from mongoengine import connect
 from models import CarAd, PriceHistory
 
 
-def save_to_database(car_ads: list):
-    for car_details in car_ads:
-        car_ad = CarAd(id=car_details['id'])
-        car_ad.manufacturer = car_details['manufacturer']
-        car_ad.model = car_details['car_model']
-        car_ad.year = car_details['year']
-        car_ad.hand = car_details['hand']
-        car_ad.engine_size = car_details['engine_size']
-        car_ad.kilometers = car_details['kilometers']
-        car_ad.price = car_details['price']
-        car_ad.updated_at = car_details['updated_at']
-        car_ad.date_added = car_details['date_added']
-        for date_price in car_details['prices']:
-            car_ad.price_history.append(PriceHistory(price=date_price['price'], date=date_price['date']))
-        car_ad.save()
+def save_to_database(ads: list):
+    for details in ads:
+        ad = CarAd(id=details['id'])
+        ad.manufacturer = details['manufacturer']
+        ad.model = details['car_model']
+        ad.year = details['year']
+        ad.hand = details['hand']
+        ad.engine_size = details['engine_size']
+        ad.kilometers = details['kilometers']
+        ad.price = details['price']
+        ad.updated_at = details['updated_at']
+        ad.date_added = details['date_added']
+        for date_price in details['prices']:
+            ad.price_history.append(PriceHistory(price=date_price['price'], date=date_price['date']))
+        ad.save()
 
 
 def init_from_persistance():

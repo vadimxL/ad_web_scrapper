@@ -2,7 +2,6 @@ import asyncio
 import hashlib
 import logging
 import threading
-from asyncio import AbstractEventLoop
 from io import BytesIO
 import pandas as pd
 from datetime import datetime, timedelta
@@ -12,7 +11,6 @@ from pydantic import EmailStr
 from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import StreamingResponse
 import firebase_db
-import json
 from fastapi import FastAPI, HTTPException
 from car_details import CarDetails
 from db_handler import DbHandler
@@ -33,14 +31,6 @@ app.add_middleware(
     allow_headers=["*"],  # You can specify specific headers if needed
     expose_headers=["*"]
 )
-
-# Replace this with your actual data source or logic
-manufacturers = {}
-manufs_unaltered = []
-
-
-# gmail_sender = GmailSender(credentials_path="gmail_sender/credentials.json", token_path="gmail_sender/token.json")
-
 
 @app.on_event("startup")
 def startup_event():
@@ -203,13 +193,11 @@ async def create_task(email: EmailStr, url: str):
     return task
 
 
-@app.on_event("shutdown")
-def shutdown_event():
-    print("Application shutdown")
-
-
 @app.delete("/tasks/{task_id}")
 async def delete_task(task_id: str):
+    """
+    Delete a task
+    """
     task: models.Task = DbHandler.get_task(task_id)
     if not task:
         return {"message": f"Task: {task_id} not found"}

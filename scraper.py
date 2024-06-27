@@ -1,4 +1,5 @@
 import asyncio
+import os
 from datetime import datetime, timedelta
 import re
 from typing import List
@@ -10,15 +11,14 @@ from car_details import CarDetails, PriceHistory
 from handz import Handz
 from headers import scrape_headers, model_headers
 from logger_setup import internal_info_logger as logger
+from dotenv import load_dotenv
 
 
-BASE_API_URL = "https://gw.yad2.co.il/feed-search-legacy/vehicles/cars"
-BASE_OPTIONS_API_URL = "https://gw.yad2.co.il/search-options/vehicles/cars"
-BASE_URL = "https://www.yad2.co.il"
+load_dotenv()
+BASE_API_URL: str = os.environ.get("BASE_API_URL")
+BASE_OPTIONS_API_URL: str = os.environ.get("BASE_OPTIONS_API_URL")
+BASE_URL: str = os.environ.get("BASE_URL")
 
-urls_expire_after = {
-    'yad2.co.il': timedelta(minutes=30),  # Requests for this base URL will expire in a week
-}
 
 FEED_SOURCES_ALL = ['xml', 'commercial', 'private']
 FEED_SOURCES_PRIVATE = FEED_SOURCES_ALL[2]
@@ -32,7 +32,6 @@ class Scraper:
         self.cache = SQLiteBackend(
             cache_name='demo_cache2',
             expire_after=timedelta(minutes=cache_timeout_min),
-            urls_expire_after=urls_expire_after,
         )
 
     async def scrape(self, q: dict) -> CachedResponse:
@@ -41,7 +40,6 @@ class Scraper:
         session = CachedSession(cache=SQLiteBackend(
             cache_name='demo_cache2',
             expire_after=timedelta(minutes=30),
-            urls_expire_after=urls_expire_after,
         ))
         r: CachedResponse = await session.get(url, data="", headers=scrape_headers, params=q)
         await session.close()
