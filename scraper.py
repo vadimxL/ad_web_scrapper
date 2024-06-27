@@ -30,7 +30,7 @@ secs_to_sleep = 0.1
 class Scraper:
     def __init__(self, cache_timeout_min: int):
         self.cache = SQLiteBackend(
-            cache_name='demo_cache2',
+            cache_name='cache/scrape_cache',
             expire_after=timedelta(minutes=cache_timeout_min),
         )
 
@@ -38,7 +38,7 @@ class Scraper:
         url = BASE_API_URL
 
         session = CachedSession(cache=SQLiteBackend(
-            cache_name='demo_cache2',
+            cache_name='cache/scrape_cache',
             expire_after=timedelta(minutes=30),
         ))
         r: CachedResponse = await session.get(url, data="", headers=scrape_headers, params=q)
@@ -311,7 +311,7 @@ class Scraper:
 
     @staticmethod
     async def get_model(manufacturer_id: str):
-        session = MyCachedSession('model_cache', backend='sqlite', expire_after=timedelta(days=4))
+        session = MyCachedSession('cache/model_cache', backend='sqlite', expire_after=timedelta(days=4))
         url = f"{BASE_OPTIONS_API_URL}?fields=model&manufacturer={manufacturer_id}"
 
         response = session.get(url, headers=model_headers, data={}, timeout=10)
@@ -319,7 +319,7 @@ class Scraper:
 
     @staticmethod
     async def get_submodel(model_id: str):
-        session = MyCachedSession('model_cache', backend='sqlite', expire_after=timedelta(days=4))
+        session = MyCachedSession('cache/model_cache', backend='sqlite', expire_after=timedelta(days=4))
         url = f"{BASE_OPTIONS_API_URL}?fields=subModel&model={model_id}"
 
         response = session.get(url, headers=model_headers, data={}, timeout=10)
@@ -328,7 +328,7 @@ class Scraper:
     @staticmethod
     async def get_search_options(manufacturers: str): # a comma separated string of manufacturers,
         # example: "21,48,37,27,19"
-        session = MyCachedSession('search_options_cache', backend='sqlite', expire_after=timedelta(days=4))
+        session = MyCachedSession('cache/search_options_cache', backend='sqlite', expire_after=timedelta(days=4))
         url = f"{BASE_OPTIONS_API_URL}?fields=manufacturer,model,subModel&manufacturer={manufacturers}"
 
         response = session.get(url, headers=model_headers, data={}, timeout=10)
