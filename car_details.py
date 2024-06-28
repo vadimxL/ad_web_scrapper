@@ -33,3 +33,5 @@ class CarDetails(BaseModel):
     manuf_en: str = 'N/A'
     updated_at: Optional[str] = None
     gear_type: str = 'N/A'
+    test_date: str = 'N/A'
+    month_on_road: str = 'N/A'

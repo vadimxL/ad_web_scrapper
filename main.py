@@ -69,8 +69,8 @@ async def read_items():
     return [task for task in tasks.values()]
 
 
-@app.get("/scrape")
-async def scrape(url: str, response_model=List[CarDetails]):
+@app.get("/scrape", response_model=List[CarDetails])
+async def scrape(url: str):
     params = extract_query_params(url)
     scraper = Scraper(cache_timeout_min=30)
     results: List[CarDetails] = await scraper.scrape_criteria(params)
@@ -171,7 +171,8 @@ async def create_task(email: EmailStr, url: str):
     if 'manufacturer' not in params or 'model' not in params or 'year' not in params or 'km' not in params:
         raise HTTPException(status_code=400, detail="Invalid URL")
 
-    id_ = hashlib.sha256(url.encode()).hexdigest()
+    # id_ = hashlib.sha256(url.encode()).hexdigest()
+    id_ = hashlib.md5(url.encode()).hexdigest()[0:12]
     task = DbHandler.get_task(id_)
     if task is not None:
         raise HTTPException(status_code=400, detail="Task already exists")

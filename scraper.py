@@ -8,7 +8,7 @@ import time
 from aiohttp_client_cache import CachedSession, SQLiteBackend, CachedResponse
 from requests_cache import CachedSession as MyCachedSession
 from car_details import CarDetails, PriceHistory
-from handz import Handz
+from handz.handz import Handz
 from headers import scrape_headers, model_headers
 from logger_setup import internal_info_logger as logger
 from dotenv import load_dotenv
@@ -66,10 +66,11 @@ class Scraper:
         #     print(f'Not from cache, sleeping for {secs_to_sleep} second')
         #     time.sleep(secs_to_sleep)
 
-        # with open('json/first_page.json', 'w', encoding='utf-8') as f1:
-        #     json.dump(response.json(), f1, indent=4, ensure_ascii=False)
-
         json_response = await response[0].json()
+
+        with open('json/first_page.json', 'w', encoding='utf-8') as f1:
+            json.dump(json_response, f1, indent=4, ensure_ascii=False)
+
         return json_response
 
     def get_number_of_pages(self, first_page):
@@ -224,6 +225,18 @@ class Scraper:
             if "שיוט" in item and "אדפטיבית" in item:
                 smart_cruise_control = item
 
+        #  get the test date
+        test_date = 'N/A'
+        for item in feed_item['more_details']:
+            if item['name'] == 'testDate':
+                test_date = item['value']
+
+        # get month on a road
+        month_on_road = 'N/A'
+        for item in feed_item['more_details']:
+            if item['name'] == 'month':
+                month_on_road = item['value']
+
         try:
             car_details = CarDetails(
                 id=feed_item['id'],
@@ -245,6 +258,8 @@ class Scraper:
                 smart_cruise_control=smart_cruise_control,
                 manuf_en=feed_item.get('manufacturer_eng', 'N/A'),
                 gear_type=self.gear_type(feed_item),
+                test_date=test_date,
+                month_on_road=month_on_road,
             )
         except Exception as e:
             logger.error(f"Error extracting car details: {e}")

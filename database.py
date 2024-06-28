@@ -5,8 +5,8 @@ from mongoengine import connect
 from models import CarAd, PriceHistory
 
 
-def save_to_database(ads: list):
-    for details in ads:
+def save_to_database(car_ads: list):
+    for details in car_ads:
         ad = CarAd(id=details['id'])
         ad.manufacturer = details['manufacturer']
         ad.model = details['car_model']
