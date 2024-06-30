@@ -2,7 +2,11 @@ import asyncio
 import os
 from datetime import datetime, timedelta
 import re
-from typing import List
+from typing import List, Dict, Tuple
+from urllib.parse import urlparse
+
+import requests
+
 import json
 import time
 from aiohttp_client_cache import CachedSession, SQLiteBackend, CachedResponse
@@ -260,6 +264,7 @@ class Scraper:
                 gear_type=self.gear_type(feed_item),
                 test_date=test_date,
                 month_on_road=month_on_road,
+                full_info=feed_item
             )
         except Exception as e:
             logger.error(f"Error extracting car details: {e}")
@@ -349,10 +354,9 @@ class Scraper:
         response = session.get(url, headers=model_headers, data={}, timeout=10)
         return response.json()
 
-    def run(self, query: dict):
+    def run(self, query: dict) -> Tuple[List[CarDetails], List[dict]]:
         # Assuming results is a list of tuples, where each tuple contains a list of CarDetails and a query string
         q: dict = query.copy()
-        result = None
         result = asyncio.new_event_loop().run_until_complete(self.scrape_criteria(q))
         return result
 
@@ -364,7 +368,8 @@ class Scraper:
         feed_sources = FEED_SOURCES_PRIVATE
         car_ads_to_save, feed_items = await self._scrape(query_str, feed_sources=feed_sources, last_page=last_page)
         logger.info(f"Scraped {len(car_ads_to_save)} items for query: {query_str}, feed_sources: {feed_sources}")
-        return car_ads_to_save
+        # self.save_feed_items(feed_items)
+        return car_ads_to_save, feed_items
 
 
 if __name__ == '__main__':

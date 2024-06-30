@@ -1,12 +1,19 @@
 import asyncio
 import hashlib
+from urllib.parse import urlparse
+
+import json
 import logging
+import os
 import threading
+from contextlib import asynccontextmanager
 from io import BytesIO
 import pandas as pd
 from datetime import datetime, timedelta
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Tuple
 from urllib import parse
+
+import requests
 from pydantic import EmailStr
 from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import StreamingResponse
@@ -18,9 +25,24 @@ from email_sender.email_sender import EmailSender
 from persistence import dump_to_excel_car_details
 import models
 from logger_setup import internal_info_logger
+from scheduler import TaskScheduler
 from scraper import Scraper
 
-app = FastAPI()
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Load firebase db
+    try:
+        firebase_db.init_firebase_db()
+    except Exception as e:
+        internal_info_logger.error(f"Error initializing firebase db: {e}")
+    scheduler = TaskScheduler(execute_tasks)
+    scheduler_thread = threading.Thread(target=scheduler.run).start()
+    yield
+    scheduler.stop()
+
+
+app = FastAPI(lifespan=lifespan)
 
 # Allow all origins with appropriate methods, headers, and credentials if needed
 app.add_middleware(
@@ -31,13 +53,6 @@ app.add_middleware(
     allow_headers=["*"],  # You can specify specific headers if needed
     expose_headers=["*"]
 )
-
-@app.on_event("startup")
-def startup_event():
-    try:
-        firebase_db.init_firebase_db()
-    except Exception as e:
-        internal_info_logger.error(f"Error initializing firebase db: {e}")
 
 async def get_models(manufacturer_id: str):
     logging.info(f"Getting models for manufacturer: {manufacturer_id}")
@@ -116,7 +131,7 @@ def execute_tasks(task_id: str):
         internal_info_logger.info(f"Task {task_id} is not active")
         return
     db_handler = DbHandler(task.title, mail_sender)
-    results: List[CarDetails] = scraper.run(task.params)
+    results, _ = scraper.run(task.params)
     internal_info_logger.info(f"Recurrence task: {task_id}: {task}")
     task.last_run = datetime.now()
     db_handler.update_task(task)
@@ -125,7 +140,6 @@ def execute_tasks(task_id: str):
             db_handler.handle_results(results)
         else:
             db_handler.create_collection(results)
-
 
 def recent_task(task: models.Task):
     return (datetime.now() - task.last_run) < timedelta(days=1)

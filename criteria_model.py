@@ -36,5 +36,7 @@ def html_criteria_mail(car_details: CarDetails):
                            initial_price=initial_price,
                            date_created=car_details.date_added,
                            prices_handz=car_details.prices_handz,
+                           test_date=car_details.test_date,
+                           month_on_road=car_details.month_on_road,
                            url_for=url_for)
 

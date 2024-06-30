@@ -74,7 +74,6 @@ class DbHandler:
         try:
             message = html_criteria_mail(new_ad)
             self.gmail_sender.send(message,
-
                                    f'🎁 [New] - {new_ad.manufacturer_he} {new_ad.car_model} {new_ad.city}')
         except Exception as e:
             internal_info_logger.error(f"Error sending email: {e}")
@@ -121,7 +120,8 @@ class DbHandler:
             internal_info_logger.error(f"Error adding new cars to db: {e}")
 
     def handle_results(self, results: List[CarDetails]):
-        data: dict = db.reference(self.path).get()
+        data: dict = db.reference(self.path).get() # results already in db
+        internal_info_logger.info(f"Handling results")
         try:
             for ad in results:
                 if ad.id not in data:
@@ -137,7 +137,7 @@ class DbHandler:
         except Exception as e:
             internal_info_logger.error(f"Error creating CarDetails: {e}")
             return
-
+        internal_info_logger.info(f"Handling sold items")
         self.handle_sold_items({ad.id: ad for ad in results}, db_data_dict)
 
     def handle_sold_items(self, new_ads: Dict[str, CarDetails], ads_db: Dict[str, CarDetails]):
