@@ -41,6 +41,19 @@ async def lifespan(app: FastAPI):
     yield
     scheduler.stop()
 
+manufacturers_en = {
+    "21": "hyundai",
+    "48": "kia",
+    "19": "toyota",
+    "37": "seat",
+    "46": "peugeot",
+    "40": "skoda",
+    "27": "mazda",
+    "41": "volkswagen",
+    "17": "honda",
+    "30": "mitsubishi",
+}
+
 
 app = FastAPI(lifespan=lifespan)
 
@@ -54,6 +67,7 @@ app.add_middleware(
     expose_headers=["*"]
 )
 
+
 async def get_models(manufacturer_id: str):
     logging.info(f"Getting models for manufacturer: {manufacturer_id}")
     # scraper = Scraper(cache_timeout_min=5)
@@ -61,6 +75,7 @@ async def get_models(manufacturer_id: str):
     if 'data' not in car_models:
         return []
     return car_models['data']['model']
+
 
 @app.get("/submodels/{model_id}")
 async def get_submodels(model_id: str):
@@ -78,6 +93,11 @@ def extract_query_params(url: str) -> dict:
     return params
 
 
+def join_query_params(params: dict) -> str:
+    # Join the dictionary of query parameters into a string without URL encoding
+    return '&'.join(f"{key}={value}" for key, value in params.items())
+
+
 @app.get("/tasks", response_model=List[models.Task])
 async def read_items():
     tasks = DbHandler.load_tasks()
@@ -86,7 +106,7 @@ async def read_items():
 
 @app.get("/scrape", response_model=List[CarDetails])
 async def scrape(url: str):
-    params = extract_query_params(url)
+    params: dict = extract_query_params(url)
     scraper = Scraper(cache_timeout_min=30)
     results: List[CarDetails] = await scraper.scrape_criteria(params)
     return results
@@ -141,6 +161,7 @@ def execute_tasks(task_id: str):
         else:
             db_handler.create_collection(results)
 
+
 def recent_task(task: models.Task):
     return (datetime.now() - task.last_run) < timedelta(days=1)
 
@@ -160,6 +181,7 @@ async def update_task(task_id: str, email: Optional[EmailStr] = None, repeat_int
         task.title = title
     DbHandler.update_task(task)
     return task
+
 
 @app.get("/run")
 async def run_tasks():
@@ -194,8 +216,12 @@ async def create_task(email: EmailStr, url: str):
     car_manufacturers, car_models, car_submodels = await Scraper.get_meta(params['manufacturer'],
                                                                           params.get('model', ""),
                                                                           params.get('subModel', ""))
-
-    task = models.Task(id=id_, title=parse.urlsplit(url).query, mail=email,
+    car_manufacturers_en = [manufacturers_en[manufacturer] for manufacturer in params['manufacturer'].split(",")]
+    title_params: dict = params.copy()
+    title_params['manufacturer'] = str.join(",", car_manufacturers_en)
+    title = join_query_params(title_params)
+    print(f"Title params: {title}")
+    task = models.Task(id=id_, title=title, mail=email,
                        params=params,
                        created_at=datetime.now(),
                        last_run=datetime.now(),

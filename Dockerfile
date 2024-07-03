@@ -1,20 +1,18 @@
-FROM ubuntu:latest
-LABEL authors="vadimv"
-
 # Use an official Python runtime as a base image
-FROM python:3.9
+FROM python:latest
 
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy the current directory contents into the container at /app
-COPY . /app
+# Copy the requirements file to the working directory
+COPY requirements.txt .
 
 # Install any needed dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
-# Specify the command to run your application
-CMD ["python", "app.py"]
+COPY . .
 
+EXPOSE 8081
 
-ENTRYPOINT ["top", "-b"]
+# Run the FastAPI application using uvicorn server
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8081"]

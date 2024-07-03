@@ -19,6 +19,13 @@ from dotenv import load_dotenv
 
 
 load_dotenv()
+if "BASE_API_URL" not in os.environ:
+    raise Exception("BASE_API_URL not found in environment variables")
+if "BASE_OPTIONS_API_URL" not in os.environ:
+    raise Exception("BASE_OPTIONS_API_URL not found in environment variables")
+if "BASE_URL" not in os.environ:
+    raise Exception("BASE_URL not found in environment variables")
+
 BASE_API_URL: str = os.environ.get("BASE_API_URL")
 BASE_OPTIONS_API_URL: str = os.environ.get("BASE_OPTIONS_API_URL")
 BASE_URL: str = os.environ.get("BASE_URL")
@@ -346,7 +353,7 @@ class Scraper:
         return response.json()
 
     @staticmethod
-    async def get_search_options(manufacturers: str): # a comma separated string of manufacturers,
+    async def get_search_options(manufacturers: str):  # a comma separated string of manufacturers,
         # example: "21,48,37,27,19"
         session = MyCachedSession('cache/search_options_cache', backend='sqlite', expire_after=timedelta(days=4))
         url = f"{BASE_OPTIONS_API_URL}?fields=manufacturer,model,subModel&manufacturer={manufacturers}"
