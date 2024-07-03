@@ -79,7 +79,11 @@ class Scraper:
 
         json_response = await response[0].json()
 
-        with open('json/first_page.json', 'w', encoding='utf-8') as f1:
+        directory = 'json'
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+
+        with open(f'{directory}/first_page.json', 'w', encoding='utf-8') as f1:
             json.dump(json_response, f1, indent=4, ensure_ascii=False)
 
         return json_response
