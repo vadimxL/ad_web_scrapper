@@ -24,7 +24,7 @@ class Handz:
         # Make the POST request
         # response = requests.post("https://api.handz.co.il/v2.0/entities/vehicles/auth",
         #                          headers=headers, data=json.dumps(data))
-        session = MyCachedSession('handz_cache', backend='sqlite', expire_after=timedelta(hours=2))
+        session = MyCachedSession('cache/handz_cache', backend='sqlite', expire_after=timedelta(hours=2))
         response = session.post(url, headers=headers, data=json.dumps(data), timeout=10)
         #
         # Parse the response as JSON and return it

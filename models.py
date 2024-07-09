@@ -1,9 +1,11 @@
+import os
 from datetime import date, datetime, time, timedelta
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 
-from typing import Optional, List
+from typing import Optional, List, Dict
 
 from mongoengine import Document, ListField, EmbeddedDocumentField, DictField, StringField, IntField, EmbeddedDocument
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 # from scraper import PriceHistory
@@ -33,9 +35,9 @@ class Range(BaseModel):
     min: int
     max: int
 
+
 class Task(BaseModel):
     id: str
-    title: str
     mail: str
     active: bool
     created_at: datetime
@@ -46,25 +48,39 @@ class Task(BaseModel):
     car_submodels: Optional[List[str]] = None
     # criteria: CarCriteria
 
+
 def create_task_from_dict(task_dict: dict) -> Task:
     task_ = Task(**task_dict)
     return task_
 
 
-class PriceHistory(EmbeddedDocument):
-    price = IntField()
-    date = StringField(max_length=50)  # You might want to use a DateTimeField for date/time fields
+class PriceHistory(BaseModel):
+    price: int
+    date: datetime
 
 
-class CarAd(Document):
-    id = StringField(primary_key=True)
-    manufacturer = StringField(max_length=50)
-    model = StringField(max_length=50)
-    year = IntField()
-    hand = StringField(max_length=50)
-    engine_size = IntField()
-    kilometers = StringField(max_length=50)
-    price = StringField(max_length=50)
-    updated_at = StringField(max_length=50)
-    date_added = StringField(max_length=50)
-    price_history = ListField(EmbeddedDocumentField(PriceHistory))
+class AdDetails(BaseModel):
+    # Fields without default values
+    id: str
+    car_model: str
+    year: int
+    price: float
+    date_added_epoch: int
+    date_added: datetime
+    feed_source: str
+
+    # Fields with default values
+    full_info: Optional[Dict] = None
+    city: str = 'N/A'
+    manufacturer_he: str = 'N/A'
+    hp: Optional[int] = None
+    hand: Optional[int] = None
+    kilometers: Optional[int] = None
+    prices: List[PriceHistory] = Field(default=None)
+    prices_handz: List[Dict] = Field(default=None)
+    blind_spot: Optional[str] = None
+    smart_cruise_control: Optional[str] = None
+    manuf_en: str = 'N/A'
+    gear_type: str = 'N/A'
+    test_date: str = 'N/A'
+    month_on_road: str = 'N/A'

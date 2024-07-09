@@ -1,14 +1,14 @@
-from car_details import CarDetails, ROOT_DIR
+import models
 from jinja2 import Environment, select_autoescape, FileSystemLoader
 env = Environment(
-    loader=FileSystemLoader(f"{ROOT_DIR}/templates"),
+    loader=FileSystemLoader(f"{models.ROOT_DIR}/templates"),
     autoescape=select_autoescape(['html', 'xml'])
 )
 from flask import url_for
 
 
-def html_criteria_mail(car_details: CarDetails):
-    with open(f"{ROOT_DIR}/templates/criteria_mail.html", "r") as f:
+def html_criteria_mail(car_details: models.AdDetails) -> str:
+    with open(f"{models.ROOT_DIR}/templates/criteria_mail.html", "r") as f:
         criteria_mail = f.read()
         # print(criteria_mail)
     template = env.get_template("criteria_mail.html")

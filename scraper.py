@@ -2,19 +2,15 @@ import asyncio
 import os
 from datetime import datetime, timedelta
 import re
-from typing import List, Dict, Tuple
-from urllib.parse import urlparse
-
-import requests
-
+from typing import List, Tuple
+from loguru import logger
 import json
 import time
 from aiohttp_client_cache import CachedSession, SQLiteBackend, CachedResponse
 from requests_cache import CachedSession as MyCachedSession
-from car_details import CarDetails, PriceHistory
+from models import AdDetails, PriceHistory
 from handz.handz import Handz
 from headers import scrape_headers, model_headers
-from logger_setup import internal_info_logger as logger
 from dotenv import load_dotenv
 
 
@@ -95,9 +91,7 @@ class Scraper:
         return first_page['data']['pagination']['total_items']
 
     async def _scrape(self, q: dict, feed_sources, last_page: int = 1):
-        filtered_feed_items = []  # type: list
         parsed_feed_items = []
-        car_ads_to_save = []
         tasks = []
 
         for i in range(1, last_page + 1):
@@ -127,9 +121,16 @@ class Scraper:
                 car_details = dict(sorted(feed_item.items()))
                 parsed_feed_items.append(car_details)
 
+        ads, filtered_feed_items = await self._parse(feed_sources, parsed_feed_items)
+        await self._price_history(ads, filtered_feed_items)
+        return ads, filtered_feed_items
+
+    async def _parse(self, feed_sources, items) -> Tuple[List[AdDetails], List[dict]]:
+        ads = []
+        filtered_feed_items = []  # type: list
         no_id_items_num = 0
         incompatible_feed_sources_items_num = 0
-        for item in parsed_feed_items:
+        for item in items:
             # if item['type'] != 'ad':
             #     # print(f"Skipping item {car_details['type']} because it's not an ad")
             #     continue
@@ -143,25 +144,22 @@ class Scraper:
                 continue
 
             filtered_feed_items.append(item)
-            car_details: CarDetails = self.extract_car_details(item)
-            car_ads_to_save.append(car_details)
-
+            ads.append(self.extract_car_details(item))
+        ads.sort(key=lambda x: x.date_added, reverse=True)  # Sort by date
         logger.info(f"Skipped {no_id_items_num} items because they don't have an id")
         logger.info(f"Skipped {incompatible_feed_sources_items_num} items because they are not in {feed_sources} list")
+        return ads, filtered_feed_items
 
+    async def _price_history(self, ads: list, filtered_feed_items: list):
         handz = Handz()
         divided_feed_items = list(self.divide_chunks(filtered_feed_items, 50))
         handz_results = []
         for divided_feed_item in divided_feed_items:
             handz_result = handz.get_prices(divided_feed_item)
             handz_results.extend(handz_result['data']['entities'])
-
         for res in handz_results:
-            result_filter: CarDetails = next(filter(lambda x: x.id == res['id'], car_ads_to_save), None)
-            if result_filter:
-                result_filter.prices_handz = self.convert_data_to_string(res['prices'])
-
-        return car_ads_to_save, filtered_feed_items
+            if result_filter := next(filter(lambda x: x.id == res['id'], ads), None):
+                result_filter.prices_handz = res['prices']
 
     # Function to convert and simplify the data
     # Function to convert and simplify the data
@@ -194,7 +192,13 @@ class Scraper:
         for i in range(0, len(listing), n):
             yield listing[i:i + n]
 
-    def extract_car_details(self, feed_item: json) -> CarDetails:
+    @staticmethod
+    def epoch_date(date1):
+            temp = datetime(1899, 12, 30)  # Note, not 31st Dec but 30th!
+            delta = date1 - temp
+            return float(delta.days) + (float(delta.seconds) / 86400)
+
+    def extract_car_details(self, feed_item: json) -> AdDetails:
         horsepower_value = 0
         row2_without_hp = 'N/A'
         row2 = feed_item.get('row_2', 'N/A')
@@ -209,15 +213,8 @@ class Scraper:
         hand = self.get_hand(feed_item)
 
         # Fix the date format
-        parsed_date = datetime.strptime(feed_item['date_added'], "%Y-%m-%d %H:%M:%S")
-
-        def excel_date(date1):
-            temp = datetime(1899, 12, 30)  # Note, not 31st Dec but 30th!
-            delta = date1 - temp
-            return float(delta.days) + (float(delta.seconds) / 86400)
-
-        date_added_epoch = int(excel_date(parsed_date))
-        formatted_date = parsed_date.strftime("%-d/%-m/%Y")
+        parsed_date: datetime = datetime.strptime(feed_item['date_added'], "%Y-%m-%d %H:%M:%S")
+        date_added_epoch = int(self.epoch_date(parsed_date))
 
         # Get the numeric value of the price
         # Remove currency symbol and commas
@@ -253,13 +250,13 @@ class Scraper:
                 month_on_road = item['value']
 
         try:
-            car_details = CarDetails(
+            car_details = AdDetails(
                 id=feed_item['id'],
                 car_model=f"{feed_item['model']} {row2_without_hp}",
                 year=feed_item['year'],
                 price=price_numeric,
                 date_added_epoch=date_added_epoch,
-                date_added=formatted_date,
+                date_added=parsed_date,
                 feed_source=feed_item['feed_source'],
 
                 # Fields with default values
@@ -365,8 +362,8 @@ class Scraper:
         response = session.get(url, headers=model_headers, data={}, timeout=10)
         return response.json()
 
-    def run(self, query: dict) -> Tuple[List[CarDetails], List[dict]]:
-        # Assuming results is a list of tuples, where each tuple contains a list of CarDetails and a query string
+    def run(self, query: dict) -> Tuple[List[AdDetails], List[dict]]:
+        # Assuming results is a list of tuples, where each tuple contains a list of AdDetails and a query string
         q: dict = query.copy()
         result = asyncio.new_event_loop().run_until_complete(self.scrape_criteria(q))
         return result

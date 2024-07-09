@@ -1,32 +1,28 @@
 import asyncio
 import hashlib
-from urllib.parse import urlparse
-
 import json
-import logging
-import os
 import threading
 from contextlib import asynccontextmanager
+from enum import Enum
 from io import BytesIO
 import pandas as pd
 from datetime import datetime, timedelta
-from typing import List, Dict, Optional, Tuple
+from typing import List, Optional
 from urllib import parse
-
-import requests
 from pydantic import EmailStr
 from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import StreamingResponse
 import firebase_db
 from fastapi import FastAPI, HTTPException
-from car_details import CarDetails
 from db_handler import DbHandler
 from email_sender.email_sender import EmailSender
-from persistence import dump_to_excel_car_details
 import models
-from logger_setup import internal_info_logger
+from notifier import Notifier
 from scheduler import TaskScheduler
-from scraper import Scraper
+from scraper import Scraper, BASE_URL
+from loguru import logger
+
+logger.add("scraper.log")
 
 
 @asynccontextmanager
@@ -35,11 +31,12 @@ async def lifespan(app: FastAPI):
     try:
         firebase_db.init_firebase_db()
     except Exception as e:
-        internal_info_logger.error(f"Error initializing firebase db: {e}")
+        logger.error(f"Error initializing firebase db: {e}")
     scheduler = TaskScheduler(execute_tasks)
     scheduler_thread = threading.Thread(target=scheduler.run).start()
     yield
     scheduler.stop()
+
 
 manufacturers_en = {
     "21": "hyundai",
@@ -53,7 +50,6 @@ manufacturers_en = {
     "17": "honda",
     "30": "mitsubishi",
 }
-
 
 app = FastAPI(lifespan=lifespan)
 
@@ -69,7 +65,7 @@ app.add_middleware(
 
 
 async def get_models(manufacturer_id: str):
-    logging.info(f"Getting models for manufacturer: {manufacturer_id}")
+    logger.info(f"Getting models for manufacturer: {manufacturer_id}")
     # scraper = Scraper(cache_timeout_min=5)
     car_models = await Scraper.get_model(manufacturer_id)
     if 'data' not in car_models:
@@ -79,7 +75,7 @@ async def get_models(manufacturer_id: str):
 
 @app.get("/submodels/{model_id}")
 async def get_submodels(model_id: str):
-    logging.info(f"Getting models for manufacturer: {model_id}")
+    logger.info(f"Getting models for manufacturer: {model_id}")
     # scraper = Scraper(cache_timeout_min=5)
     car_models = await Scraper.get_model(model_id)
     if 'data' not in car_models:
@@ -104,30 +100,66 @@ async def read_items():
     return [task for task in tasks.values()]
 
 
-@app.get("/scrape", response_model=List[CarDetails])
+@app.get("/scrape", response_model=List[models.AdDetails])
 async def scrape(url: str):
     params: dict = extract_query_params(url)
     scraper = Scraper(cache_timeout_min=30)
-    results: List[CarDetails] = await scraper.scrape_criteria(params)
+    results: List[models.AdDetails] = await scraper.scrape_criteria(params)
     return results
+
+
+def make_hyperlink(value):
+    url_ = f"{BASE_URL}/item/{value}"
+    hyperlink = '=HYPERLINK("%s", "%s")' % (url_, value)
+    return hyperlink
+
+
+def ads_to_df(ads_: List[models.AdDetails]) -> pd.DataFrame:
+    ads: dict = {ad.id: ad.model_dump(mode='json') for ad in ads_}
+    df = pd.json_normalize(ads.values())
+    df['id'] = df['id'].apply(make_hyperlink)
+    return df
+
+
+@app.get("/archive")
+async def archive():
+    # db_handler = DbHandler(on_new_cb=lambda x: None, on_update_cb=lambda x: None, on_archive_cb=lambda x: None)
+    # results: List[models.AdDetails] = db_handler.get_archive()
+    archived = []
+    with open("archive.json", "r") as f:
+        results = json.load(f)
+
+    for id_, ad in results.items():
+        if "full_info" in ad:
+            ad.pop("full_info")
+
+    df = pd.json_normalize(results.values())
+    df['id'] = df['id'].apply(make_hyperlink)
+    filename = "archive.xlsx"
+    df.to_excel(filename, index=False)
+    buffer = BytesIO()
+    with pd.ExcelWriter(buffer) as writer:
+        df.to_excel(writer, index=False)
+
+    return StreamingResponse(
+        BytesIO(buffer.getvalue()),
+        media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        headers={"Content-Disposition": f"attachment; filename={filename}"})
 
 
 @app.get("/scrape_excel")
 async def scrape_excel(url: str):
     params: dict = extract_query_params(url)
     scraper = Scraper(cache_timeout_min=30)
-    results: List[CarDetails] = await scraper.scrape_criteria(params)
-    df: pd.DataFrame = dump_to_excel_car_details(results)
+    results: List[models.AdDetails] = await scraper.scrape_criteria(params)
+
+    df: pd.DataFrame = ads_to_df(results)
     filename = "car_ads_"
     for param in params.values():
         filename += param + "_"
     # filename = filename + ".xlsx"
     filename = filename.replace(",", "_") + ".xlsx"
 
-    # return StreamingResponse(
-    #     iter([df.to_csv(index=False)]),
-    #     media_type="text/csv",
-    #     headers={"Content-Disposition": f"attachment; filename=data.csv"})
     df.to_excel('car_ads.xlsx', index=False)
     buffer = BytesIO()
     with pd.ExcelWriter(buffer) as writer:
@@ -140,25 +172,30 @@ async def scrape_excel(url: str):
 
 
 def execute_tasks(task_id: str):
-    internal_info_logger.info(f"Executing task: {task_id}")
+    logger.info(f"Executing task: {task_id}")
     scraper = Scraper(cache_timeout_min=30)
     task = DbHandler.get_task(task_id)
-    mail_sender = EmailSender(task.mail)
+    mail_sender = EmailSender(task.mail, log_only=True)
     if task is None:
-        internal_info_logger.error(f"Task {task_id} not found")
+        logger.error(f"Task {task_id} not found")
         return
     if not task.active:
-        internal_info_logger.info(f"Task {task_id} is not active")
+        logger.info(f"Task {task_id} is not active")
         return
-    db_handler = DbHandler(task.title, mail_sender)
+    notifier = Notifier(mail_sender)
+    db_handler = DbHandler(on_new_cb=notifier.notify_new_ad,
+                           on_update_cb=notifier.notify_update_ad,
+                           on_archive_cb=notifier.notify_archived)
     results, _ = scraper.run(task.params)
-    internal_info_logger.info(f"Recurrence task: {task_id}: {task}")
+    logger.info(f"Recurrence task: {task_id}: {task}")
     task.last_run = datetime.now()
     db_handler.update_task(task)
     if results:
         if db_handler.collection_exists() and recent_task(task):
-            db_handler.handle_results(results)
+            logger.info(f"Handling results for task: {task_id}")
+            db_handler.handle_results(results, task)
         else:
+            logger.info(f"Creating collection for task: {task_id}")
             db_handler.create_collection(results)
 
 
@@ -168,8 +205,7 @@ def recent_task(task: models.Task):
 
 # Update (PUT)
 @app.put("/tasks/{task_id}", response_model=models.Task)
-async def update_task(task_id: str, email: Optional[EmailStr] = None, repeat_interval: Optional[int] = None,
-                      title: Optional[str] = None):
+async def update_task(task_id: str, email: Optional[EmailStr] = None, repeat_interval: Optional[int] = None):
     task = DbHandler.get_task(task_id)
     if task is None:
         raise HTTPException(status_code=404, detail="Item not found")
@@ -177,8 +213,6 @@ async def update_task(task_id: str, email: Optional[EmailStr] = None, repeat_int
         task.mail = email
     if repeat_interval is not None:
         task.repeat_interval = repeat_interval
-    if title is not None:
-        task.title = title
     DbHandler.update_task(task)
     return task
 
@@ -220,7 +254,6 @@ async def create_task(email: EmailStr, url: str):
     title_params: dict = params.copy()
     title_params['manufacturer'] = str.join(",", car_manufacturers_en)
     title = join_query_params(title_params)
-    print(f"Title params: {title}")
     task = models.Task(id=id_, title=title, mail=email,
                        params=params,
                        created_at=datetime.now(),

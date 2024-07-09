@@ -7,8 +7,8 @@ from random import randint
 from typing import Dict, List
 import models
 from db_handler import DbHandler
-from logger_setup import internal_info_logger as logger
 import firebase_db
+from loguru import logger
 
 scheduled_task_events: Dict[str, threading.Event] = dict()
 
@@ -27,15 +27,13 @@ class TaskScheduler:
         # Get the current date and time
         now = datetime.now()
 
-        # Replace the hour, minute, second, and microsecond to set the time to 21:00
-        today_at_22 = now.replace(hour=22, minute=0, second=0, microsecond=0)
-        today_at_7 = now.replace(hour=7, minute=0, second=0, microsecond=0)
+        end_day = now.replace(hour=23, minute=59, second=0, microsecond=0)
+        start_day = now.replace(hour=7, minute=0, second=0, microsecond=0)
 
-        if today_at_7 < now < today_at_22:
-            # If the current time is between 8 AM and 9 PM, schedule the task for 9 PM
+        if start_day < now < end_day:
             threading.Thread(target=self._run_task, args=(task_id,)).start()
         else:
-            logger.info(f"Task {task_id} will be run tomorrow because it's not between 8 AM and 9 PM")
+            logger.info(f"Task {task_id} will be run tomorrow because it's not between {start_day} AM and {end_day} PM")
 
     def tasks_changed_listener(self, event):
         logger.info(f"Tasks changed, {event.data=}, {event.path=}, {event.event_type=}")
@@ -66,7 +64,6 @@ class TaskScheduler:
             for task in tasks:
                 logger.info(f"Job id: {task.id}, "
                             f"last_run: {task.last_run}, "
-                            f"next_run: {task.last_run + timedelta(hours=1)}, "
                             f"active: {task.active}, "
                             f"manufacturers: {task.manufacturers}, "
                             f"models: {task.car_models} ")

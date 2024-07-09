@@ -12,10 +12,11 @@ def init_firebase_db():
 
 
 def clear_firebase_db():
-    ref = db.reference('/')
-    ref.delete()
+    ref = db.reference('/archive')
+    ref.set({"Name": "Archive"})
 
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     init_firebase_db()
+    clear_firebase_db()

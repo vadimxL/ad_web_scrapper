@@ -3,7 +3,7 @@ import unittest
 from datetime import datetime
 
 import firebase_db
-from car_details import CarDetails, PriceHistory
+from car_details import AdDetails, PriceHistory
 from db_handler import DbHandler
 from gmail_sender.gmail_sender import GmailSender
 
@@ -26,14 +26,14 @@ class TestDbHandler(unittest.TestCase):
                 # price_hist = PriceHistory(price=ad['price'], date=d)
                 try:
                     ad['prices'][-1]['date'] = d
-                    car_details = CarDetails(**ad)
+                    car_details = AdDetails(**ad)
                 except Exception as e:
-                    print(f"Error creating CarDetails: {e}")
+                    print(f"Error creating AdDetails: {e}")
                     return
                 # car_details.prices = [price_hist]
                 ads.append(car_details)
             gmail_sender = GmailSender("../gmail_sender/credentials.json")
-            db_handler = DbHandler("test", gmail_sender)
+            db_handler = DbHandler(gmail_sender, "test")
             # db_handler.create_collection(ads)
             db_handler.handle_results(ads)
 
