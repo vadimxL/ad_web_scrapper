@@ -6,8 +6,7 @@ from datetime import timedelta, datetime
 from random import randint
 from typing import Dict, List
 import models
-from db_handler import DbHandler
-import firebase_db
+from db_firestore_handler import FbDbHandler as DbHandler
 from loguru import logger
 
 scheduled_task_events: Dict[str, threading.Event] = dict()
@@ -35,8 +34,11 @@ class TaskScheduler:
         else:
             logger.info(f"Task {task_id} will be run tomorrow because it's not between {start_day} AM and {end_day} PM")
 
-    def tasks_changed_listener(self, event):
-        logger.info(f"Tasks changed, {event.data=}, {event.path=}, {event.event_type=}")
+    def tasks_changed_listener(self, doc_snapshot, changes, read_time):
+        for doc in doc_snapshot:
+            print(f"Received document snapshot: {doc.id}")
+        """
+                logger.info(f"Tasks changed, {event.data=}, {event.path=}, {event.event_type=}")
         if event.event_type == 'patch':
             if event.data in ('title', 'repeat_interval', 'active'):
                 task_id = event.path.lstrip('/')
@@ -56,6 +58,7 @@ class TaskScheduler:
                 prop = split_path[2]
                 if prop in ('title', 'repeat_interval', 'active'):
                     self.run_task(task_id)
+        """
 
     def run(self):
         DbHandler.create_listener(self.tasks_changed_listener)
@@ -74,14 +77,3 @@ class TaskScheduler:
     def stop(self):
         logger.info("Shutting down...")
         self.event_.set()
-
-
-if __name__ == '__main__':
-    try:
-        firebase_db.init_firebase_db()
-    except Exception:
-        logger.exception(f"Error initializing firebase db")
-        exit(1)
-    task_scheduler = TaskScheduler()
-    threading.Thread(target=task_scheduler.run).start()
-    atexit.register(task_scheduler.stop)

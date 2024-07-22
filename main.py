@@ -1,5 +1,9 @@
 import asyncio
 import hashlib
+
+import firebase_admin
+from firebase_admin import credentials
+
 import json
 import threading
 from contextlib import asynccontextmanager
@@ -12,9 +16,8 @@ from urllib import parse
 from pydantic import EmailStr
 from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import StreamingResponse
-import firebase_db
 from fastapi import FastAPI, HTTPException
-from db_handler import DbHandler
+from db_firestore_handler import FbDbHandler as DbHandler
 from email_sender.email_sender import EmailSender
 import models
 from notifier import Notifier
@@ -29,7 +32,8 @@ logger.add("scraper.log")
 async def lifespan(app: FastAPI):
     # Load firebase db
     try:
-        firebase_db.init_firebase_db()
+        cred = credentials.Certificate('adscraper.json')
+        firebase_admin.initialize_app(cred)
     except Exception as e:
         logger.error(f"Error initializing firebase db: {e}")
     scheduler = TaskScheduler(execute_tasks)
