@@ -74,7 +74,7 @@ class DbHandler:
         try:
             message = html_criteria_mail(new_ad)
             self.gmail_sender.send(message,
-                                   f'🎁 [New] - {new_ad.manufacturer_he} {new_ad.car_model} {new_ad.city}')
+                                   f'🎁 {new_ad.manufacturer_he} {new_ad.car_model} {new_ad.city}')
         except Exception as e:
             internal_info_logger.error(f"Error sending email: {e}")
 
@@ -100,9 +100,9 @@ class DbHandler:
                 last_price = db_ad.prices[-1].price
                 previous_price = db_ad.prices[-2].price
                 if last_price < previous_price:
-                    subject = f'⬇️ [Update] - {new_ad.manufacturer_he} {new_ad.car_model} {new_ad.city}'
+                    subject = f'⬇️ {new_ad.manufacturer_he} {new_ad.car_model} {new_ad.city}'
                 else:
-                    subject = f'⬆️ [Update] - {new_ad.manufacturer_he} {new_ad.car_model} {new_ad.city}'
+                    subject = f'⬆️ {new_ad.manufacturer_he} {new_ad.car_model} {new_ad.city}'
 
                 self.gmail_sender.send(message, subject)
             except Exception as e:
@@ -138,15 +138,15 @@ class DbHandler:
             internal_info_logger.error(f"Error creating CarDetails: {e}")
             return
         internal_info_logger.info(f"Handling sold items")
-        self.handle_sold_items({ad.id: ad for ad in results}, db_data_dict)
+        self.handle_removed_ads({ad.id: ad for ad in results}, db_data_dict)
 
-    def handle_sold_items(self, new_ads: Dict[str, CarDetails], ads_db: Dict[str, CarDetails]):
+    def handle_removed_ads(self, new_ads: Dict[str, CarDetails], ads_db: Dict[str, CarDetails]):
         for id_, ad_db in ads_db.items():
             if id_ not in new_ads:
-                ads_updates_logger.info(f"sold car: {json.dumps(ad_db.model_dump(mode='json'), ensure_ascii=False)}")
+                ads_updates_logger.info(f"removed ad: {json.dumps(ad_db.model_dump(mode='json'), ensure_ascii=False)}")
                 message = html_criteria_mail(ad_db)
                 self.gmail_sender.send(message,
-                                       f'💸 [Sold] - {ad_db.manufacturer_he} {ad_db.car_model} {ad_db.city}')
+                                       f'💸 {ad_db.manufacturer_he} {ad_db.car_model} {ad_db.city}')
                 db.reference(self.sold_path).child(ad_db.id).set(ad_db.model_dump(mode='json'))
                 ads_updates_logger.info(f"removing item {ad_db.id} from main db")
                 db.reference(self.path).child(ad_db.id).delete()

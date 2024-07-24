@@ -1,5 +1,6 @@
 from car_details import CarDetails, ROOT_DIR
 from jinja2 import Environment, select_autoescape, FileSystemLoader
+
 env = Environment(
     loader=FileSystemLoader(f"{ROOT_DIR}/templates"),
     autoescape=select_autoescape(['html', 'xml'])
@@ -7,7 +8,7 @@ env = Environment(
 from flask import url_for
 
 
-def html_criteria_mail(car_details: CarDetails):
+def html_criteria_mail(car_details: CarDetails, images_links: list = []):
     with open(f"{ROOT_DIR}/templates/criteria_mail.html", "r") as f:
         criteria_mail = f.read()
         # print(criteria_mail)
@@ -24,6 +25,13 @@ def html_criteria_mail(car_details: CarDetails):
     else:
         initial_price = "N/A"
 
+    images_links = []
+    if 'images_urls' in car_details.full_info:
+        img: str
+        for img in car_details.full_info['images_urls']:
+            images_links.append(img + "?c=8")
+        # images_links: list = car_details.full_info['images_urls']
+
     return template.render(id=car_details.id,
                            manufacturer=car_details.manuf_en,
                            hand=car_details.hand,
@@ -38,5 +46,5 @@ def html_criteria_mail(car_details: CarDetails):
                            prices_handz=car_details.prices_handz,
                            test_date=car_details.test_date,
                            month_on_road=car_details.month_on_road,
+                           images_url=images_links,
                            url_for=url_for)
-

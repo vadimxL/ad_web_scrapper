@@ -76,6 +76,13 @@
                    </span>
                </span>
 </div>
+    <p>
+        <strong>Photos:</strong>
+        {% for url in images_url %}
+            <p><a href={{url}}>
+            <img src={{url}} alt={{loop.index}}></a></p>
+        {% endfor %}
+    </p>
 <table>
     <tbody>
     <tr>

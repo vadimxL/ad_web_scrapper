@@ -28,21 +28,19 @@ class TaskScheduler:
         now = datetime.now()
 
         # Replace the hour, minute, second, and microsecond to set the time to 21:00
-        today_at_22 = now.replace(hour=22, minute=0, second=0, microsecond=0)
-        today_at_7 = now.replace(hour=7, minute=0, second=0, microsecond=0)
+        today_hour_end = now.replace(hour=23, minute=59, second=0, microsecond=0)
+        today_hour_start = now.replace(hour=6, minute=0, second=0, microsecond=0)
 
-        if today_at_7 < now < today_at_22:
+        if today_hour_start < now < today_hour_end:
             # If the current time is between 8 AM and 9 PM, schedule the task for 9 PM
             threading.Thread(target=self._run_task, args=(task_id,)).start()
         else:
-            logger.info(f"Task {task_id} will be run tomorrow because it's not between 8 AM and 9 PM")
+            logger.info(f"Time now: {now}, Task {task_id} will be run tomorrow because it's not between 8 AM and 9 PM")
 
     def tasks_changed_listener(self, event):
         logger.info(f"Tasks changed, {event.data=}, {event.path=}, {event.event_type=}")
         if event.event_type == 'patch':
-            if event.data in ('title', 'repeat_interval', 'active'):
-                task_id = event.path.lstrip('/')
-                self.run_task(task_id)
+            pass
         if event.event_type == 'put':
             if event.data is None:  # task deleted or no tasks
                 logger.info("All tasks deleted or not tasks found")
@@ -65,6 +63,7 @@ class TaskScheduler:
             tasks: List[models.Task] = DbHandler.get_tasks()
             for task in tasks:
                 logger.info(f"Job id: {task.id}, "
+                            f"Time now: {datetime.now()}, "
                             f"last_run: {task.last_run}, "
                             f"next_run: {task.last_run + timedelta(hours=1)}, "
                             f"active: {task.active}, "
