@@ -201,7 +201,7 @@ async def update_task(task_id: str, email: Optional[EmailStr] = None,
                       km_max: Annotated[Optional[int], Query(title="Max value of mileage", le=200000)] = None):
     task = DbHandler.get_task(task_id)
     if task is None:
-        raise HTTPException(status_code=404, detail="Item not found")
+        raise HTTPException(status_code=404, detail="Task not found")
     if email is not None:
         task.mail = email
     if "km" not in task.title:
