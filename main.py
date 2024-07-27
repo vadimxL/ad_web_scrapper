@@ -10,7 +10,7 @@ from contextlib import asynccontextmanager
 from io import BytesIO
 import pandas as pd
 from datetime import datetime, timedelta
-from typing import List, Dict, Optional, Tuple
+from typing import List, Dict, Optional, Tuple, Annotated
 from urllib import parse
 
 import requests
@@ -18,7 +18,7 @@ from pydantic import EmailStr
 from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import StreamingResponse
 import firebase_db
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Path, Query
 from car_details import CarDetails
 from db_handler import DbHandler
 from email_sender.email_sender import EmailSender
@@ -41,6 +41,7 @@ async def lifespan(app: FastAPI):
     yield
     scheduler.stop()
 
+
 manufacturers_en = {
     "21": "hyundai",
     "48": "kia",
@@ -53,7 +54,6 @@ manufacturers_en = {
     "17": "honda",
     "30": "mitsubishi",
 }
-
 
 app = FastAPI(lifespan=lifespan)
 
@@ -166,19 +166,56 @@ def recent_task(task: models.Task):
     return (datetime.now() - task.last_run) < timedelta(days=1)
 
 
+def create_title(params: dict) -> str:
+    car_manufacturers_en: list = [manufacturers_en[manufacturer] for manufacturer in params['manufacturer'].split(",")]
+    title_params: dict = params.copy()
+    title_params['manufacturer'] = str.join(",", car_manufacturers_en)
+    title = join_query_params(title_params)
+    print(f"Title params: {title}")
+    return title
+
+
+def parse_km_range(km_str: str) -> Tuple[int, int]:
+    params_km_start: int = -1
+    params_km_end: int = -1
+    split_km: list = km_str.split("-")
+    if len(split_km) == 4:  # -x--y
+        params_km_start = -1 * int(split_km[1])
+        params_km_end = -1 * int(split_km[3])
+    if len(split_km) == 3 and split_km[0]:  # x--y
+        params_km_start = int(split_km[0])
+        params_km_end = -1 * int(split_km[2])
+    if len(split_km) == 3 and not split_km[0]:  # -x-y
+        params_km_start = -1 * int(split_km[1])
+        params_km_end = int(split_km[2])
+    if len(split_km) == 2:  # x-y
+        params_km_start = int(split_km[0])
+        params_km_end = int(split_km[1])
+    return params_km_start, params_km_end
+
+
 # Update (PUT)
 @app.put("/tasks/{task_id}", response_model=models.Task)
-async def update_task(task_id: str, email: Optional[EmailStr] = None, repeat_interval: Optional[int] = None,
-                      title: Optional[str] = None):
+async def update_task(task_id: str, email: Optional[EmailStr] = None,
+                      km_min: Annotated[Optional[int], Query(title="Min value of mileage", ge=-1)] = None,
+                      km_max: Annotated[Optional[int], Query(title="Max value of mileage", le=200000)] = None):
     task = DbHandler.get_task(task_id)
     if task is None:
         raise HTTPException(status_code=404, detail="Item not found")
     if email is not None:
         task.mail = email
-    if repeat_interval is not None:
-        task.repeat_interval = repeat_interval
-    if title is not None:
-        task.title = title
+    if "km" not in task.title:
+        raise HTTPException(status_code=400, detail="Task does not have km range")
+
+    params_km_start, params_km_end = parse_km_range(task.params['km'])
+
+    if km_min is not None:
+        task.params['km'] = f"{km_min}-{params_km_end}"
+        task.title = create_title(task.params)
+    if km_max is not None:
+        task.params['km'] = f"{params_km_start}-{km_max}"
+        task.title = create_title(task.params)
+
     DbHandler.update_task(task)
     return task
 
@@ -216,10 +253,7 @@ async def create_task(email: EmailStr, url: str):
     car_manufacturers, car_models, car_submodels = await Scraper.get_meta(params['manufacturer'],
                                                                           params.get('model', ""),
                                                                           params.get('subModel', ""))
-    car_manufacturers_en = [manufacturers_en[manufacturer] for manufacturer in params['manufacturer'].split(",")]
-    title_params: dict = params.copy()
-    title_params['manufacturer'] = str.join(",", car_manufacturers_en)
-    title = join_query_params(title_params)
+    title = create_title(params)
     print(f"Title params: {title}")
     task = models.Task(id=id_, title=title, mail=email,
                        params=params,

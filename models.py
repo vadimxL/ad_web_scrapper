@@ -33,6 +33,7 @@ class Range(BaseModel):
     min: int
     max: int
 
+
 class Task(BaseModel):
     id: str
     title: str
@@ -45,6 +46,7 @@ class Task(BaseModel):
     car_models: Optional[List[str]] = None
     car_submodels: Optional[List[str]] = None
     # criteria: CarCriteria
+
 
 def create_task_from_dict(task_dict: dict) -> Task:
     task_ = Task(**task_dict)
