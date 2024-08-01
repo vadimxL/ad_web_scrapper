@@ -76,8 +76,13 @@ class Scraper:
         # if not response[0].from_cache:
         #     print(f'Not from cache, sleeping for {secs_to_sleep} second')
         #     time.sleep(secs_to_sleep)
-
-        json_response = await response[0].json()
+        try:
+            json_response = await response[0].json()
+        except Exception as e:
+            logger.error(f"Error parsing json: {e}")
+            with open('json/error_first_page.json', 'w', encoding='utf-8') as f:
+                json.dump(response[0], f, indent=4, ensure_ascii=False)
+            return {}
 
         directory = 'json'
         if not os.path.exists(directory):
@@ -88,10 +93,10 @@ class Scraper:
 
         return json_response
 
-    def get_number_of_pages(self, first_page):
+    def get_number_of_pages(self, first_page) -> int:
         return first_page['data']['pagination']['last_page']
 
-    def get_total_items(self, first_page):
+    def get_total_items(self, first_page) -> int:
         return first_page['data']['pagination']['total_items']
 
     async def _scrape(self, q: dict, feed_sources, last_page: int = 1):
@@ -371,14 +376,19 @@ class Scraper:
         result = asyncio.new_event_loop().run_until_complete(self.scrape_criteria(q))
         return result
 
-    async def scrape_criteria(self, query_str: dict):
-        first_page = await self.first_page(query_str)
-        total_items_to_scrape = self.get_total_items(first_page)
-        logger.info(f"Total items to be scraped: {total_items_to_scrape} for query: {query_str}")
+    async def scrape_criteria(self, query_: dict) -> Tuple[List[CarDetails], List[dict]]:
+        first_page: dict = await self.first_page(query_)
+
+        if not first_page:
+            logger.error(f"Error scraping first page: {first_page}")
+            return [], []
+
+        num_of_ads = self.get_total_items(first_page)
+        logger.info(f"Total items to be scraped: {num_of_ads} for query: {query_}")
         last_page = self.get_number_of_pages(first_page)
         feed_sources = FEED_SOURCES_PRIVATE
-        car_ads_to_save, feed_items = await self._scrape(query_str, feed_sources=feed_sources, last_page=last_page)
-        logger.info(f"Scraped {len(car_ads_to_save)} items for query: {query_str}, feed_sources: {feed_sources}")
+        car_ads_to_save, feed_items = await self._scrape(query_, feed_sources=feed_sources, last_page=last_page)
+        logger.info(f"Scraped {len(car_ads_to_save)} items for query: {query_}, feed_sources: {feed_sources}")
         # self.save_feed_items(feed_items)
         return car_ads_to_save, feed_items
 
