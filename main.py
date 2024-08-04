@@ -143,13 +143,13 @@ def execute_tasks(task_id: str):
     internal_info_logger.info(f"Executing task: {task_id}")
     scraper = Scraper(cache_timeout_min=30)
     task = DbHandler.get_task(task_id)
-    mail_sender = EmailSender(task.mail)
     if task is None:
         internal_info_logger.error(f"Task {task_id} not found")
         return
     if not task.active:
         internal_info_logger.info(f"Task {task_id} is not active")
         return
+    mail_sender = EmailSender(task.mail)
     db_handler = DbHandler(task.title, mail_sender)
     results, _ = scraper.run(task.params)
     internal_info_logger.info(f"Recurrence task: {task_id}: {task}")
