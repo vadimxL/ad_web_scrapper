@@ -79,9 +79,7 @@ class Scraper:
         try:
             json_response = await response[0].json()
         except Exception as e:
-            logger.error(f"Error parsing json: {e}")
-            with open('json/error_first_page.json', 'w', encoding='utf-8') as f:
-                json.dump(response[0], f, indent=4, ensure_ascii=False)
+            logger.error(f"Error parsing json: {e}, response: {response}")
             return {}
 
         directory = 'json'

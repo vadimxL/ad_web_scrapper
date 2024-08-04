@@ -25,12 +25,18 @@ def html_criteria_mail(car_details: CarDetails, images_links: list = []):
     else:
         initial_price = "N/A"
 
+
+
     images_links = []
-    if 'images_urls' in car_details.full_info:
-        img: str
-        for img in car_details.full_info['images_urls']:
-            images_links.append(img + "?c=8")
-        # images_links: list = car_details.full_info['images_urls']
+    try:
+        if 'images_urls' in car_details.full_info:
+            img: str
+            for img in car_details.full_info['images_urls']:
+                images_links.append(img + "?c=8")
+            # images_links: list = car_details.full_info['images_urls']
+    except Exception as e:
+        print(f"Error getting images: {e}")
+        print(f"Full info: {car_details}")
 
     return template.render(id=car_details.id,
                            manufacturer=car_details.manuf_en,
