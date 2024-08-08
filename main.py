@@ -103,28 +103,6 @@ async def read_items():
     tasks = DbHandler.load_tasks()
     return [task for task in tasks.values()]
 
-# @app.get("/scrape")
-# async def scrape(url: str):
-#     params: dict = extract_query_params(url)
-#     scraper = Scraper(cache_timeout_min=30)
-#     results: List[CarDetails]
-#     results, _ = await scraper.scrape_criteria(params)
-#     df: pd.DataFrame = dump_to_excel_car_details(results)
-#     filename = "car_ads_"
-#     for param in params.values():
-#         filename += param + "_"
-#     filename = filename.replace(",", "_") + ".xlsx"
-#     df.to_excel('car_ads.xlsx', index=False)
-#     buffer = BytesIO()
-#     with pd.ExcelWriter(buffer) as writer:
-#         df.to_excel(writer, index=False)
-#
-#     return StreamingResponse(
-#         BytesIO(buffer.getvalue()),
-#         media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-#         headers={"Content-Disposition": f"attachment; filename={filename}"})
-
-
 def execute_tasks(task_id: str):
     internal_info_logger.info(f"Executing task: {task_id}")
     scraper = Scraper(cache_timeout_min=30)
