@@ -68,13 +68,22 @@ app.add_middleware(
 )
 
 
+@app.get("/models/{manufacturer_id}")
 async def get_models(manufacturer_id: str):
     logging.info(f"Getting models for manufacturer: {manufacturer_id}")
-    # scraper = Scraper(cache_timeout_min=5)
     car_models = await Scraper.get_model(manufacturer_id)
     if 'data' not in car_models:
         return []
     return car_models['data']['model']
+
+
+@app.get("/manufacturers")
+async def get_manufacturers():
+    manufacturers = await Scraper.get_manufacturers()
+    logging.info(f"Getting manufacturers, {manufacturers}")
+    if 'data' not in manufacturers:
+        return []
+    return manufacturers['data']['manufacturer']
 
 
 @app.get("/submodels/{model_id}")
@@ -102,6 +111,7 @@ def join_query_params(params: dict) -> str:
 async def read_items():
     tasks = DbHandler.load_tasks()
     return [task for task in tasks.values()]
+
 
 def execute_tasks(task_id: str):
     internal_info_logger.info(f"Executing task: {task_id}")

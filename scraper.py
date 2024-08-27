@@ -352,6 +352,14 @@ class Scraper:
         return response.json()
 
     @staticmethod
+    async def get_manufacturers():
+        session = MyCachedSession('cache/model_cache', backend='sqlite', expire_after=timedelta(days=4))
+        url = f"{BASE_OPTIONS_API_URL}?fields=manufacturer"
+
+        response = session.get(url, headers=model_headers, data={}, timeout=10)
+        return response.json()
+
+    @staticmethod
     async def get_submodel(model_id: str):
         session = MyCachedSession('cache/model_cache', backend='sqlite', expire_after=timedelta(days=4))
         url = f"{BASE_OPTIONS_API_URL}?fields=subModel&model={model_id}"
