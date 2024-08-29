@@ -14,7 +14,7 @@ from typing import List, Dict, Optional, Tuple, Annotated
 from urllib import parse
 
 import requests
-from pydantic import EmailStr
+from pydantic import EmailStr, BaseModel
 from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import StreamingResponse
 import firebase_db
@@ -209,7 +209,7 @@ async def run_tasks():
 
 
 @app.post("/tasks", response_model=models.Task)
-async def create_task(email: EmailStr, url: str):
+async def create_task(email: EmailStr, url: str) -> models.Task:
     """
     Create a new task
     """
@@ -240,6 +240,24 @@ async def create_task(email: EmailStr, url: str):
     # create task in database
     DbHandler.insert_task(task)
     return task
+
+
+class UITask(BaseModel):
+    email: EmailStr
+    km_start: int
+    km_end: int
+    manufacturer: str
+    model: str
+    year_start: int
+    year_end: int
+
+
+
+@app.post("/v2/tasks", response_model=models.Task)
+async def create_task_v2(ui_task: UITask):
+    url = f"?manufacturer={ui_task.manufacturer}&model={ui_task.model}&year={ui_task.year_start}-{ui_task.year_end}&km={ui_task.km_start}-{ui_task.km_end}"
+    t: models.Task = await create_task(ui_task.email, url)
+    return t
 
 
 @app.delete("/tasks/{task_id}")
