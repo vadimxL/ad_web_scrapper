@@ -1,29 +1,18 @@
 import asyncio
 import hashlib
-from urllib.parse import urlparse
-
-import json
 import logging
-import os
 import threading
+import models
+import firebase_db
 from contextlib import asynccontextmanager
-from io import BytesIO
-import pandas as pd
 from datetime import datetime, timedelta
-from typing import List, Dict, Optional, Tuple, Annotated
+from typing import List, Optional, Tuple, Annotated
 from urllib import parse
-
-import requests
 from pydantic import EmailStr, BaseModel
 from starlette.middleware.cors import CORSMiddleware
-from starlette.responses import StreamingResponse
-import firebase_db
-from fastapi import FastAPI, HTTPException, Path, Query
-from car_details import CarDetails
+from fastapi import FastAPI, HTTPException, Query
 from db_handler import DbHandler
 from email_sender.email_sender import EmailSender
-from persistence import dump_to_excel_car_details
-import models
 from logger_setup import internal_info_logger
 from scheduler import TaskScheduler
 from scraper import Scraper
@@ -90,10 +79,10 @@ async def get_manufacturers():
 async def get_submodels(model_id: str):
     logging.info(f"Getting models for manufacturer: {model_id}")
     # scraper = Scraper(cache_timeout_min=5)
-    car_models = await Scraper.get_model(model_id)
+    car_models = await Scraper.get_submodel(model_id)
     if 'data' not in car_models:
         return []
-    return car_models['data']['model']
+    return car_models['data']['subModel']
 
 
 def extract_query_params(url: str) -> dict:
