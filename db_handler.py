@@ -1,5 +1,5 @@
 import json
-from typing import List, Dict
+from typing import List, Dict, Optional
 from firebase_admin import db
 import models
 from car_details import CarDetails
@@ -57,8 +57,9 @@ class DbHandler:
         db.reference('tasks').child(task_id).delete()
 
     @classmethod
-    def load_tasks(cls) -> Dict:
-        return db.reference('tasks').get()
+    def load_tasks(cls) -> Optional[Dict]:
+        tasks = db.reference('tasks').get()
+        return tasks
 
     def insert_car_ad(self, new_ad: CarDetails):
         ad_dict = new_ad.model_dump(mode='json')

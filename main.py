@@ -99,6 +99,8 @@ def join_query_params(params: dict) -> str:
 @app.get("/tasks", response_model=List[models.Task])
 async def read_items():
     tasks = DbHandler.load_tasks()
+    if tasks is None:
+        return []
     return [task for task in tasks.values()]
 
 
@@ -190,6 +192,8 @@ async def run_tasks():
     and Scrape the data
     """
     tasks = DbHandler.load_tasks()
+    if tasks is None:
+        return {"message": "No tasks found"}
     for id_, task_dict in tasks.items():
         task_ = models.create_task_from_dict(task_dict)
         loop = asyncio.get_event_loop()
