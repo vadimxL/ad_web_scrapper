@@ -16,6 +16,7 @@ from email_sender.email_sender import EmailSender
 from logger_setup import internal_info_logger
 from scheduler import TaskScheduler
 from scraper import Scraper
+from utils import join_query_params, extract_query_params
 
 
 @asynccontextmanager
@@ -83,18 +84,6 @@ async def get_submodels(model_id: str):
     if 'data' not in car_models:
         return []
     return car_models['data']['subModel']
-
-
-def extract_query_params(url: str) -> dict:
-    # Extract query parameters from the URL
-    params = dict(parse.parse_qsl(parse.urlsplit(url).query))
-    return params
-
-
-def join_query_params(params: dict) -> str:
-    # Join the dictionary of query parameters into a string without URL encoding
-    return '&'.join(f"{key}={value}" for key, value in params.items())
-
 
 @app.get("/tasks", response_model=List[models.Task])
 async def read_items():

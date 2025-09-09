@@ -2,10 +2,7 @@ import asyncio
 import os
 from datetime import datetime, timedelta
 import re
-from typing import List, Dict, Tuple
-from urllib.parse import urlparse
-
-import requests
+from typing import List, Tuple, Dict, Optional
 
 import json
 import time
@@ -17,6 +14,7 @@ from headers import scrape_headers, model_headers
 from logger_setup import internal_info_logger as logger
 from dotenv import load_dotenv
 
+from utils import extract_query_params
 
 load_dotenv()
 if "BASE_API_URL" not in os.environ:
@@ -29,7 +27,7 @@ if "BASE_URL" not in os.environ:
 BASE_API_URL: str = os.environ.get("BASE_API_URL")
 BASE_OPTIONS_API_URL: str = os.environ.get("BASE_OPTIONS_API_URL")
 BASE_URL: str = os.environ.get("BASE_URL")
-
+BASE_API_CAR_AD_URL: str = os.environ.get("BASE_API_CAR_AD_URL")
 
 FEED_SOURCES_ALL = ['xml', 'commercial', 'private']
 FEED_SOURCES_PRIVATE = FEED_SOURCES_ALL[2]
@@ -48,12 +46,11 @@ class Scraper:
     async def scrape(self, q: dict) -> CachedResponse:
         url = BASE_API_URL
 
-        session = CachedSession(cache=SQLiteBackend(
+        async with CachedSession(cache=SQLiteBackend(
             cache_name='cache/scrape_cache',
             expire_after=timedelta(minutes=30),
-        ))
-        r: CachedResponse = await session.get(url, data="", headers=scrape_headers, params=q)
-        await session.close()
+        )) as session:
+            r: CachedResponse = await session.get(url, headers=scrape_headers, params=q)
 
         if r.from_cache:
             logger.info(
@@ -91,11 +88,21 @@ class Scraper:
 
         return json_response
 
+    def get_total_number_of_items_per_page(self, first_page) -> int:
+        return first_page['data']['pagination']['perPage']
+
     def get_number_of_pages(self, first_page) -> int:
-        return first_page['data']['pagination']['last_page']
+        return first_page['data']['pagination']['pages']
 
     def get_total_items(self, first_page) -> int:
-        return first_page['data']['pagination']['total_items']
+        return first_page['data']['pagination']['total']
+
+    def get_ads(self, page: dict) -> List[dict]:
+        try:
+            return page['data']['private']
+        except KeyError as e:
+            logger.error(f"Error getting ads from page: {e}")
+            return []
 
     async def _scrape(self, q: dict, feed_sources, last_page: int = 1):
         filtered_feed_items = []  # type: list
@@ -118,7 +125,7 @@ class Scraper:
 
             scraped_page = await page.json()
             try:
-                feed_items = scraped_page['data']['feed']['feed_items']
+                feed_items = self.get_ads(scraped_page)
             except KeyError as e:
                 logger.error(f"Error scraping page: {e}")
                 with open('json/error_page.json', 'w', encoding='utf-8') as f:
@@ -137,16 +144,17 @@ class Scraper:
             #     # print(f"Skipping item {car_details['type']} because it's not an ad")
             #     continue
             #
-            if 'id' not in item:
-                no_id_items_num += 1
-                continue
+            # if 'id' not in item:
+            #     no_id_items_num += 1
+            #     continue
 
-            if item['feed_source'] not in feed_sources:
-                incompatible_feed_sources_items_num += 1
-                continue
+            # if item['feed_source'] not in feed_sources:
+            #     incompatible_feed_sources_items_num += 1
+            #     continue
 
             filtered_feed_items.append(item)
-            car_details: CarDetails = self.extract_car_details(item)
+            car_ad: dict = await self._get_car_details(item["token"])
+            car_details: CarDetails = self.extract_car_details_new(car_ad)
             car_ads_to_save.append(car_details)
 
         logger.info(f"Skipped {no_id_items_num} items because they don't have an id")
@@ -196,6 +204,119 @@ class Scraper:
         # looping till length l
         for i in range(0, len(listing), n):
             yield listing[i:i + n]
+
+    async def _get_car_details(self, token: str) -> Dict:
+        url = f"{BASE_API_CAR_AD_URL}/{token}"
+        async with CachedSession(cache=SQLiteBackend(
+            cache_name='cache/scrape_cache',
+            expire_after=timedelta(minutes=30),
+        )) as session:
+            r: CachedResponse = await session.get(url, headers=scrape_headers)
+
+        if r.from_cache:
+            logger.info(
+                f'cache created_at: {r.created_at.strftime("%H:%M")}, last_used: {r.last_used.strftime("%H:%M:%S")}, '
+                f'expires: {datetime.fromisoformat(r.expires.isoformat()).strftime("%H:%M:%S") if r.expires else "Never"} ,'
+                f'url: {url}')
+
+        try:
+            json_response = await r.json()
+        except Exception as e:
+            logger.error(f"Error parsing json: {e}, response: {r}")
+            return {}
+
+        return json_response
+
+    def extract_car_details_new(self, car_ad: dict) -> Optional[CarDetails]:
+        """Extract car details from the car ad API response"""
+        if not car_ad or 'data' not in car_ad:
+            return None
+
+        data = car_ad['data']
+
+        # Basic info
+        car_id = str(data.get('token', ''))
+        price = float(data.get('price', 0))
+
+        # Dates
+        date_added = datetime.now()  # Default to current time
+        if 'dates' in data and 'createdAt' in data['dates']:
+            date_added = datetime.fromisoformat(data['dates']['createdAt'].replace('Z', '+00:00'))
+
+        formatted_date = date_added.strftime("%-d/%-m/%Y")
+        date_added_epoch = int((date_added - datetime(1899, 12, 30)).days +
+                               (date_added - datetime(1899, 12, 30)).seconds / 86400)
+
+        # Manufacturer and model
+        manufacturer_he = data.get('manufacturer', {}).get('text', 'N/A')
+        manuf_en = data.get('manufacturer', {}).get('textEng', 'N/A')
+        model = data.get('model', {}).get('text', 'N/A')
+        submodel = data.get('subModel', {}).get('text', 'N/A')
+
+        # Car details
+        car_model = f"{model} {submodel}"
+        year = data.get('vehicleDates', {}).get('yearOfProduction', 0)
+        kilometers = data.get('km', 0)
+        city = data.get('address', {}).get('city', {}).get('text', 'N/A')
+
+        # Special features
+        blind_spot = 'N/A'
+        if data.get('specification', {}).get('blindSpotAssist'):
+            blind_spot = "התרעה על רכב בשטח מת"
+
+        smart_cruise_control = 'N/A'
+        if data.get('specification', {}).get('adaptiveCruiseControl'):
+            smart_cruise_control = "בקרת שיוט אדפטיבית"
+
+        # Gear type
+        gear_type = 'N/A'
+        if 'gearBox' in data:
+            gear_text = data['gearBox'].get('text', '').lower()
+            if "אוטומט" in gear_text:
+                gear_type = "automatic"
+            elif "ידני" in gear_text:
+                gear_type = "manual"
+
+        # Hand (owner history)
+        hand = data.get('hand', {}).get('id', 0)
+
+        # Test date
+        test_date = 'N/A'
+        if 'vehicleDates' in data and 'testDate' in data['vehicleDates']:
+            test_date = data['vehicleDates']['testDate'].split('T')[0]
+
+        # Month on road
+        month_on_road = 'N/A'
+        if 'vehicleDates' in data and 'monthOfProduction' in data['vehicleDates']:
+            month_on_road = data['vehicleDates']['monthOfProduction'].get('text', 'N/A')
+
+        # Horsepower
+        hp = data.get('horsePower', None)
+
+        return CarDetails(
+            id=car_id,
+            car_model=car_model,
+            year=year,
+            price=price,
+            date_added_epoch=date_added_epoch,
+            date_added=formatted_date,
+            feed_source="api",  # This is from the API response
+
+            # Fields with default values
+            city=city,
+            manufacturer_he=manufacturer_he,
+            hp=hp,
+            hand=hand,
+            kilometers=kilometers,
+            prices=[PriceHistory(price=price, date=datetime.now())],
+            blind_spot=blind_spot,
+            smart_cruise_control=smart_cruise_control,
+            manuf_en=manuf_en,
+            gear_type=gear_type,
+            test_date=test_date,
+            month_on_road=month_on_road,
+            full_info=data
+        )
 
     def extract_car_details(self, feed_item: json) -> CarDetails:
         horsepower_value = 0
@@ -391,13 +512,19 @@ class Scraper:
 
         num_of_ads = self.get_total_items(first_page)
         logger.info(f"Total items to be scraped: {num_of_ads} for query: {query_}")
-        last_page = self.get_number_of_pages(first_page)
+        pages_num = self.get_number_of_pages(first_page)
         feed_sources = FEED_SOURCES_PRIVATE
-        car_ads_to_save, feed_items = await self._scrape(query_, feed_sources=feed_sources, last_page=last_page)
+        car_ads_to_save, feed_items = await self._scrape(query_, feed_sources=feed_sources, last_page=pages_num)
         logger.info(f"Scraped {len(car_ads_to_save)} items for query: {query_}, feed_sources: {feed_sources}")
         # self.save_feed_items(feed_items)
         return car_ads_to_save, feed_items
 
 
 if __name__ == '__main__':
-    pass
+    url: str = "https://www.yad2.co.il/vehicles/cars?manufacturer=21%2C27%2C48%2C36&year=2017--1&price=-1-50000&km=-1-140000&area=6%2C5&priceOnly=1&imgOnly=1"
+    scraper: Scraper = Scraper(cache_timeout_min=30)
+    query_params = extract_query_params(url)
+    result: Tuple[List[CarDetails], List[dict]] = scraper.run(query_params)
+    car_ads: List[CarDetails] = result[0]
+    for car_ad in car_ads:
+        print(f"{car_ad.id}, {car_ad.manufacturer_he} {car_ad.car_model}, {car_ad.year}, {car_ad.kilometers} km, {car_ad.price} ₪, added on {car_ad.date_added}")

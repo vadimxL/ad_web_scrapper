@@ -31,12 +31,12 @@ class Handz:
         return response.json()
 
     @staticmethod
-    def prepare_data(listings):
-        # Sort the list of dictionaries based on the 'id' key
-        listings.sort(key=lambda x: x['id'])
+    def prepare_data(listings: List[Dict]):
+        # Sort the list of dictionaries based on the 'token' key
+        listings.sort(key=lambda x: x['token'])
         # Concatenate the 'id' and 'price' values for each dictionary in t
         magic_string = "-vt@.%G^M-994tho.!$d"
-        id_and_price = ''.join(f"{d['id']}-{Handz.parse_int(d['price'])}" for d in listings)
+        id_and_price = ''.join(f"{d['token']}-{Handz.parse_int(d['price'])}" for d in listings)
         # Compute the SHA512 hash of the concatenated string
         hash_result = hashlib.sha512(f'"{id_and_price}"{magic_string}'.encode()).hexdigest()
         # Prepare the request body

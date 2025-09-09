@@ -36,6 +36,8 @@ class DbHandler:
     def get_tasks(cls) -> List[models.Task]:
         tasks_list = []
         tasks: Dict = db.reference('tasks').get()
+        if tasks is None:
+            return tasks_list
         for task_id, task_dict in tasks.items():
             tasks_list.append(models.create_task_from_dict(task_dict))
         return tasks_list
