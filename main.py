@@ -2,6 +2,7 @@ import asyncio
 import hashlib
 import logging
 import threading
+import os
 import models
 import firebase_db
 from contextlib import asynccontextmanager
@@ -10,6 +11,7 @@ from typing import List, Optional, Tuple, Annotated
 from urllib import parse
 from pydantic import EmailStr, BaseModel
 from starlette.middleware.cors import CORSMiddleware
+from starlette.middleware.sessions import SessionMiddleware
 from fastapi import FastAPI, HTTPException, Query
 from db_handler import DbHandler
 from email_sender.email_sender import EmailSender
@@ -17,6 +19,7 @@ from logger_setup import internal_info_logger
 from scheduler import TaskScheduler
 from scraper import Scraper
 from utils import join_query_params, extract_query_params
+from auth import router as auth_router
 
 
 @asynccontextmanager
@@ -43,6 +46,7 @@ manufacturers_en = {
     "41": "volkswagen",
     "17": "honda",
     "30": "mitsubishi",
+    "36": "suzuki",
 }
 
 app = FastAPI(lifespan=lifespan)
@@ -56,6 +60,16 @@ app.add_middleware(
     allow_headers=["*"],  # You can specify specific headers if needed
     expose_headers=["*"]
 )
+
+# Server-side session middleware (cookie-based)
+app.add_middleware(
+    SessionMiddleware,
+    secret_key=os.getenv("SESSION_SECRET_KEY", "change-this-secret"),
+    same_site="lax",
+)
+
+# Include authentication routes
+app.include_router(auth_router, prefix="/auth")
 
 
 @app.get("/models/{manufacturer_id}")
@@ -120,8 +134,9 @@ def recent_task(task: models.Task):
     return (datetime.now() - task.last_run) < timedelta(days=1)
 
 
-def create_title(params: dict) -> str:
-    car_manufacturers_en: list = [manufacturers_en[manufacturer] for manufacturer in params['manufacturer'].split(",")]
+def create_title(params: dict, manufacturers_in_en: dict) -> str:
+    car_manufacturers_en: list = \
+        [manufacturers_in_en[manufacturer] for manufacturer in params['manufacturer'].split(",")]
     title_params: dict = params.copy()
     title_params['manufacturer'] = str.join(",", car_manufacturers_en)
     title = join_query_params(title_params)
@@ -165,10 +180,10 @@ async def update_task(task_id: str, email: Optional[EmailStr] = None,
 
     if km_min is not None:
         task.params['km'] = f"{km_min}-{params_km_end}"
-        task.title = create_title(task.params)
+        task.title = create_title(task.params, manufacturers_en)
     if km_max is not None:
         task.params['km'] = f"{params_km_start}-{km_max}"
-        task.title = create_title(task.params)
+        task.title = create_title(task.params, manufacturers_en)
 
     DbHandler.update_task(task)
     return task
@@ -197,8 +212,13 @@ async def create_task(email: EmailStr, url: str) -> models.Task:
     """
     params: dict = extract_query_params(url)
 
-    if 'manufacturer' not in params or 'model' not in params or 'year' not in params or 'km' not in params:
-        raise HTTPException(status_code=400, detail="Invalid URL")
+    required_params = ['manufacturer', 'year', 'km'] # model
+    missing_params = [param for param in required_params if param not in params or not params[param].strip()]
+    if missing_params:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Invalid URL, missing or empty required parameters: {', '.join(missing_params)}"
+        )
 
     # id_ = hashlib.sha256(url.encode()).hexdigest()
     id_ = hashlib.md5(url.encode()).hexdigest()[0:12]
@@ -209,7 +229,7 @@ async def create_task(email: EmailStr, url: str) -> models.Task:
     car_manufacturers, car_models, car_submodels = await Scraper.get_meta(params['manufacturer'],
                                                                           params.get('model', ""),
                                                                           params.get('subModel', ""))
-    title = create_title(params)
+    title = create_title(params, manufacturers_en)
     print(f"Title params: {title}")
     task = models.Task(id=id_, title=title, mail=email,
                        params=params,
