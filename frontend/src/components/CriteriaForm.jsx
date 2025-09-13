@@ -9,28 +9,35 @@ import Models from "./Models";
 import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {DatePicker} from "@mui/x-date-pickers/DatePicker";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
 import * as React from "react";
 import Navbar from "../Navbar";
 import dayjs from "dayjs";
 import {InputLabel, MenuItem, Select} from "@mui/material";
 import FormControl from "@mui/material/FormControl";
-import SubModel from "./SubModel";
+import Slider from '@mui/material/Slider';
+import InputAdornment from '@mui/material/InputAdornment';
+import TextField from '@mui/material/TextField';
 
 export default function CriteriaForm(props) {
-    const [age, setAge] = React.useState('');
+    const [kmStart, setKmStart] = React.useState(0);
+    const [kmEnd, setKmEnd] = React.useState(100000);
+    const [yearStart, setYearStart] = React.useState(2020);
+    const [yearEnd, setYearEnd] = React.useState(2024);
+    const [priceRange, setPriceRange] = React.useState([0, 250000]); // [min, max]
+    const MIN_PRICE = 0;
+    const MAX_PRICE = 250000;
+    const PRICE_STEP = 1000;
+    const MIN_KM = 0;
+    const MAX_KM = 150000;
+    const KM_STEP = 1000;
+    // Use props for manufacturers/models selection
+    const { selectedManufacturers, setSelectedManufacturers, selectedModels, setSelectedModels } = props;
 
-    const handleChange = (event) => {
-        setAge(event.target.value);
-    };
-
-    const menu_items = [];
-    for (let i = 0; i < 100000; i += 5000) {
-        menu_items.push(<MenuItem key={i} value={i}>{i}</MenuItem>);
-    }
+    // Determine if submit should be disabled (handle both array or scalar values)
+    const hasManufacturer = Array.isArray(selectedManufacturers) ? selectedManufacturers.length > 0 : !!selectedManufacturers;
+    const hasModel = Array.isArray(selectedModels) ? selectedModels.length > 0 : !!selectedModels;
+    const isSubmitDisabled = !(hasManufacturer && hasModel);
 
     return (
     <div>
@@ -49,16 +56,27 @@ export default function CriteriaForm(props) {
             <Typography component="h1" variant="h5">
                 יצירת קריטריון
             </Typography>
-            <Box component="form" noValidate onSubmit={props.onSubmit} sx={{mt: 3}}>
+            <Box component="form" noValidate onSubmit={e => {
+                e.preventDefault();
+                if (props.onSubmit) {
+                    props.onSubmit({
+                        manufacturer: selectedManufacturers,
+                        model: selectedModels,
+                        year_start: yearStart,
+                        year_end: yearEnd,
+                        kmStart,
+                        kmEnd,
+                        price_min: priceRange[0],
+                        price_max: priceRange[1]
+                    });
+                }
+            }} sx={{mt: 3}}>
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
                         <Manufacturers/>
                     </Grid>
                     <Grid item xs={12}>
                         <Models/>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <SubModel/>
                     </Grid>
                     <Grid item xs={6}>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -67,7 +85,8 @@ export default function CriteriaForm(props) {
                                 id="start_year"
                                 name="start_year"
                                 views={["year"]}
-                                defaultValue={dayjs('2020-01-01')}
+                                value={dayjs(`${yearStart}-01-01`)}
+                                onChange={date => setYearStart(date ? date.year() : 2020)}
                                 renderInput={props.renderInput}
                             />
                         </LocalizationProvider>
@@ -79,61 +98,113 @@ export default function CriteriaForm(props) {
                                 id="end_year"
                                 name="end_year"
                                 views={["year"]}
-                                defaultValue={dayjs('2024-01-01')}
+                                value={dayjs(`${yearEnd}-01-01`)}
+                                onChange={date => setYearEnd(date ? date.year() : 2024)}
                                 renderInput={props.renderInput}
                             />
                         </LocalizationProvider>
                     </Grid>
-                    <Grid item xs={6}>
-                        <Box sx={{ minWidth: 120 }}>
-                            <FormControl fullWidth>
-                                <InputLabel id="demo-simple-select-label">Km Start</InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={age}
-                                    label="Age"
-                                    onChange={handleChange}
-                                >
-                                    {menu_items}
-                                </Select>
-                            </FormControl>
-                        </Box>
-                        {/*<TextField id="start_km" name="start_km" defaultValue={0} label="Km Start" variant="outlined" />*/}
-                    </Grid>
-                    <Grid item xs={6}>
-                        <Box sx={{ minWidth: 120 }}>
-                            <FormControl fullWidth>
-                                <InputLabel id="demo-simple-select-label">Km End</InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={age}
-                                    label="Age"
-                                    onChange={handleChange}
-                                >
-                                    {menu_items}
-                                </Select>
-                            </FormControl>
-                        </Box>
-                        {/*<TextField id="end_km" name="end_km" defaultValue={80000} label="Km End" variant="outlined" />*/}
-                    </Grid>
+                    {/* Kilometer Range Section */}
                     <Grid item xs={12}>
-                        <TextField
-                            required
-                            fullWidth
-                            id="email"
-                            label="Email Address"
-                            name="email"
-                            autoComplete="email"
-                            defaultValue={"vadimski30@gmail.com"}
-                        />
+                        <Typography variant="subtitle1" align="right" sx={{ fontWeight: 600, mb: 1 }}>קילומטראז'</Typography>
+                        <Grid container spacing={2} alignItems="center" direction="row-reverse">
+                            <Grid item xs={6}>
+                                <TextField
+                                    fullWidth
+                                    label="Max"
+                                    value={kmEnd.toLocaleString('he-IL')}
+                                    onChange={(e) => {
+                                        const raw = e.target.value.replace(/[^0-9]/g,'');
+                                        const val = Math.min(Math.max(parseInt(raw||'0',10), kmStart), MAX_KM);
+                                        setKmEnd(val);
+                                    }}
+                                    InputProps={{
+                                        inputProps: { min: MIN_KM, max: MAX_KM, step: KM_STEP }
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={6}>
+                                <TextField
+                                    fullWidth
+                                    label="Min"
+                                    value={kmStart.toLocaleString('he-IL')}
+                                    onChange={(e) => {
+                                        const raw = e.target.value.replace(/[^0-9]/g,'');
+                                        const val = Math.max(Math.min(parseInt(raw||'0',10), kmEnd), MIN_KM);
+                                        setKmStart(val);
+                                    }}
+                                    InputProps={{
+                                        inputProps: { min: MIN_KM, max: MAX_KM, step: KM_STEP }
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Box sx={{ px: 1 }}>
+                                    <Slider
+                                        value={[kmStart, kmEnd]}
+                                        onChange={(e, newVal) => { setKmStart(newVal[0]); setKmEnd(newVal[1]); }}
+                                        valueLabelDisplay="auto"
+                                        min={MIN_KM}
+                                        max={MAX_KM}
+                                        step={KM_STEP}
+                                        getAriaLabel={() => 'Kilometer range'}
+                                        valueLabelFormat={(v) => v.toLocaleString('he-IL')}
+                                        disableSwap
+                                    />
+                                </Box>
+                            </Grid>
+                        </Grid>
                     </Grid>
+                    {/* Price Range Section */}
                     <Grid item xs={12}>
-                        <FormControlLabel
-                            control={<Checkbox value="allowExtraEmails" color="primary"/>}
-                            label="I want to receive updates email."
-                        />
+                        <Typography variant="subtitle1" align="right" sx={{ fontWeight: 600, mb: 1 }}>מחיר</Typography>
+                        <Grid container spacing={2} alignItems="center" direction="row-reverse">
+                            <Grid item xs={6}>
+                                <TextField
+                                    fullWidth
+                                    label="Max"
+                                    value={priceRange[1]}
+                                    onChange={(e) => {
+                                        const v = Math.min(Math.max(parseInt(e.target.value.replace(/[^0-9]/g, '') || '0', 10), priceRange[0]), MAX_PRICE);
+                                        setPriceRange([priceRange[0], v]);
+                                    }}
+                                    InputProps={{
+                                        startAdornment: <InputAdornment position="start">₪</InputAdornment>,
+                                        inputProps: { min: MIN_PRICE, max: MAX_PRICE, step: PRICE_STEP }
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={6}>
+                                <TextField
+                                    fullWidth
+                                    label="Min"
+                                    value={priceRange[0]}
+                                    onChange={(e) => {
+                                        const v = Math.max(Math.min(parseInt(e.target.value.replace(/[^0-9]/g, '') || '0', 10), priceRange[1]), MIN_PRICE);
+                                        setPriceRange([v, priceRange[1]]);
+                                    }}
+                                    InputProps={{
+                                        startAdornment: <InputAdornment position="start">₪</InputAdornment>,
+                                        inputProps: { min: MIN_PRICE, max: MAX_PRICE, step: PRICE_STEP }
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Box sx={{ px: 1 }}>
+                                    <Slider
+                                        value={priceRange}
+                                        onChange={(e, newVal) => setPriceRange(newVal)}
+                                        valueLabelDisplay="auto"
+                                        min={MIN_PRICE}
+                                        max={MAX_PRICE}
+                                        step={PRICE_STEP}
+                                        getAriaLabel={() => 'Price range'}
+                                        valueLabelFormat={(v) => `₪ ${v.toLocaleString('he-IL')}`}
+                                        disableSwap
+                                    />
+                                </Box>
+                            </Grid>
+                        </Grid>
                     </Grid>
                 </Grid>
                 <Button
@@ -141,6 +212,7 @@ export default function CriteriaForm(props) {
                     fullWidth
                     variant="contained"
                     sx={{mt: 3, mb: 2}}
+                    disabled={isSubmitDisabled}
                 >
                     צור קיטריון לקבלת התראות
                 </Button>

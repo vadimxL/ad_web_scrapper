@@ -8,7 +8,7 @@ const DataTable = () => {
 
     const fetchData = async () => {
         try {
-            const response = await fetch('http://127.0.0.1:8000/ads');
+            const response = await fetch('http://localhost:8000/ads');
             const jsonData = await response.json();
             // Convert dictionary values to an array for mapping
             const dataArray = Object.values(jsonData?.ads || {});

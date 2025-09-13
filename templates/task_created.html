@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Your alert is set up</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", sans-serif; color: #1f2937; background: #f9fafb; margin: 0; padding: 0; }
+    .container { max-width: 680px; margin: 0 auto; background: #ffffff; border-radius: 12px; padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.06); }
+    h1 { font-size: 22px; color: #111827; margin-bottom: 12px; }
+    .subtitle { color: #6b7280; margin-top: 0; }
+    .card { border: 1px solid #e5e7eb; border-radius: 10px; padding: 16px; margin: 16px 0; background: #fbfdff; }
+    .kv { margin: 8px 0; }
+    .k { color: #6b7280; width: 140px; display: inline-block; }
+    .v { color: #111827; font-weight: 600; }
+    .footer { color: #9ca3af; font-size: 12px; margin-top: 24px; }
+    .badge { display: inline-block; padding: 4px 10px; border-radius: 999px; font-size: 12px; background: #e0f2fe; color: #0369a1; font-weight: 600; }
+    ul { margin: 8px 0 0 18px; }
+  </style>
+</head>
+<body style="padding: 24px;">
+  <div class="container">
+    <h1>✅ Your alert is live</h1>
+    <p class="subtitle">We’ll email you when we find new matches.</p>
+
+    <div class="card">
+      <div class="kv"><span class="k">Title</span> <span class="v">{{ title }}</span></div>
+      <div class="kv"><span class="k">Recipient</span> <span class="v">{{ email }}</span></div>
+      <div class="kv"><span class="k">Active</span> <span class="v">{% if active %}Yes{% else %}No{% endif %}</span></div>
+      <div class="kv"><span class="k">Created</span> <span class="v">{{ created_at }}</span></div>
+    </div>
+
+    <div class="card">
+      <div class="kv"><span class="k">Manufacturers</span>
+        <span class="v">
+          {% if manufacturers and manufacturers|length > 0 %}
+            {{ manufacturers | join(", ") }}
+          {% else %}
+            Any
+          {% endif %}
+        </span>
+      </div>
+      <div class="kv"><span class="k">Model</span> <span class="v">{{ model }}</span></div>
+      <div class="kv"><span class="k">Submodel</span> <span class="v">{{ sub_model }}</span></div>
+      <div class="kv"><span class="k">Year</span> <span class="v">{{ year }}</span></div>
+      <div class="kv"><span class="k">Mileage (km)</span> <span class="v">{{ km }}</span></div>
+    </div>
+
+    <div class="card">
+      <span class="badge">What happens next?</span>
+      <ul>
+        <li>We periodically search for new listings that match your criteria.</li>
+        <li>When we find something, you’ll receive an email with all the details and images.</li>
+        <li>You can update or delete this alert at any time from your dashboard.</li>
+      </ul>
+    </div>
+
+    <p class="footer">
+      You’re receiving this message because you created an alert with us.
+      If this wasn’t you, you can ignore this email.
+    </p>
+  </div>
+</body>
+</html>

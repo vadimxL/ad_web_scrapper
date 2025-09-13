@@ -8,7 +8,7 @@ import {
     RouterProvider,
 } from "react-router-dom";
 import CriteriaForm from "./components/CriteriaForm";
-import Tasks from "./components/Tasks";
+import { AuthProvider } from "./context/AuthContext";
 
 const router = createBrowserRouter([
     {
@@ -17,18 +17,16 @@ const router = createBrowserRouter([
     },
     {
         path: "/Home",
-        element: <CriteriaForm />,
-    },
-    {
-        path: "/Tasks",
-        element: <Tasks />,
+        element: <App />,
     }
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-      <RouterProvider router={router} />
+      <AuthProvider>
+          <RouterProvider router={router} />
+      </AuthProvider>
       {/*<App />*/}
   </React.StrictMode>
 );

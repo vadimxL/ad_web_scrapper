@@ -15,8 +15,11 @@ import CriteriaForm from "./components/CriteriaForm";
 import Tasks from "./components/Tasks";
 import AdvancedOptions from "./components/AdvancedOptions";
 import CreateTask from "./components/CreateTask";
+import { useAuth } from './context/AuthContext';
 
-const CREATE_TASK_URL = 'http://127.0.0.1:8000/v2/tasks';
+axios.defaults.withCredentials = true;
+
+const CREATE_TASK_URL = 'http://localhost:8000/v2/tasks';
 
 
 export const ManufacturersContext = createContext([]);
@@ -51,6 +54,7 @@ CriteriaForm.propTypes = {
 };
 
 export default function SignUp() {
+    const { user } = useAuth();
 
     const [selectedManufacturers, setSelectedManufacturers] = useState([]);
     const [selectedModels, setSelectedModels] = useState([]);
@@ -78,26 +82,21 @@ export default function SignUp() {
         fetchManufacturers();
     }, []);
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-
+    const handleSubmit = async (data) => {
+        if (!user || !user.email) {
+            alert('You must be logged in to create a task.');
+            return;
+        }
         const requestData = {
-            email: data.get('email'),
-            // manufacturers: selectedManufacturers.map((manufacturers) => manufacturers),
-            manufacturer: selectedManufacturers,
-            // models: selectedModels.map((models) => models),
-            model: selectedModels,
-            year_start: data.get('start_year'),
-            year_end: data.get('end_year'),
-            km_start: data.get('start_km'),
-            km_end: data.get('end_km'),
-            // mileage_range: {"min": "", "max": ""},
-            // price_range: {"min": priceRange.start_price, "max": priceRange.end_price},
+            email: user.email,
+            manufacturer: Array.isArray(data.manufacturer) ? data.manufacturer.join(",") : data.manufacturer,
+            model: Array.isArray(data.model) ? data.model.join(",") : data.model,
+            year_start: data.year_start,
+            year_end: data.year_end,
+            km_start: data.kmStart,
+            km_end: data.kmEnd,
         };
-
-        console.log(requestData);
-
+        console.log('Submitting:', requestData);
         try {
             const response = await axios.post(CREATE_TASK_URL, requestData);
             // Handle the response as needed
@@ -106,7 +105,6 @@ export default function SignUp() {
             // Handle errors
             console.error('Error sending POST request:', error);
         }
-
     };
 
     const handleSetTodos = (newValues) => {
@@ -115,24 +113,31 @@ export default function SignUp() {
     }
 
     return (
-        <QueryClientProvider client={queryClient}>
-            <ThemeProvider theme={defaultTheme}>
-                <Container component="main" maxWidth="xs">
-                    <ManufacturersContext.Provider value={manufacturers}>
-                        <SelectedManufacturersContext.Provider
-                            value={{selectedManufacturers, setSelectedManufacturers}}>
-                            <SelectedModelsContext.Provider value={{selectedModels, setSelectedModels}}>
-                                <CriteriaForm onSubmit={handleSubmit}
-                                              renderInput={(params) => <TextField {...params} />}/>
-                            </SelectedModelsContext.Provider>
-                        </SelectedManufacturersContext.Provider>
-                    </ManufacturersContext.Provider>
-                    <CssBaseline/>
-                    <AdvancedOptions/>
-                    {/*<CreateTask/>*/}
-                    <Copyright sx={{mt: 5}}/>
-                </Container>
-            </ThemeProvider>
-        </QueryClientProvider>
+            <QueryClientProvider client={queryClient}>
+                <ThemeProvider theme={defaultTheme}>
+                    <Container component="main" maxWidth="sm" style={{ maxWidth: 600 }}>
+                        <ManufacturersContext.Provider value={manufacturers}>
+                            <SelectedManufacturersContext.Provider
+                                value={{selectedManufacturers, setSelectedManufacturers}}>
+                                <SelectedModelsContext.Provider value={{selectedModels, setSelectedModels}}>
+                                    <CriteriaForm
+                                        onSubmit={handleSubmit}
+                                        renderInput={(params) => <TextField {...params} />}
+                                        selectedManufacturers={selectedManufacturers}
+                                        setSelectedManufacturers={setSelectedManufacturers}
+                                        selectedModels={selectedModels}
+                                        setSelectedModels={setSelectedModels}
+                                    />
+                                </SelectedModelsContext.Provider>
+                            </SelectedManufacturersContext.Provider>
+                        </ManufacturersContext.Provider>
+                        <CssBaseline/>
+                        <AdvancedOptions/>
+                        {/*<CreateTask/>*/}
+                        <Tasks />
+                        <Copyright sx={{mt: 5}}/>
+                    </Container>
+                </ThemeProvider>
+            </QueryClientProvider>
     );
 }

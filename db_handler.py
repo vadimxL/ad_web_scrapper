@@ -154,4 +154,17 @@ class DbHandler:
                 ads_updates_logger.info(f"removing item {ad_db.id} from main db")
                 db.reference(self.path).child(ad_db.id).delete()
 
-
+    @classmethod
+    def clear_all_tasks(cls):
+        tasks_ref = db.reference('tasks')
+        tasks = tasks_ref.get()
+        if tasks:
+            print("Clearing all tasks. Task info:")
+            for task_id, task_dict in tasks.items():
+                print(f"Task ID: {task_id}", task_dict)
+            tasks_ref.delete()
+            internal_info_logger.info(f"All tasks have been removed by debug clear_all_tasks(). {len(tasks)} tasks deleted.")
+            return list(tasks.values())
+        else:
+            print("No tasks to clear.")
+            return []

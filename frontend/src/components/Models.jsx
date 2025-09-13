@@ -11,51 +11,90 @@ import {ManufacturersContext, SelectedManufacturersContext, SelectedModelsContex
 import Autocomplete from "@mui/material/Autocomplete";
 
 
-const MODEL_API_URL = 'http://127.0.0.1:8000/models/';
-
+const MODEL_API_URL = 'http://localhost:8000/models/';
 
 const Models = () => {
-    const [models, setModels] = useState([]);
+    const [options, setOptions] = useState([]); // flattened grouped options
+    const [loading, setLoading] = useState(false);
 
-    const {selectedManufacturers, setSelectedManufacturers} = useContext(SelectedManufacturersContext);
+    const manufacturersAll = useContext(ManufacturersContext);
+    const {selectedManufacturers} = useContext(SelectedManufacturersContext); // now array of ids
     const {selectedModels, setSelectedModels} = useContext(SelectedModelsContext);
 
-    const fetchModels = () => {
-        fetch(MODEL_API_URL + selectedManufacturers)
-            .then((r) => r.json())
-            .then((model) => setModels(model));
-    }
+    // Build lookup for manufacturer text
+    const mLookup = React.useMemo(() => {
+        const map = {};
+        (manufacturersAll || []).forEach(m => { map[m.value] = m.text; });
+        return map;
+    }, [manufacturersAll]);
 
-    const handleChange = (event, data) => {
-        console.log("Selected manufacturer.text: ", data);
-        console.log("Selected manufacturer.value: ", data.value);
-        setSelectedModels(data.value);
+    useEffect(() => {
+        let cancelled = false;
+        async function load() {
+            if (!Array.isArray(selectedManufacturers) || selectedManufacturers.length === 0) {
+                setOptions([]);
+                setSelectedModels([]);
+                return;
+            }
+            setLoading(true);
+            try {
+                const promises = selectedManufacturers.map(id => fetch(MODEL_API_URL + id).then(r => r.json()).then(list => ({ id, list })));
+                const results = await Promise.all(promises);
+                if (cancelled) return;
+                const merged = [];
+                results.forEach(({ id, list }) => {
+                    if (Array.isArray(list)) {
+                        list.forEach(model => {
+                            // Ensure each model object has unique composite key & group
+                            merged.push({
+                                ...model,
+                                manufacturerId: id,
+                                group: mLookup[id] || id,
+                                compositeValue: `${id}:${model.value}`
+                            });
+                        });
+                    }
+                });
+                setOptions(merged);
+            } catch (_) {
+                if (!cancelled) setOptions([]);
+            } finally {
+                if (!cancelled) setLoading(false);
+            }
+        }
+        load();
+        return () => { cancelled = true; };
+    }, [selectedManufacturers, mLookup, setSelectedModels]);
+
+    const handleChange = (event, selectedOptionObjects) => {
+        // store array of composite ids or original model ids? Use composite to avoid clashes
+        const ids = selectedOptionObjects.map(o => o.compositeValue);
+        setSelectedModels(ids);
     };
 
-    console.log("Fetching models...." + models);
-    useEffect(() => {
-        fetchModels();
-    }, [selectedManufacturers]);
+    // Derive value objects from stored selectedModels
+    const valueObjects = Array.isArray(selectedModels)
+        ? options.filter(opt => selectedModels.includes(opt.compositeValue))
+        : [];
 
     return (
         <Stack spacing={2}>
             <Autocomplete
-                freeSolo
-                id="free-solo-2-demo"
-                disableClearable
+                multiple
+                id="models-multi-grouped"
+                options={options}
+                disableCloseOnSelect
+                loading={loading}
+                groupBy={(option) => option.group}
+                value={valueObjects}
                 onChange={handleChange}
-                options={models}
-                getOptionLabel={(models) => models.text}
+                getOptionLabel={(option) => option.text}
+                isOptionEqualToValue={(o, v) => o.compositeValue === v.compositeValue}
                 renderInput={(params) => (
                     <TextField
                         {...params}
-                        label="Search Models"
-                        slotProps={{
-                            input: {
-                                ...params.InputProps,
-                                type: 'search',
-                            },
-                        }}
+                        label="Models"
+                        placeholder={loading ? 'Loading…' : 'Select models'}
                     />
                 )}
             />

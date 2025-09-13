@@ -54,3 +54,27 @@ def html_criteria_mail(car_details: CarDetails, images_links: list = []):
                            month_on_road=car_details.month_on_road,
                            images_url=images_links,
                            url_for=url_for)
+
+
+def html_task_created(task):
+    """
+    Render an HTML email summarizing the newly created alert (task).
+    """
+    template = env.get_template("task_created.html")
+    params = task.params or {}
+    model = params.get("model") or "Any"
+    sub_model = params.get("subModel") or "Any"
+    year = params.get("year", "N/A")
+    km = params.get("km", "N/A")
+    manufacturers = task.manufacturers or []
+    return template.render(
+        title=task.title,
+        email=task.mail,
+        manufacturers=manufacturers,
+        model=model,
+        sub_model=sub_model,
+        year=year,
+        km=km,
+        created_at=task.created_at.strftime("%Y-%m-%d %H:%M"),
+        active=task.active,
+    )

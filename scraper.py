@@ -26,6 +26,7 @@ if "BASE_URL" not in os.environ:
 
 BASE_API_URL: str = os.environ.get("BASE_API_URL")
 BASE_OPTIONS_API_URL: str = os.environ.get("BASE_OPTIONS_API_URL")
+BASE_CATALOG_API_URL: str = os.environ.get("BASE_CATALOG_API_URL")
 BASE_URL: str = os.environ.get("BASE_URL")
 BASE_API_CAR_AD_URL: str = os.environ.get("BASE_API_CAR_AD_URL")
 
@@ -476,6 +477,14 @@ class Scraper:
     async def get_manufacturers():
         session = MyCachedSession('cache/model_cache', backend='sqlite', expire_after=timedelta(days=4))
         url = f"{BASE_OPTIONS_API_URL}?fields=manufacturer"
+
+        response = session.get(url, headers=model_headers, data={}, timeout=10)
+        return response.json()
+
+    @staticmethod
+    async def get_vehicles_car_catalog():
+        session = MyCachedSession('cache/model_cache', backend='sqlite', expire_after=timedelta(days=4))
+        url = f"{BASE_CATALOG_API_URL}"
 
         response = session.get(url, headers=model_headers, data={}, timeout=10)
         return response.json()

@@ -63,9 +63,9 @@ class TaskScheduler:
             tasks: List[models.Task] = DbHandler.get_tasks()
             for task in tasks:
                 logger.info(f"Job id: {task.id}, "
-                            f"Time now: {datetime.now()}, "
-                            f"last_run: {task.last_run}, "
-                            f"next_run: {task.last_run + timedelta(hours=1)}, "
+                            f"Time now: {datetime.now().strftime('%m/%d/%Y %H:%M:%S')}, "
+                            f"last_run: {task.last_run.strftime('%m/%d/%Y %H:%M:%S')}, "
+                            f"next_run: {(task.last_run + timedelta(hours=1)).strftime('%m/%d/%Y %H:%M:%S')}, "
                             f"active: {task.active}, "
                             f"manufacturers: {task.manufacturers}, "
                             f"models: {task.car_models} ")

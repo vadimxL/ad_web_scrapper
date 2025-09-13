@@ -42,6 +42,7 @@ class Task(BaseModel):
     created_at: datetime
     last_run: datetime
     params: dict
+    owner_id: Optional[str] = None
     manufacturers: Optional[List[str]] = None
     car_models: Optional[List[str]] = None
     car_submodels: Optional[List[str]] = None
