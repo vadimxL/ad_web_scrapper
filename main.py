@@ -46,6 +46,8 @@ async def lifespan(app: FastAPI):
         scheduler_thread.join(timeout=3.0)
         if scheduler_thread.is_alive():
             internal_info_logger.warning("Scheduler thread did not exit after join timeout")
+        else:
+            internal_info_logger.info("Scheduler thread exited cleanly")
 
 async def get_manufacturers_en() -> dict:
     manufacturers_en = {}
