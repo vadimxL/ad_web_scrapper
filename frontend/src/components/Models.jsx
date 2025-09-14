@@ -9,9 +9,8 @@ import {
 } from '@tanstack/react-query'
 import {ManufacturersContext, SelectedManufacturersContext, SelectedModelsContext} from "../App";
 import Autocomplete from "@mui/material/Autocomplete";
+import { api } from '../api/client';
 
-
-const MODEL_API_URL = 'http://localhost:8000/models/';
 
 const Models = () => {
     const [options, setOptions] = useState([]); // flattened grouped options
@@ -38,25 +37,12 @@ const Models = () => {
             }
             setLoading(true);
             try {
-                const promises = selectedManufacturers.map(id => fetch(MODEL_API_URL + id).then(r => r.json()).then(list => ({ id, list })));
-                const results = await Promise.all(promises);
-                if (cancelled) return;
-                const merged = [];
-                results.forEach(({ id, list }) => {
-                    if (Array.isArray(list)) {
-                        list.forEach(model => {
-                            // Ensure each model object has unique composite key & group
-                            merged.push({
-                                ...model,
-                                manufacturerId: id,
-                                group: mLookup[id] || id,
-                                compositeValue: `${id}:${model.value}`
-                            });
-                        });
-                    }
-                });
-                setOptions(merged);
-            } catch (_) {
+                // Use api instance for models endpoint
+                const resp = await api.get(`/models/${selectedManufacturers.join(',')}`);
+                if (!cancelled) {
+                    setOptions(resp.data);
+                }
+            } catch (e) {
                 if (!cancelled) setOptions([]);
             } finally {
                 if (!cancelled) setLoading(false);
@@ -64,7 +50,7 @@ const Models = () => {
         }
         load();
         return () => { cancelled = true; };
-    }, [selectedManufacturers, mLookup, setSelectedModels]);
+    }, [selectedManufacturers, setSelectedModels]);
 
     const handleChange = (event, selectedOptionObjects) => {
         // store array of composite ids or original model ids? Use composite to avoid clashes

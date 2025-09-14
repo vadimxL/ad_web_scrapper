@@ -1,24 +1,21 @@
-import axios from 'axios';
-
-const API_BASE = process.env.REACT_APP_API_BASE || 'http://localhost:8000';
-axios.defaults.withCredentials = true;
+import { api } from './client';
 
 export const getMe = async () => {
-  const { data } = await axios.get(`${API_BASE}/auth/me`);
+  const { data } = await api.get('/auth/me');
   return data;
 };
 
 export const login = async ({ email, password }) => {
-  const { data } = await axios.post(`${API_BASE}/auth/login`, { email, password });
+  const { data } = await api.post('/auth/login', { email, password });
   return data;
 };
 
 export const register = async ({ email, password }) => {
-  const { data } = await axios.post(`${API_BASE}/auth/register`, { email, password });
+  const { data } = await api.post('/auth/register', { email, password });
   return data;
 };
 
 export const logout = async () => {
-  const { data } = await axios.post(`${API_BASE}/auth/logout`);
+  const { data } = await api.post('/auth/logout');
   return data;
 };

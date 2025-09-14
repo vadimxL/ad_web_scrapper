@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { api } from '../api/client';
 
 
 const DataTable = () => {
@@ -8,8 +9,8 @@ const DataTable = () => {
 
     const fetchData = async () => {
         try {
-            const response = await fetch('http://localhost:8000/ads');
-            const jsonData = await response.json();
+            const response = await api.get('/ads');
+            const jsonData = response.data;
             // Convert dictionary values to an array for mapping
             const dataArray = Object.values(jsonData?.ads || {});
             setData(dataArray);

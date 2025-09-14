@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Button from "@mui/material/Button";
+import { api } from '../api/client';
 
 const URLInput = () => {
     const [url, setUrl] = useState('');
@@ -10,13 +11,8 @@ const URLInput = () => {
         const queries = url.split('?')[1];
         console.log(queries)
         try {
-            const response =
-                await fetch(`http://127.0.0.1:8000/scrape/cars?${queries}`);
-            if (!response.ok) {
-                throw new Error('Failed to fetch data');
-            }
-            const jsonData = await response.json();
-            setResponseData(jsonData);
+            const response = await api.get(`/scrape/cars?${queries}`);
+            setResponseData(response.data);
         } catch (error) {
             console.error('Error fetching data:', error);
         }

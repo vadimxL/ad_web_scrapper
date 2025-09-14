@@ -3,7 +3,7 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import axios from "axios";
+import { api } from '../api/client';
 import {useState} from "react";
 
 
@@ -14,15 +14,11 @@ export default function CreateTask() {
     const submitHandler = async (e) => {
         console.log('submit called');
         e.preventDefault();
-
-        // event.preventDefault();
         const data = new FormData(e.currentTarget);
-
         const requestData = {
             email: data.get('email'),
             url: data.get('url')
         };
-
         const config = {
             headers: {
                 'Content-Type': 'application/json',
@@ -32,16 +28,13 @@ export default function CreateTask() {
                 url: requestData.url,
             }
         }
-
         try {
-            const response = await axios.post("http://localhost:8000/v2/tasks", requestData, config);
-            // Handle the response as needed
+            const response = await api.post('/v2/tasks', requestData, config);
             setStatus(response.statusText)
             console.log(response.data);
         } catch (error) {
-            // Handle errors
             setStatus(error.message);
-            setDetail(error.response.data.detail);
+            setDetail(error.response?.data?.detail || '');
             console.error('Error sending POST request:', error);
         }
 

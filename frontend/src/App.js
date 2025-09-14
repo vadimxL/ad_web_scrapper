@@ -16,10 +16,9 @@ import Tasks from "./components/Tasks";
 import AdvancedOptions from "./components/AdvancedOptions";
 import CreateTask from "./components/CreateTask";
 import { useAuth } from './context/AuthContext';
+import { api } from './api/client';
 
 axios.defaults.withCredentials = true;
-
-const CREATE_TASK_URL = 'http://localhost:8000/v2/tasks';
 
 
 export const ManufacturersContext = createContext([]);
@@ -72,9 +71,8 @@ export default function SignUp() {
     };
 
     const fetchManufacturers = () => {
-        fetch("http://localhost:8000/manufacturers")
-            .then((r) => r.json())
-            .then((manufacturers) => setManufacturers(manufacturers));
+        api.get('/manufacturers')
+            .then((r) => setManufacturers(r.data));
     }
 
     console.log("Fetching manufacturers...." + manufacturers);
