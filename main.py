@@ -37,9 +37,15 @@ async def lifespan(app: FastAPI):
         internal_info_logger.error(f"Error initializing firebase db: {e}")
     task_executor = TaskExecutor()
     scheduler = TaskScheduler(task_executor.run)
-    scheduler_thread = threading.Thread(target=scheduler.run).start()
-    yield
-    scheduler.stop()
+    scheduler_thread = threading.Thread(target=scheduler.run, name="task-scheduler")
+    scheduler_thread.start()
+    try:
+        yield
+    finally:
+        scheduler.stop()
+        scheduler_thread.join(timeout=3.0)
+        if scheduler_thread.is_alive():
+            internal_info_logger.warning("Scheduler thread did not exit after join timeout")
 
 async def get_manufacturers_en() -> dict:
     manufacturers_en = {}
