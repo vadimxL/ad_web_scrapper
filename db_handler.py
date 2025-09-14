@@ -46,7 +46,8 @@ class DbHandler:
     @classmethod
     def create_listener(cls, callback):
         ref = db.reference('tasks')
-        ref.listen(callback)
+        listener = ref.listen(callback)
+        return listener
 
     @classmethod
     def update_task(cls, task: models.Task):

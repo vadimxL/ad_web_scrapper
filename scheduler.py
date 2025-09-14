@@ -18,6 +18,7 @@ class TaskScheduler:
         self.event_ = threading.Event()
         self.task_cb = task_cb
         self._task_threads: list[threading.Thread] = []  # track spawned task threads
+        self._listener = None  # firebase listener (event source)
 
     def _run_task(self, task_id: str):
         # Use cancellable wait instead of raw sleep so shutdown is responsive
@@ -66,7 +67,7 @@ class TaskScheduler:
                     self.run_task(task_id)
 
     def run(self):
-        DbHandler.create_listener(self.tasks_changed_listener)
+        self._listener = DbHandler.create_listener(self.tasks_changed_listener)
         logger.info("Scheduler started")
         # Main loop checks for stop signal frequently
         while not self.event_.is_set():
@@ -91,6 +92,13 @@ class TaskScheduler:
     def stop(self):
         logger.info("Shutting down...")
         self.event_.set()
+        # Close firebase listener if present
+        try:
+            if self._listener and hasattr(self._listener, 'close'):
+                self._listener.close()
+                logger.info("Firebase listener closed")
+        except Exception:
+            logger.exception("Error closing firebase listener")
         # Join spawned task threads briefly
         for t in list(self._task_threads):
             if t.is_alive():
