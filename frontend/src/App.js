@@ -96,7 +96,7 @@ export default function SignUp() {
         };
         console.log('Submitting:', requestData);
         try {
-            const response = await axios.post(CREATE_TASK_URL, requestData);
+            const response = await api.post('/v2/tasks', requestData);
             // Handle the response as needed
             console.log(response.data);
         } catch (error) {
