@@ -1,13 +1,16 @@
+import os
+
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
 
 
 def init_firebase_db():
-    databaseURL = "https://carscraper-d91d9-default-rtdb.firebaseio.com/"
-    cred = credentials.Certificate("chukumuk.json")
+    database_url: str = os.environ.get("FIREBASE_DB_URL")
+    certificate_path: str = os.environ.get("FIREBASE_CERTIFICATE_PATH")
+    cred = credentials.Certificate(certificate_path)
     default_app = firebase_admin.initialize_app(cred, {
-        'databaseURL': databaseURL
+        'databaseURL': database_url
     })
 
 
