@@ -1,9 +1,8 @@
-import io
 from typing import List
 
 from firebase_admin import db
 import pandas as pd
-import firebase_db
+from backend.db import firebase_db
 import json
 from datetime import datetime
 

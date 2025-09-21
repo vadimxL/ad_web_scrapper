@@ -1,10 +1,10 @@
 import json
 import unittest
 
-import firebase_db
-from scraper import urls, Scraper
+from backend.db import firebase_db
+from backend.scraper import urls, Scraper
 from firebase_admin import db
-from firebase_admin.db import Reference
+
 
 class TestScraper(unittest.TestCase):
     def test_db_path(self):
@@ -28,7 +28,7 @@ class TestScraper(unittest.TestCase):
 
     def test_add_new_car(self):
         firebase_db.init_firebase_db()
-        db_ref = db.reference(f'/car_ads_test')
+        db_ref = db.reference('/car_ads_test')
         with open("car_ads_sample.json", "r") as f:
             cars_ads_list = json.loads(f.read())[0]
             cars_ads_dict = {car_ad['id']: car_ad for car_ad in cars_ads_list}

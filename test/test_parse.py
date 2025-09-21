@@ -1,7 +1,7 @@
 import json
 import unittest
 
-from main import parse_km_range
+from backend.main import parse_km_range
 
 
 class MyTestCase(unittest.TestCase):

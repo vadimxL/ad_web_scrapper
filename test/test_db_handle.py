@@ -2,9 +2,9 @@ import json
 import unittest
 from datetime import datetime
 
-import firebase_db
-from car_details import CarDetails, PriceHistory
-from db_handler import DbHandler
+from backend.db import firebase_db
+from backend.car_details import CarDetails
+from backend.db.db_handler import DbHandler
 from gmail_sender.gmail_sender import GmailSender
 
 

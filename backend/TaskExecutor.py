@@ -1,7 +1,7 @@
 from datetime import timedelta, datetime
 
 import models
-from db_handler import DbHandler
+from backend.db.db_handler import DbHandler
 from email_sender.email_sender import EmailSender
 from logger_setup import internal_info_logger
 from scraper import Scraper

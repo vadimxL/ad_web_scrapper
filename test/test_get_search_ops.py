@@ -1,5 +1,5 @@
 import unittest
-from scraper import Scraper
+from backend.scraper import Scraper
 
 class TestScraper(unittest.IsolatedAsyncioTestCase):
     async def test_get_search_ops(self):

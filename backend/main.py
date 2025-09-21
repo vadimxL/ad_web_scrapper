@@ -3,22 +3,19 @@ import hashlib
 import logging
 import threading
 import os
-from enum import Enum
 
 import models
-import firebase_db
+from backend.db import firebase_db
 from contextlib import asynccontextmanager
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import List, Optional, Tuple, Annotated
-from urllib import parse
-from enum import Enum
 from pydantic import EmailStr, BaseModel
 from starlette.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from fastapi import FastAPI, HTTPException, Query, Depends
 
 from TaskExecutor import TaskExecutor
-from db_handler import DbHandler
+from backend.db.db_handler import DbHandler
 from email_sender.email_sender import EmailSender
 from logger_setup import internal_info_logger
 from scheduler import TaskScheduler
@@ -235,14 +232,14 @@ async def create_task(email: EmailStr, url: str, user: dict = Depends(get_curren
     title = create_title(params, manufacturers_en)
     print(f"Title params: {title}")
     task = models.Task(id=id_, title=title, mail=email,
-                      params=params,
-                      created_at=datetime.now(),
-                      last_run=datetime.now(),
-                      manufacturers=car_manufacturers,
-                      active=True,
-                      car_models=car_models,
-                      car_submodels=car_submodels,
-                      owner_id=user["id"])
+                       params=params,
+                       created_at=datetime.now(),
+                       last_run=datetime.now(),
+                       manufacturers=car_manufacturers,
+                       active=True,
+                       car_models=car_models,
+                       car_submodels=car_submodels,
+                       owner_id=user["id"])
     # create task in database
     DbHandler.insert_task(task)
 

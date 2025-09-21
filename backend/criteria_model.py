@@ -1,17 +1,14 @@
 from car_details import CarDetails, ROOT_DIR
 from jinja2 import Environment, select_autoescape, FileSystemLoader
+from flask import url_for
 
 env = Environment(
     loader=FileSystemLoader(f"{ROOT_DIR}/templates"),
     autoescape=select_autoescape(['html', 'xml'])
 )
-from flask import url_for
 
 
-def html_criteria_mail(car_details: CarDetails, images_links: list = []):
-    with open(f"{ROOT_DIR}/templates/criteria_mail.html", "r") as f:
-        criteria_mail = f.read()
-        # print(criteria_mail)
+def html_criteria_mail(car_details: CarDetails):
     template = env.get_template("criteria_mail.html")
 
     # Transforming the list to a single human-readable string

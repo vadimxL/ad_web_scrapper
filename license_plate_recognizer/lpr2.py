@@ -3,7 +3,7 @@ import time
 import requests
 from pprint import pprint
 from os import listdir
-from os.path import isfile, join
+from os.path import isfile
 
 def main():
     regions = ["il"]  # Change to your country

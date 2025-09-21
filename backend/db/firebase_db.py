@@ -9,9 +9,10 @@ def init_firebase_db():
     database_url: str = os.environ.get("FIREBASE_DB_URL")
     certificate_path: str = os.environ.get("FIREBASE_CERTIFICATE_PATH")
     cred = credentials.Certificate(certificate_path)
-    default_app = firebase_admin.initialize_app(cred, {
+    default_app: firebase_admin.App = firebase_admin.initialize_app(cred, {
         'databaseURL': database_url
     })
+    print("Firebase DB initialized, default app name:", default_app.name)
 
 
 def clear_firebase_db():

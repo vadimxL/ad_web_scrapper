@@ -3,9 +3,9 @@ from email.mime.text import MIMEText
 import os
 from dotenv import load_dotenv
 
-from car_details import CarDetails
-from criteria_model import html_criteria_mail
-from logger_setup import ads_updates_logger
+from backend.car_details import CarDetails
+from backend.criteria_model import html_criteria_mail
+from backend.logger_setup import ads_updates_logger
 
 # If modifying these scopes, delete the file token.json.
 SCOPES = ["https://www.googleapis.com/auth/gmail.send"]

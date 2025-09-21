@@ -1,14 +1,12 @@
-import asyncio
 import atexit
 import threading
-import time
 from datetime import timedelta, datetime
 from random import randint
 from typing import Dict, List
 import models
-from db_handler import DbHandler
+from backend.db.db_handler import DbHandler
 from logger_setup import internal_info_logger as logger
-import firebase_db
+from backend.db import firebase_db
 
 scheduled_task_events: Dict[str, threading.Event] = dict()
 

@@ -1,9 +1,9 @@
 import unittest
 from urllib import parse
 
-import models
-from main import extract_query_params
-from scraper import BASE_API_URL
+from backend import models
+from backend.main import extract_query_params
+from backend.scraper import BASE_API_URL
 
 
 class MyTestCase(unittest.TestCase):

@@ -7,10 +7,10 @@ def main():
     # car_model = "ELANTRA HEV"  # ELANTRA HYBRID, ELANTRA HEV
     car_model = "BRONCO"  # ELANTRA HYBRID, ELANTRA HEV
     year = "2023"  #input textbox
-    month_year_on_the_road = "2022-3"  #input textbox
-    submodel = 'EXECUTIVE'
+    # month_year_on_the_road = "2022-3"  #input textbox
+    # submodel = 'EXECUTIVE'
     license_plate_partial = "X5X30002"  #input textbox
-    full_license_plate = "61010701"
+    # full_license_plate = "61010701"
     url = "https://data.gov.il/api/3/action/datastore_search?resource_id=053cea08-09bc-40ec-8f7a-156f0677aff3&limit=99999999"
     filters = {
         # 'kinuy_mishari': car_model,
