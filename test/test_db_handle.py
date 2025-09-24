@@ -32,7 +32,7 @@ class TestDbHandler(unittest.TestCase):
                     return
                 # car_details.prices = [price_hist]
                 ads.append(car_details)
-            gmail_sender = GmailSender("../gmail_sender/credentials.json")
+            gmail_sender = GmailSender("../mail_sender/credentials.json")
             db_handler = DbHandler("test", gmail_sender)
             # db_handler.create_collection(ads)
             db_handler.handle_results(ads)

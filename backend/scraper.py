@@ -1,34 +1,21 @@
 import asyncio
-import os
+
 from datetime import datetime, timedelta
 import re
+from logging import Logger
 from typing import List, Tuple, Dict, Optional
-
 import json
 import time
 from aiohttp_client_cache import CachedSession, SQLiteBackend, CachedResponse
 from requests_cache import CachedSession as MyCachedSession
-from car_details import CarDetails, PriceHistory
-from handz.handz import Handz
-from headers import scrape_headers, model_headers
-from logger_setup import internal_info_logger as logger
-from dotenv import load_dotenv
+from backend.car_details import CarDetails, PriceHistory
+from backend.config import BASE_OPTIONS_API_URL, BASE_CATALOG_API_URL, BASE_API_CAR_AD_URL, BASE_API_URL
+from backend.handz.handz import Handz
+from backend.headers import scrape_headers, model_headers
 
-from utils import extract_query_params
+from backend.utils import extract_query_params
 
-load_dotenv()
-if "BASE_API_URL" not in os.environ:
-    raise Exception("BASE_API_URL not found in environment variables")
-if "BASE_OPTIONS_API_URL" not in os.environ:
-    raise Exception("BASE_OPTIONS_API_URL not found in environment variables")
-if "BASE_URL" not in os.environ:
-    raise Exception("BASE_URL not found in environment variables")
 
-BASE_API_URL: str = os.environ.get("BASE_API_URL")
-BASE_OPTIONS_API_URL: str = os.environ.get("BASE_OPTIONS_API_URL")
-BASE_CATALOG_API_URL: str = os.environ.get("BASE_CATALOG_API_URL")
-BASE_URL: str = os.environ.get("BASE_URL")
-BASE_API_CAR_AD_URL: str = os.environ.get("BASE_API_CAR_AD_URL")
 
 FEED_SOURCES_ALL = ['xml', 'commercial', 'private']
 FEED_SOURCES_PRIVATE = FEED_SOURCES_ALL[2]
@@ -38,11 +25,12 @@ secs_to_sleep = 0.1
 
 
 class Scraper:
-    def __init__(self, cache_timeout_min: int):
+    def __init__(self, cache_timeout_min: int, logger: Logger):
         self.cache = SQLiteBackend(
             cache_name='cache/scrape_cache',
             expire_after=timedelta(minutes=cache_timeout_min),
         )
+        self._logger = logger
 
     async def scrape(self, q: dict) -> CachedResponse:
         url = BASE_API_URL
@@ -54,7 +42,7 @@ class Scraper:
             r: CachedResponse = await session.get(url, headers=scrape_headers, params=q)
 
         if r.from_cache:
-            logger.info(
+            self._logger.info(
                 f'cache created_at: {r.created_at.strftime("%H:%M")}, last_used: {r.last_used.strftime("%H:%M:%S")} for page: {q.get("page")}, '
                 f'expires: {datetime.fromisoformat(r.expires.isoformat()).strftime("%H:%M:%S") if r.expires else "Never"} ,'
                 f'url: {url}, query: {q}')
@@ -77,7 +65,7 @@ class Scraper:
         try:
             json_response = await response[0].json()
         except Exception as e:
-            logger.error(f"Error parsing json: {e}, response: {response}")
+            self._logger.error(f"Error parsing json: {e}, response: {response}")
             return {}
 
         directory = 'json'
@@ -102,7 +90,7 @@ class Scraper:
         try:
             return page['data']['private']
         except KeyError as e:
-            logger.error(f"Error getting ads from page: {e}")
+            self._logger.error(f"Error getting ads from page: {e}")
             return []
 
     async def _scrape(self, q: dict, feed_sources, last_page: int = 1):
@@ -121,14 +109,14 @@ class Scraper:
 
         for page in pages:
             if not page.from_cache:
-                logger.info(f'Not from cache, sleeping for {secs_to_sleep} second')
+                self._logger.info(f'Not from cache, sleeping for {secs_to_sleep} second')
                 time.sleep(secs_to_sleep)
 
             scraped_page = await page.json()
             try:
                 feed_items = self.get_ads(scraped_page)
             except KeyError as e:
-                logger.error(f"Error scraping page: {e}")
+                self._logger.error(f"Error scraping page: {e}")
                 with open('json/error_page.json', 'w', encoding='utf-8') as f:
                     json.dump(scraped_page, f, indent=4, ensure_ascii=False)
                 raise e
@@ -158,8 +146,8 @@ class Scraper:
             car_details: CarDetails = self.extract_car_details_new(car_ad)
             car_ads_to_save.append(car_details)
 
-        logger.info(f"Skipped {no_id_items_num} items because they don't have an id")
-        logger.info(f"Skipped {incompatible_feed_sources_items_num} items because they are not in {feed_sources} list")
+        self._logger.info(f"Skipped {no_id_items_num} items because they don't have an id")
+        self._logger.info(f"Skipped {incompatible_feed_sources_items_num} items because they are not in {feed_sources} list")
 
         handz = Handz()
         divided_feed_items = list(self.divide_chunks(filtered_feed_items, 50))
@@ -215,15 +203,17 @@ class Scraper:
             r: CachedResponse = await session.get(url, headers=scrape_headers)
 
         if r.from_cache:
-            logger.info(
-                f'cache created_at: {r.created_at.strftime("%H:%M")}, last_used: {r.last_used.strftime("%H:%M:%S")}, '
-                f'expires: {datetime.fromisoformat(r.expires.isoformat()).strftime("%H:%M:%S") if r.expires else "Never"} ,'
+            self._logger.info(
+                f'cache created_at: {r.created_at.strftime("%H:%M")}, '
+                f'last_used: {r.last_used.strftime("%H:%M:%S")}, '
+                f'expires: '
+                f'{datetime.fromisoformat(r.expires.isoformat()).strftime("%H:%M:%S") if r.expires else "Never"} ,'
                 f'url: {url}')
 
         try:
             json_response = await r.json()
         except Exception as e:
-            logger.error(f"Error parsing json: {e}, response: {r}")
+            self._logger.error(f"Error parsing json: {e}, response: {r}")
             return {}
 
         return json_response
@@ -403,7 +393,7 @@ class Scraper:
                 full_info=feed_item
             )
         except Exception as e:
-            logger.error(f"Error extracting car details: {e}")
+            self._logger.error(f"Error extracting car details: {e}")
             with open('json/error_feed_item.json', 'w', encoding='utf-8') as f:
                 json.dump(feed_item, f, indent=4, ensure_ascii=False)
             raise e
@@ -516,15 +506,15 @@ class Scraper:
         first_page: dict = await self.first_page(query_)
 
         if not first_page:
-            logger.error(f"Error scraping first page: {first_page}")
+            self._logger.error(f"Error scraping first page: {first_page}")
             return [], []
 
         num_of_ads = self.get_total_items(first_page)
-        logger.info(f"Total items to be scraped: {num_of_ads} for query: {query_}")
+        self._logger.info(f"Total items to be scraped: {num_of_ads} for query: {query_}")
         pages_num = self.get_number_of_pages(first_page)
         feed_sources = FEED_SOURCES_PRIVATE
         car_ads_to_save, feed_items = await self._scrape(query_, feed_sources=feed_sources, last_page=pages_num)
-        logger.info(f"Scraped {len(car_ads_to_save)} items for query: {query_}, feed_sources: {feed_sources}")
+        self._logger.info(f"Scraped {len(car_ads_to_save)} items for query: {query_}, feed_sources: {feed_sources}")
         # self.save_feed_items(feed_items)
         return car_ads_to_save, feed_items
 

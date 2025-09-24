@@ -1,36 +1,39 @@
 import atexit
 import threading
 from datetime import timedelta, datetime
+from logging import Logger
 from random import randint
-from typing import Dict, List
-import models
+from typing import Dict, List, Callable
+from backend.TaskExecutor import TaskExecutor
+from backend import models
+from backend.db.database import Database
 from backend.db.db_handler import DbHandler
-from logger_setup import internal_info_logger as logger
-from backend.db import firebase_db
 
 scheduled_task_events: Dict[str, threading.Event] = dict()
 
 
 class TaskScheduler:
-    def __init__(self, task_cb: callable):
+    def __init__(self, logger: Logger, db_handler: DbHandler):
         self.event_ = threading.Event()
-        self.task_cb = task_cb
+        self._logger = logger
         self._task_threads: list[threading.Thread] = []  # track spawned task threads
         self._listener = None  # firebase listener (event source)
+        self._db_handler = db_handler
+        self._task_executor = TaskExecutor(logger=logger)
 
     def _run_task(self, task_id: str):
         # Use cancellable wait instead of raw sleep so shutdown is responsive
         delay = randint(30, 120)
         if self.event_.wait(delay):  # returns True if event set during wait
-            logger.info(f"Cancelled task {task_id} before execution (shutdown)")
+            self._logger.info(f"Cancelled task {task_id} before execution (shutdown)")
             return
         if self.event_.is_set():
             return
-        logger.info(f"Running task {task_id}")
+        self._logger.info(f"Running task {task_id}")
         try:
-            self.task_cb(task_id)
+            self.task_executor.run(task_id, self._logger)
         except Exception:
-            logger.exception(f"Error running task {task_id}")
+            self._logger.exception(f"Error running task {task_id}")
 
     def run_task(self, task_id: str):
         now = datetime.now()
@@ -42,15 +45,15 @@ class TaskScheduler:
             t.start()
             self._task_threads.append(t)
         else:
-            logger.info(f"Time now: {now}, Task {task_id} will be run tomorrow because it's not between 6 AM and midnight")
+            self._logger.info(f"Time now: {now}, Task {task_id} will be run tomorrow because it's not between 6 AM and midnight")
 
     def tasks_changed_listener(self, event):
-        logger.info(f"Tasks changed, {event.data=}, {event.path=}, {event.event_type=}")
+        self._logger.info(f"Tasks changed, {event.data=}, {event.path=}, {event.event_type=}")
         if event.event_type == 'patch':
             return
         if event.event_type == 'put':
             if event.data is None:  # task deleted or no tasks
-                logger.info("All tasks deleted or no tasks found")
+                self._logger.info("All tasks deleted or no tasks found")
             elif event.path == '/':  # all tasks
                 for task_id, task_dict in event.data.items():
                     self.run_task(task_id)
@@ -65,13 +68,13 @@ class TaskScheduler:
                     self.run_task(task_id)
 
     def run(self):
-        self._listener = DbHandler.create_listener(self.tasks_changed_listener)
-        logger.info("Scheduler started")
+        self._listener = self._db_handler.create_listener(self.tasks_changed_listener)
+        self._logger.info("Scheduler started")
         # Main loop checks for stop signal frequently
         while not self.event_.is_set():
-            tasks: List[models.Task] = DbHandler.get_tasks()
+            tasks: List[models.Task] = self._db_handler.get_tasks()
             for task in tasks:
-                logger.info(
+                self._logger.info(
                     f"Job id: {task.id}, "
                     f"Time now: {datetime.now().strftime('%m/%d/%Y %H:%M:%S')}, "
                     f"last_run: {task.last_run.strftime('%m/%d/%Y %H:%M:%S')}, "
@@ -85,32 +88,20 @@ class TaskScheduler:
             # Wait up to 5 minutes, but wake early if stopping
             if self.event_.wait(300):
                 break
-        logger.info("Exiting run loop")
+        self._logger.info("Exiting run loop")
 
     def stop(self):
-        logger.info("Shutting down...")
+        self._logger.info("Shutting down...")
         self.event_.set()
         # Close firebase listener if present
         try:
             if self._listener and hasattr(self._listener, 'close'):
                 self._listener.close()
-                logger.info("Firebase listener closed")
+                self._logger.info("Firebase listener closed")
         except Exception:
-            logger.exception("Error closing firebase listener")
+            self._logger.exception("Error closing firebase listener")
         # Join spawned task threads briefly
         for t in list(self._task_threads):
             if t.is_alive():
                 t.join(timeout=2)
-        logger.info("All task threads joined or timed out")
-
-
-if __name__ == '__main__':
-    try:
-        firebase_db.init_firebase_db()
-    except Exception:
-        logger.exception("Error initializing firebase db")
-        exit(1)
-    # Provide a no-op task callback when running standalone
-    task_scheduler = TaskScheduler(lambda _tid: logger.info(f"(Standalone) would run task {_tid}"))
-    threading.Thread(target=task_scheduler.run, daemon=True).start()
-    atexit.register(task_scheduler.stop)
+        self._logger.info("All task threads joined or timed out")

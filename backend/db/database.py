@@ -1,8 +1,8 @@
 import os
 import json
 from mongoengine import connect
-
-from models import CarAd, PriceHistory
+from backend.db.firebase_db import init_firebase_db
+from backend.models import CarAd, PriceHistory
 
 
 def save_to_database(car_ads: list):
@@ -61,3 +61,13 @@ def init_db():
 if __name__ == '__main__':
     init_db()
     init_from_persistance()
+
+
+# This will be a class that abstract the firebase DB and will be used in the main app
+class Database:
+    def __init__(self):
+        self._db = init_firebase_db()
+
+    def reference(self, path: str):
+        return self._db.reference(path)
+

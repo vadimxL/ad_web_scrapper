@@ -1,6 +1,7 @@
-from car_details import CarDetails, ROOT_DIR
 from jinja2 import Environment, select_autoescape, FileSystemLoader
 from flask import url_for
+
+from backend.car_details import ROOT_DIR, CarDetails
 
 env = Environment(
     loader=FileSystemLoader(f"{ROOT_DIR}/templates"),

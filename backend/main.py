@@ -4,8 +4,7 @@ import logging
 import threading
 import os
 
-import models
-from backend.db import firebase_db
+from backend import models
 from contextlib import asynccontextmanager
 from datetime import datetime
 from typing import List, Optional, Tuple, Annotated
@@ -13,29 +12,24 @@ from pydantic import EmailStr, BaseModel
 from starlette.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from fastapi import FastAPI, HTTPException, Query, Depends
-
-from TaskExecutor import TaskExecutor
+from backend.db.database import Database
 from backend.db.db_handler import DbHandler
-from email_sender.email_sender import EmailSender
-from logger_setup import internal_info_logger
-from scheduler import TaskScheduler
-from scraper import Scraper
-from utils import join_query_params, extract_query_params
-from criteria_model import html_task_created
-from auth import router as auth_router, get_current_user
+from backend.email.email_sender import EmailSender
+from backend.logger_setup import internal_info_logger
+from backend.scheduler import TaskScheduler
+from backend.scraper import Scraper
+from backend.utils import join_query_params, extract_query_params
+from backend.criteria_model import html_task_created
+from backend.auth import router as auth_router, get_current_user
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Load firebase db
-    try:
-        firebase_db.init_firebase_db()
-    except Exception as e:
-        internal_info_logger.error(f"Error initializing firebase db: {e}")
-    task_executor = TaskExecutor()
-    scheduler = TaskScheduler(task_executor.run)
+    db_handler = DbHandler("global", db=Database(), logger=internal_info_logger)
+    scheduler = TaskScheduler(internal_info_logger, db_handler=db_handler)
     scheduler_thread = threading.Thread(target=scheduler.run, name="task-scheduler")
     scheduler_thread.start()
+    app.state.db_handler = db_handler
     try:
         yield
     finally:
@@ -57,6 +51,9 @@ async def get_manufacturers_en() -> dict:
     return manufacturers_en
 
 app = FastAPI(lifespan=lifespan)
+
+def get_db_handler() -> DbHandler:
+    return app.state.db_handler  # type: ignore[return-value]
 
 # Allow all origins with appropriate methods, headers, and credentials if needed
 app.add_middleware(
@@ -114,8 +111,9 @@ async def get_submodels(model_id: str):
     return car_models['data']['subModel']
 
 @app.get("/tasks", response_model=List[models.Task])
-async def read_items(user: dict = Depends(get_current_user)):
-    tasks = DbHandler.load_tasks()
+async def read_items(user: dict = Depends(get_current_user),
+                     db_handler: DbHandler = Depends(get_db_handler)):
+    tasks = db_handler.load_tasks()
     if tasks is None:
         return []
     # Filter tasks by owner_id
@@ -161,9 +159,10 @@ def parse_km_range(km_str: str) -> Tuple[int, int]:
 async def update_task(task_id: str,
                       km_min: Annotated[Optional[int], Query(title="Min value of mileage", ge=-1)] = None,
                       km_max: Annotated[Optional[int], Query(title="Max value of mileage", le=200000)] = None,
-                      user: dict = Depends(get_current_user)):
+                      user: dict = Depends(get_current_user),
+                      db_handler: DbHandler = Depends(get_db_handler)) -> models.Task:
     manufacturers_en: dict = await get_manufacturers_en()
-    task = DbHandler.get_task(task_id)
+    task = db_handler.get_task(task_id)
     if task is None:
         raise HTTPException(status_code=404, detail="Task not found")
     if task.owner_id != user["id"]:
@@ -184,28 +183,13 @@ async def update_task(task_id: str,
         task.params['km'] = f"{params_km_start}-{km_max}"
         task.title = create_title(task.params, manufacturers_en)
 
-    DbHandler.update_task(task)
+    db.update_task(task)
     return task
 
 
-@app.get("/run")
-async def run_tasks():
-    """
-    Run all tasks
-    and Scrape the data
-    """
-    tasks = DbHandler.load_tasks()
-    if tasks is None:
-        return {"message": "No tasks found"}
-    for id_, task_dict in tasks.items():
-        task_ = models.create_task_from_dict(task_dict)
-        loop = asyncio.get_event_loop()
-        threading.Thread(target=TaskExecutor.run, args=(task_.id,)).start()
-    return {"message": "All tasks run successfully"}
-
-
 @app.post("/tasks", response_model=models.Task)
-async def create_task(email: EmailStr, url: str, user: dict = Depends(get_current_user)) -> models.Task:
+async def create_task(email: EmailStr, url: str, user: dict = Depends(get_current_user),
+                      db_handler = Depends(get_db_handler)) -> models.Task:
     """
     Create a new task
     """
@@ -222,7 +206,7 @@ async def create_task(email: EmailStr, url: str, user: dict = Depends(get_curren
 
     # id_ = hashlib.sha256(url.encode()).hexdigest()
     id_ = hashlib.md5(url.encode()).hexdigest()[0:12]
-    task = DbHandler.get_task(id_)
+    task = db_handler.get_task(id_)
     if task is not None:
         raise HTTPException(status_code=400, detail="Task already exists")
 
@@ -241,14 +225,16 @@ async def create_task(email: EmailStr, url: str, user: dict = Depends(get_curren
                        car_submodels=car_submodels,
                        owner_id=user["id"])
     # create task in database
-    DbHandler.insert_task(task)
+    db_handler.insert_task(task)
 
     # Send confirmation email with alert details
     try:
-        mail_sender = EmailSender(task.mail)
+        sender_email = EmailStr(os.getenv("SENDER_EMAIL"))
+        sender_pw = os.getenv("EMAIL_PASSWORD")
+        mail_sender = EmailSender(sender_email, sender_pw)
         message = html_task_created(task)
         internal_info_logger.info(f"Sending task creation email to {task.mail}")
-        mail_sender.send(message, f"✅ Alert created: {task.title}")
+        mail_sender.send(message, [EmailStr(task.mail)], f"✅ Alert created: {task.title}")
     except Exception as e:
         internal_info_logger.error(f"Error sending task creation email: {e}")
 
@@ -274,16 +260,17 @@ async def create_task_v2(ui_task: UITask, user: dict = Depends(get_current_user)
 
 
 @app.delete("/tasks/{task_id}")
-async def delete_task(task_id: str, user: dict = Depends(get_current_user)):
+async def delete_task(task_id: str, user: dict = Depends(get_current_user),
+                      db_handler: DbHandler = Depends(get_db_handler)):
     """
     Delete a task
     """
-    task: models.Task = DbHandler.get_task(task_id)
+    task: models.Task = db_handler.get_task(task_id)
     if not task:
         return {"message": f"Task: {task_id} not found"}
     if task.owner_id != user["id"]:
         raise HTTPException(status_code=403, detail="Not authorized to delete this task")
-    DbHandler.delete_task(task_id)
+    db_handler.delete_task(task_id)
     return {"message": f"Task: {task} deleted"}
 
 
