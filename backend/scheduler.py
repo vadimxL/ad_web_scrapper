@@ -1,13 +1,18 @@
-import atexit
+import os
 import threading
 from datetime import timedelta, datetime
 from logging import Logger
 from random import randint
-from typing import Dict, List, Callable
-from backend.TaskExecutor import TaskExecutor
+from typing import Dict, List, Optional
+
+from pydantic import EmailStr
+
 from backend import models
-from backend.db.database import Database
 from backend.db.db_handler import DbHandler
+from backend.email.email_sender import EmailSender
+from backend.notifier import Notifier
+from backend.scraper import Scraper
+from backend.config import SENDER_EMAIL, SENDER_EMAIL_PW
 
 scheduled_task_events: Dict[str, threading.Event] = dict()
 
@@ -19,7 +24,31 @@ class TaskScheduler:
         self._task_threads: list[threading.Thread] = []  # track spawned task threads
         self._listener = None  # firebase listener (event source)
         self._db_handler = db_handler
-        self._task_executor = TaskExecutor(logger=logger)
+
+    def _recent_task(self, task: models.Task):
+        return (datetime.now() - task.last_run) < timedelta(days=1)
+
+    def _execute_task(self, task_id: str):
+        self._logger.info(f"Executing task: {task_id}")
+        scraper = Scraper(cache_timeout_min=30, logger=self._logger)
+        task: Optional[models.Task] = self._db_handler.get_task(task_id)
+        if task is None:
+            self._logger.error(f"Task {task_id} not found")
+            return
+        if not task.active:
+            self._logger.info(f"Task {task_id} is not active")
+            return
+        results, _ = scraper.run(task.params)
+        self._logger.info(f"Recurrence task: {task_id}: {task}")
+        task.last_run = datetime.now()
+        self._db_handler.update_task(task)
+        mail_sender = EmailSender(SENDER_EMAIL, SENDER_EMAIL_PW)
+        notifier = Notifier(mail_sender, [task.mail], self._logger)
+        if results:
+            if self._db_handler.collection_exists() and self._recent_task(task):
+                self._db_handler.handle_results(results, task.title, notifier)
+            else:
+                self._db_handler.create_collection(results)
 
     def _run_task(self, task_id: str):
         # Use cancellable wait instead of raw sleep so shutdown is responsive
@@ -31,7 +60,7 @@ class TaskScheduler:
             return
         self._logger.info(f"Running task {task_id}")
         try:
-            self.task_executor.run(task_id, self._logger)
+            self._execute_task(task_id)
         except Exception:
             self._logger.exception(f"Error running task {task_id}")
 

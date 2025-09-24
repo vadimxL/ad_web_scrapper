@@ -189,7 +189,7 @@ async def update_task(task_id: str,
 
 @app.post("/tasks", response_model=models.Task)
 async def create_task(email: EmailStr, url: str, user: dict = Depends(get_current_user),
-                      db_handler = Depends(get_db_handler)) -> models.Task:
+                      db_handler: DbHandler = Depends(get_db_handler)) -> models.Task:
     """
     Create a new task
     """
