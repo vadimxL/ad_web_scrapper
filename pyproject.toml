@@ -26,3 +26,5 @@ min_confidence = 80
 sort_by_size = true
 
 
+[tool.pylint.'MESSAGES CONTROL']
+disable = ["missing-function-docstring"]

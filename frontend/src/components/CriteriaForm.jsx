@@ -21,7 +21,8 @@ export default function CriteriaForm(props) {
     const [kmStart, setKmStart] = React.useState(0);
     const [kmEnd, setKmEnd] = React.useState(100000);
     const [yearStart, setYearStart] = React.useState(2020);
-    const [yearEnd, setYearEnd] = React.useState(2024);
+    const currentYear = new Date().getFullYear();
+    const [yearEnd, setYearEnd] = React.useState(currentYear);
     const [priceRange, setPriceRange] = React.useState([0, 250000]); // [min, max]
     const MIN_PRICE = 0;
     const MAX_PRICE = 250000;
@@ -97,7 +98,7 @@ export default function CriteriaForm(props) {
                                 name="end_year"
                                 views={["year"]}
                                 value={dayjs(`${yearEnd}-01-01`)}
-                                onChange={date => setYearEnd(date ? date.year() : 2024)}
+                                onChange={date => setYearEnd(date ? date.year() : currentYear)}
                                 renderInput={props.renderInput}
                             />
                         </LocalizationProvider>
