@@ -1,10 +1,8 @@
 from datetime import datetime
+from typing import List, Optional
 
-from typing import Optional, List
-
-from mongoengine import Document, ListField, EmbeddedDocumentField, DictField, StringField, IntField, EmbeddedDocument
+from mongoengine import DictField, Document, EmbeddedDocument, EmbeddedDocumentField, IntField, ListField, StringField
 from pydantic import BaseModel
-
 
 # from scraper import PriceHistory
 

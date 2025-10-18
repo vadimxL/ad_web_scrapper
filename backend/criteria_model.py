@@ -1,5 +1,5 @@
-from jinja2 import Environment, select_autoescape, FileSystemLoader
 from flask import url_for
+from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from backend.car_details import ROOT_DIR, CarDetails
 

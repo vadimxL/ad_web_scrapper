@@ -1,21 +1,20 @@
 import asyncio
-
-from datetime import datetime, timedelta
-import re
-from logging import Logger
-from typing import List, Tuple, Dict, Optional
 import json
+import os
+import re
 import time
-from aiohttp_client_cache import CachedSession, SQLiteBackend, CachedResponse
+from datetime import datetime, timedelta
+from logging import Logger
+from typing import Dict, List, Optional, Tuple
+
+from aiohttp_client_cache import CachedResponse, CachedSession, SQLiteBackend
 from requests_cache import CachedSession as MyCachedSession
+
 from backend.car_details import CarDetails, PriceHistory
-from backend.config import BASE_OPTIONS_API_URL, BASE_CATALOG_API_URL, BASE_API_CAR_AD_URL, BASE_API_URL
+from backend.config import BASE_API_CAR_AD_URL, BASE_API_URL, BASE_CATALOG_API_URL, BASE_OPTIONS_API_URL
 from backend.handz.handz import Handz
-from backend.headers import scrape_headers, model_headers
-
+from backend.headers import model_headers, scrape_headers
 from backend.utils import extract_query_params
-
-
 
 FEED_SOURCES_ALL = ['xml', 'commercial', 'private']
 FEED_SOURCES_PRIVATE = FEED_SOURCES_ALL[2]

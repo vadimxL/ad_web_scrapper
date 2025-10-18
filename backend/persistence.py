@@ -1,13 +1,13 @@
-from typing import List
-
-from firebase_admin import db
-import pandas as pd
-from backend.db import firebase_db
 import json
 from datetime import datetime
+from typing import List
 
+import pandas as pd
 from car_details import CarDetails
-from scraper import FEED_SOURCES_PRIVATE, Scraper, BASE_URL
+from firebase_admin import db
+from scraper import BASE_URL, FEED_SOURCES_PRIVATE, Scraper
+
+from backend.db import firebase_db
 
 
 def dump_to_json(car_ads_to_save: dict, feed_sources: list):

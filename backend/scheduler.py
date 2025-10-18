@@ -1,18 +1,15 @@
-import os
 import threading
-from datetime import timedelta, datetime
+from datetime import datetime, timedelta
 from logging import Logger
 from random import randint
 from typing import Dict, List, Optional
 
-from pydantic import EmailStr
-
 from backend import models
+from backend.config import SENDER_EMAIL, SENDER_EMAIL_PW
 from backend.db.db_handler import DbHandler
 from backend.email.email_sender import EmailSender
 from backend.notifier import Notifier
 from backend.scraper import Scraper
-from backend.config import SENDER_EMAIL, SENDER_EMAIL_PW
 
 scheduled_task_events: Dict[str, threading.Event] = dict()
 
@@ -45,10 +42,10 @@ class TaskScheduler:
         mail_sender = EmailSender(SENDER_EMAIL, SENDER_EMAIL_PW)
         notifier = Notifier(mail_sender, [task.mail], self._logger)
         if results:
-            if self._db_handler.collection_exists() and self._recent_task(task):
+            if self._db_handler.collection_exists(task.title) and self._recent_task(task):
                 self._db_handler.handle_results(results, task.title, notifier)
             else:
-                self._db_handler.create_collection(results)
+                self._db_handler.create_collection(task.title, results)
 
     def _run_task(self, task_id: str):
         # Use cancellable wait instead of raw sleep so shutdown is responsive
@@ -77,7 +74,7 @@ class TaskScheduler:
             self._logger.info(f"Time now: {now}, Task {task_id} will be run tomorrow because it's not between 6 AM and midnight")
 
     def tasks_changed_listener(self, event):
-        self._logger.info(f"Tasks changed, {event.data=}, {event.path=}, {event.event_type=}")
+        self._logger.info(f"Tasks changed, {event.data=}\n, {event.path=}\n, {event.event_type=}\n")
         if event.event_type == 'patch':
             return
         if event.event_type == 'put':

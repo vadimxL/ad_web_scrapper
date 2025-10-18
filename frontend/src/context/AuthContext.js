@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import React, { createContext, useContext, useEffect, useMemo, useState, useCallback } from 'react';
 import { getMe, login as apiLogin, register as apiRegister, logout as apiLogout } from '../api/auth';
 
 export const AuthContext = createContext({
@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const refresh = async () => {
+  const refresh = useCallback(async () => {
     try {
       setLoading(true);
       const me = await getMe();
@@ -27,30 +27,36 @@ export const AuthProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     refresh();
-  }, []);
+  }, [refresh]);
 
-  const login = async ({ email, password }) => {
-    await apiLogin({ email, password });
-    await refresh();
-  };
+  const login = useCallback(
+    async ({ email, password }) => {
+      await apiLogin({ email, password });
+      await refresh();
+    },
+    [refresh]
+  );
 
-  const register = async ({ email, password }) => {
-    await apiRegister({ email, password });
-    await refresh();
-  };
+  const register = useCallback(
+    async ({ email, password }) => {
+      await apiRegister({ email, password });
+      await refresh();
+    },
+    [refresh]
+  );
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
     await apiLogout();
     setUser(null);
-  };
+  }, []);
 
   const value = useMemo(
     () => ({ user, loading, error, refresh, login, register, logout }),
-    [user, loading, error]
+    [user, loading, error, refresh, login, register, logout]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -2,11 +2,7 @@ import {
     Stack,
     TextField
 } from "@mui/material";
-import Chip from "@mui/material/Chip";
 import React, {useContext, useEffect, useState} from "react";
-import {
-    useQueries,
-} from '@tanstack/react-query'
 import {ManufacturersContext, SelectedManufacturersContext, SelectedModelsContext} from "../App";
 import Autocomplete from "@mui/material/Autocomplete";
 import { api } from '../api/client';
@@ -37,23 +33,46 @@ const Models = () => {
             }
             setLoading(true);
             try {
-                // Use api instance for models endpoint
                 const resp = await api.get(`/models/${selectedManufacturers.join(',')}`);
                 if (!cancelled) {
-                    setOptions(resp.data);
+                    const transformed = (resp.data || []).map(item => {
+                        // Derive stable value
+                        const baseVal = item.value ?? item.id ?? item.text ?? item.name;
+                        // Attempt to find manufacturer grouping (API structure may differ)
+                        const manufacturerId = item.manufacturer?.value || item.manufacturerId || item.manufId || null;
+                        const group = manufacturerId && mLookup[manufacturerId]
+                            ? mLookup[manufacturerId]
+                            : (item.manufacturer?.text || item.manufacturerText || '');
+                        return {
+                            ...item,
+                            text: item.text || item.name || String(baseVal),
+                            compositeValue: String(baseVal),
+                            group: group || 'Models'
+                        };
+                    });
+                    // Deduplicate by compositeValue in case backend returns duplicates
+                    const seen = new Set();
+                    const unique = transformed.filter(o => {
+                        if (seen.has(o.compositeValue)) return false; seen.add(o.compositeValue); return true;
+                    });
+                    setOptions(unique);
+                    // Prune selected models that are no longer present
+                    setSelectedModels(prev => Array.isArray(prev) ? prev.filter(v => unique.some(o => o.compositeValue === v)) : []);
                 }
             } catch (e) {
-                if (!cancelled) setOptions([]);
+                if (!cancelled) {
+                    setOptions([]);
+                    setSelectedModels([]);
+                }
             } finally {
                 if (!cancelled) setLoading(false);
             }
         }
         load();
         return () => { cancelled = true; };
-    }, [selectedManufacturers, setSelectedModels]);
+    }, [selectedManufacturers, setSelectedModels, mLookup]);
 
     const handleChange = (event, selectedOptionObjects) => {
-        // store array of composite ids or original model ids? Use composite to avoid clashes
         const ids = selectedOptionObjects.map(o => o.compositeValue);
         setSelectedModels(ids);
     };
@@ -71,7 +90,7 @@ const Models = () => {
                 options={options}
                 disableCloseOnSelect
                 loading={loading}
-                groupBy={(option) => option.group}
+                groupBy={(option) => option.group || ''}
                 value={valueObjects}
                 onChange={handleChange}
                 getOptionLabel={(option) => option.text}

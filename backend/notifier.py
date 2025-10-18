@@ -1,13 +1,12 @@
 from logging import Logger
-from pydantic import EmailStr
+
 from backend.car_details import CarDetails
 from backend.criteria_model import html_criteria_mail
 from backend.email.email_sender import EmailSender
 
 
 class Notifier:
-    def __init__(self, email_sender: EmailSender, logger: Logger,
-                 recipients: list[EmailStr]):
+    def __init__(self, email_sender: EmailSender, recipients: list[str], logger: Logger):
         self._email = email_sender
         self._log = logger
         self._recipients = recipients
@@ -20,7 +19,7 @@ class Notifier:
         except Exception as e:
             self._log.error(f"Error sending new ad email: {e}")
 
-    def updated_car_ad(self, old_ad: CarDetails, new_ad: CarDetails):
+    def updated_car_ad(self, new_ad: CarDetails):
         try:
             msg = html_criteria_mail(new_ad)
             last_price = new_ad.prices[-1].price

@@ -13,8 +13,6 @@ import Button from "@mui/material/Button";
 import * as React from "react";
 import Navbar from "../Navbar";
 import dayjs from "dayjs";
-import {InputLabel, MenuItem, Select} from "@mui/material";
-import FormControl from "@mui/material/FormControl";
 import Slider from '@mui/material/Slider';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
@@ -32,7 +30,7 @@ export default function CriteriaForm(props) {
     const MAX_KM = 150000;
     const KM_STEP = 1000;
     // Use props for manufacturers/models selection
-    const { selectedManufacturers, setSelectedManufacturers, selectedModels, setSelectedModels } = props;
+    const { selectedManufacturers, selectedModels } = props;
 
     // Determine if submit should be disabled (handle both array or scalar values)
     const hasManufacturer = Array.isArray(selectedManufacturers) ? selectedManufacturers.length > 0 : !!selectedManufacturers;

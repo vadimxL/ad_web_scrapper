@@ -2,10 +2,11 @@ import json
 import unittest
 from datetime import datetime
 
-from backend.db import firebase_db
-from backend.car_details import CarDetails
-from backend.db.db_handler import DbHandler
 from gmail_sender.gmail_sender import GmailSender
+
+from backend.car_details import CarDetails
+from backend.db import firebase_db
+from backend.db.db_handler import DbHandler
 
 
 class TestDbHandler(unittest.TestCase):

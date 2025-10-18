@@ -1,0 +1,28 @@
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+# Ignore paths
+exclude = [".git", "__pycache__", "venv", "commons", "build", "detector_lib"]
+
+[tool.ruff.flake8-bugbear]
+extend-immutable-calls = ["fastapi.Depends", "fastapi.params.Depends", "fastapi.Query", "fastapi.params.Query"]
+
+[tool.ruff.lint]
+exclude = ["**/.venv/**"]
+select = ["E", "F", "B", "ANN", "I"]
+ignore = ["ANN002", "ANN401", "ANN003", "B017", "B024"]
+
+[tool.autopep8]
+in-place = true
+aggressive = 3
+recursive = true
+max_line_length = 120
+exclude = ".git, __pycache__, venv, commons, build, detector_lib"
+
+
+[tool.vulture]
+exclude = [".git", "__pycache__", "venv", "commons", "build", "detector_lib"]
+min_confidence = 80
+sort_by_size = true
+
+

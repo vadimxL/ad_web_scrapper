@@ -1,8 +1,10 @@
 from os import listdir
 from os.path import isfile, join
-import easyocr
+
 import cv2
+import easyocr
 from ultralytics import YOLO
+
 # load models
 coco_model = YOLO('yolov8n.pt')
 license_plate_detector = YOLO('license_plate_detector.pt')

@@ -1,6 +1,6 @@
-from dotenv import load_dotenv
 import os
-from pydantic import EmailStr
+
+from dotenv import load_dotenv
 
 load_dotenv("backend/secrets/.env")
 if "BASE_API_URL" not in os.environ:
@@ -29,5 +29,5 @@ BASE_URL: str = os.environ.get("BASE_URL")
 BASE_API_CAR_AD_URL: str = os.environ.get("BASE_API_CAR_AD_URL")
 FIREBASE_DB_URL: str = os.environ.get("FIREBASE_DB_URL")
 FIREBASE_CERTIFICATE_PATH: str = os.environ.get("FIREBASE_CERTIFICATE_PATH")
-SENDER_EMAIL: EmailStr = os.environ.get("SENDER_EMAIL")
+SENDER_EMAIL: str = os.environ.get("SENDER_EMAIL")
 SENDER_EMAIL_PW: str = os.environ.get("EMAIL_PASSWORD")

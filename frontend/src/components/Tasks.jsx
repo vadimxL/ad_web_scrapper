@@ -50,9 +50,7 @@ function Task({ task }) {
                 <Typography color="primary">Manufacturers:</Typography>
                 <Typography> {task.manufacturers} </Typography>
                 <Typography color="primary">Models:</Typography>
-                <Typography> {task.car_models} </Typography>
-                <Typography color="primary">Submodels:</Typography>
-                <Typography> {task.car_submodels} </Typography>
+                <Typography> {Array.isArray(task.car_models) ? task.car_models.join(', ') : task.car_models} </Typography>
                 <Typography color="primary">Mail:</Typography>
                 <Typography> {task.mail} </Typography>
                 <Price params={task.params}/>
@@ -63,7 +61,7 @@ function Task({ task }) {
 }
 Task.propTypes = { task: PropTypes.any };
 
-export default function Tasks({ embedded = true }) {
+export default function Tasks({ embedded = true, refreshTrigger }) {
     const [tasks, setTasks] = useState([]);
     const [running, setRunning] = useState(false);
     const [runMessage, setRunMessage] = useState('');
@@ -91,7 +89,7 @@ export default function Tasks({ embedded = true }) {
 
     useEffect(() => {
         if (user) fetchTasks(); else setTasks([]);
-    }, [user]);
+    }, [user, refreshTrigger]);
 
     const defaultTheme = createTheme();
 
@@ -146,4 +144,4 @@ export default function Tasks({ embedded = true }) {
     );
 }
 
-Tasks.propTypes = { embedded: PropTypes.bool };
+Tasks.propTypes = { embedded: PropTypes.bool, refreshTrigger: PropTypes.number }

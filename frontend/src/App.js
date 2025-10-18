@@ -9,12 +9,11 @@ import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
-import {QueryClient, QueryClientProvider, useQuery} from '@tanstack/react-query'
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
 import * as PropTypes from "prop-types";
 import CriteriaForm from "./components/CriteriaForm";
 import Tasks from "./components/Tasks";
 import AdvancedOptions from "./components/AdvancedOptions";
-import CreateTask from "./components/CreateTask";
 import { useAuth } from './context/AuthContext';
 import { api } from './api/client';
 
@@ -57,18 +56,8 @@ export default function SignUp() {
 
     const [selectedManufacturers, setSelectedManufacturers] = useState([]);
     const [selectedModels, setSelectedModels] = useState([]);
-
-    const [tasks, setTasks] = useState([]);
     const [manufacturers, setManufacturers] = useState([]);
-    const [priceRange, setPriceRange] = useState({start_price: '', end_price: '',});
-
-    const handleInputChange = (e) => {
-        const {name, value} = e.target;
-        setPriceRange((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
-    };
+    const [tasksRefreshTrigger, setTasksRefreshTrigger] = useState(0);
 
     const fetchManufacturers = () => {
         api.get('/manufacturers')
@@ -96,19 +85,14 @@ export default function SignUp() {
         };
         console.log('Submitting:', requestData);
         try {
-            const response = await api.post('/v2/tasks', requestData);
-            // Handle the response as needed
-            console.log(response.data);
+            await api.post('/v2/tasks', requestData);
+            // Trigger tasks list refresh
+            setTasksRefreshTrigger(prev => prev + 1);
         } catch (error) {
-            // Handle errors
             console.error('Error sending POST request:', error);
         }
     };
 
-    const handleSetTodos = (newValues) => {
-        console.log("**selected tasks...." + tasks);
-        setTasks(newValues);
-    }
 
     return (
             <QueryClientProvider client={queryClient}>
@@ -132,7 +116,7 @@ export default function SignUp() {
                         <CssBaseline/>
                         <AdvancedOptions/>
                         {/*<CreateTask/>*/}
-                        <Tasks />
+                        <Tasks refreshTrigger={tasksRefreshTrigger} />
                         <Copyright sx={{mt: 5}}/>
                     </Container>
                 </ThemeProvider>

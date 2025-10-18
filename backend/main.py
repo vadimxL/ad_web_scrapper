@@ -1,31 +1,49 @@
-import asyncio
 import hashlib
 import logging
-import threading
 import os
-
-from backend import models
+import threading
 from contextlib import asynccontextmanager
 from datetime import datetime
-from typing import List, Optional, Tuple, Annotated
-from pydantic import EmailStr, BaseModel
+from typing import Annotated, List, Optional, Tuple
+
+from fastapi import Depends, FastAPI, HTTPException, Query
+from pydantic import BaseModel, EmailStr
 from starlette.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
-from fastapi import FastAPI, HTTPException, Query, Depends
+
+from backend import models
+from backend.auth import create_user_repo, get_current_user, set_user_repo
+from backend.auth import router as auth_router
+from backend.criteria_model import html_task_created
 from backend.db.database import Database
 from backend.db.db_handler import DbHandler
+from backend.db.firebase_config import FirebaseConfig
 from backend.email.email_sender import EmailSender
 from backend.logger_setup import internal_info_logger
 from backend.scheduler import TaskScheduler
 from backend.scraper import Scraper
-from backend.utils import join_query_params, extract_query_params
-from backend.criteria_model import html_task_created
-from backend.auth import router as auth_router, get_current_user
+from backend.utils import extract_query_params, join_query_params
+
+
+def get_db_handler() -> DbHandler:
+    return app.state.db_handler  # type: ignore[return-value]
+
+DBHandlerDep = Annotated[DbHandler, Depends(get_db_handler)]
+UserDep = Annotated[dict, Depends(get_current_user)]
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    db_handler = DbHandler("global", db=Database(), logger=internal_info_logger)
+    # Initialize Database explicitly with config (non-singleton)
+    cfg = FirebaseConfig.from_config_module()
+    shared_db = Database(cfg)
+    app.state.database = shared_db
+
+    # Initialize auth user repo with shared DB (Firebase if configured)
+    user_repo = create_user_repo(shared_db)
+    set_user_repo(user_repo)
+
+    db_handler = DbHandler(db=shared_db, logger=internal_info_logger)
     scheduler = TaskScheduler(internal_info_logger, db_handler=db_handler)
     scheduler_thread = threading.Thread(target=scheduler.run, name="task-scheduler")
     scheduler_thread.start()
@@ -52,16 +70,23 @@ async def get_manufacturers_en() -> dict:
 
 app = FastAPI(lifespan=lifespan)
 
-def get_db_handler() -> DbHandler:
-    return app.state.db_handler  # type: ignore[return-value]
+# Configure CORS with explicit origins (wildcard + credentials is invalid)
+_frontend_origins_env = os.getenv("FRONTEND_ORIGINS", "")
+if _frontend_origins_env:
+    _allowed_origins = [o.strip() for o in _frontend_origins_env.split(",") if o.strip()]
+else:
+    _allowed_origins = [
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "http://172.22.122.196:3000",
+    ]
 
-# Allow all origins with appropriate methods, headers, and credentials if needed
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Replace "*" with specific origins if needed
+    allow_origins=_allowed_origins,
     allow_credentials=True,
-    allow_methods=["*"],  # You can specify specific methods (e.g., ["GET", "POST"])
-    allow_headers=["*"],  # You can specify specific headers if needed
+    allow_methods=["*"],  # allow all methods so preflight (OPTIONS) passes
+    allow_headers=["*"],  # or specify e.g. ["Authorization", "Content-Type"]
     expose_headers=["*"]
 )
 
@@ -111,8 +136,7 @@ async def get_submodels(model_id: str):
     return car_models['data']['subModel']
 
 @app.get("/tasks", response_model=List[models.Task])
-async def read_items(user: dict = Depends(get_current_user),
-                     db_handler: DbHandler = Depends(get_db_handler)):
+async def read_items(user: UserDep, db_handler: DBHandlerDep):
     tasks = db_handler.load_tasks()
     if tasks is None:
         return []
@@ -127,7 +151,7 @@ async def read_items(user: dict = Depends(get_current_user),
 
 def create_title(params: dict, manufacturers_in_en: dict) -> str:
     car_manufacturers_en: list = \
-        [manufacturers_in_en[manufacturer] for manufacturer in params['manufacturer'].split(",")]
+        [manufacturers_in_en[int(manufacturer)] for manufacturer in params['manufacturer'].split(",")]
     title_params: dict = params.copy()
     title_params['manufacturer'] = str.join(",", car_manufacturers_en)
     title = join_query_params(title_params)
@@ -157,10 +181,10 @@ def parse_km_range(km_str: str) -> Tuple[int, int]:
 # Update (PUT)
 @app.put("/tasks/{task_id}", response_model=models.Task)
 async def update_task(task_id: str,
+                      user: UserDep,
+                      db_handler: DBHandlerDep,
                       km_min: Annotated[Optional[int], Query(title="Min value of mileage", ge=-1)] = None,
-                      km_max: Annotated[Optional[int], Query(title="Max value of mileage", le=200000)] = None,
-                      user: dict = Depends(get_current_user),
-                      db_handler: DbHandler = Depends(get_db_handler)) -> models.Task:
+                      km_max: Annotated[Optional[int], Query(title="Max value of mileage", le=200000)] = None) -> models.Task:
     manufacturers_en: dict = await get_manufacturers_en()
     task = db_handler.get_task(task_id)
     if task is None:
@@ -183,16 +207,11 @@ async def update_task(task_id: str,
         task.params['km'] = f"{params_km_start}-{km_max}"
         task.title = create_title(task.params, manufacturers_en)
 
-    db.update_task(task)
+    db_handler.update_task(task)
     return task
 
-
-@app.post("/tasks", response_model=models.Task)
-async def create_task(email: EmailStr, url: str, user: dict = Depends(get_current_user),
-                      db_handler: DbHandler = Depends(get_db_handler)) -> models.Task:
-    """
-    Create a new task
-    """
+# Core logic extracted to avoid calling route function directly
+async def _create_task_logic(email: EmailStr, url: str, user: dict, db_handler: DbHandler) -> models.Task:
     params: dict = extract_query_params(url)
     manufacturers_en: dict = await get_manufacturers_en()
 
@@ -214,7 +233,6 @@ async def create_task(email: EmailStr, url: str, user: dict = Depends(get_curren
                                                                           params.get('model', ""),
                                                                           params.get('subModel', ""))
     title = create_title(params, manufacturers_en)
-    print(f"Title params: {title}")
     task = models.Task(id=id_, title=title, mail=email,
                        params=params,
                        created_at=datetime.now(),
@@ -241,6 +259,11 @@ async def create_task(email: EmailStr, url: str, user: dict = Depends(get_curren
     return task
 
 
+@app.post("/tasks", response_model=models.Task)
+async def create_task(email: EmailStr, url: str, user: UserDep, db_handler: DBHandlerDep) -> models.Task:
+    return await _create_task_logic(email, url, user, db_handler)
+
+
 class UITask(BaseModel):
     email: EmailStr
     km_start: int
@@ -253,15 +276,13 @@ class UITask(BaseModel):
 
 
 @app.post("/v2/tasks", response_model=models.Task)
-async def create_task_v2(ui_task: UITask, user: dict = Depends(get_current_user)):
+async def create_task_v2(ui_task: UITask, user: UserDep, db_handler: DBHandlerDep):
     url = f"?manufacturer={ui_task.manufacturer}&model={ui_task.model}&year={ui_task.year_start}-{ui_task.year_end}&km={ui_task.km_start}-{ui_task.km_end}"
-    t: models.Task = await create_task(ui_task.email, url, user)
-    return t
+    return await _create_task_logic(ui_task.email, url, user, db_handler)
 
 
 @app.delete("/tasks/{task_id}")
-async def delete_task(task_id: str, user: dict = Depends(get_current_user),
-                      db_handler: DbHandler = Depends(get_db_handler)):
+async def delete_task(task_id: str, user: UserDep, db_handler: DBHandlerDep):
     """
     Delete a task
     """
@@ -286,5 +307,3 @@ def get_range(data: str) -> models.Range:
 def clear_tasks_debug():
     removed_tasks = DbHandler.clear_all_tasks()
     return {"message": f"All tasks have been removed (debug route). {len(removed_tasks)} tasks deleted."}
-
-

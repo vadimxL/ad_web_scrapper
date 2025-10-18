@@ -1,8 +1,9 @@
 import hashlib
-from datetime import timedelta
-from typing import List, Dict
 import json
 import re
+from datetime import timedelta
+from typing import Dict, List
+
 from requests_cache import CachedSession as MyCachedSession
 
 

@@ -1,7 +1,9 @@
-from datetime import datetime
-from typing import List, Optional, Dict
-from pydantic import BaseModel, Field
 import os
+from datetime import datetime
+from typing import Dict, List, Optional
+
+from pydantic import BaseModel, Field
+
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 class PriceHistory(BaseModel):

@@ -1,9 +1,9 @@
 import smtplib
 from email.mime.text import MIMEText
-import os
 from typing import List
+
 from dotenv import load_dotenv
-from pydantic import EmailStr
+
 from backend.car_details import CarDetails
 from backend.criteria_model import html_criteria_mail
 from backend.logger_setup import ads_updates_logger
@@ -13,12 +13,12 @@ SCOPES = ["https://www.googleapis.com/auth/gmail.send"]
 
 
 class EmailSender:
-    def __init__(self, sender_email: EmailStr, sender_pw: str) -> None:
+    def __init__(self, sender_email: str, sender_pw: str) -> None:
         self._sender_email = sender_email
         self._sender_pw = sender_pw
         pass
 
-    def send(self, msg_content: str, recipient: List[EmailStr], subject: str = "Automated draft"):
+    def send(self, msg_content: str, recipient: List[str], subject: str = "Automated draft"):
         load_dotenv()
         # Define the subject and body of the email.
         body = msg_content

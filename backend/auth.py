@@ -1,13 +1,14 @@
-import os
-import json
-import uuid
 import hashlib
+import hmac
+import json
+import os
 import secrets
 import threading
-from datetime import datetime, UTC
-from typing import Optional, Dict, Any
+import uuid
+from datetime import UTC, datetime
+from typing import Any, Dict, List, Optional, Protocol
 
-from fastapi import APIRouter, HTTPException, Request, status, Depends
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from pydantic import BaseModel, EmailStr
 
 
@@ -31,8 +32,9 @@ class UsersDB:
     """
     Minimal JSON-file-based user storage with salted PBKDF2-HMAC password hashing.
     Thread-safe for single-process concurrency via a lock.
+    Serves as a fallback when Firebase configuration is missing.
     """
-    def __init__(self, path: str = "users_db.json"):
+    def __init__(self, path: str = "users_db.json") -> None:
         self.path = path
         self._lock = threading.Lock()
         if not os.path.exists(self.path):
@@ -70,7 +72,10 @@ class UsersDB:
         return dk.hex()
 
     def verify_password(self, password: str, user: dict) -> bool:
-        return self._hash_password(password, user["salt"]) == user["password_hash"]
+        user_pw_hashed: str = user.get("password_hash", "")
+        entered_pw_hash = self._hash_password(password, user_pw_hashed)
+        print(f"Verifying password: entered hash {entered_pw_hash}, stored hash {user_pw_hashed}")
+        return hmac.compare_digest(user_pw_hashed, entered_pw_hash)
 
     def create_user(self, email: str, password: str) -> dict:
         if self.find_by_email(email):
@@ -89,7 +94,7 @@ class UsersDB:
         self._save(data)
         return user
 
-    def clear_all_users(self):
+    def clear_all_users(self) -> List[dict]:
         data = self._load()
         users = data.get("users", [])
         print("Clearing all users. User info:")
@@ -97,36 +102,80 @@ class UsersDB:
             print(user)
         data["users"] = []
         self._save(data)
-        return users
+        return users  # type: ignore[return-value]
 
 
-db = UsersDB()
+class UserRepoProtocol(Protocol):
+    def find_by_email(self, email: str) -> Optional[dict]: ...
+    def find_by_id(self, user_id: str) -> Optional[dict]: ...
+    def create_user(self, email: str, password: str) -> dict: ...
+    def verify_password(self, password: str, user: dict) -> bool: ...
+    def clear_all_users(self) -> List[dict]: ...
+
+
+# --- Firebase-backed repository (preferred) ---------------------------------
+try:
+    from backend.db.database import Database  # type: ignore
+    from backend.db.firebase_users_db import FirebaseUsersDB  # type: ignore
+except Exception:  # pragma: no cover - import errors just disable firebase usage
+    FirebaseUsersDB = None  # type: ignore
+    Database = None  # type: ignore
+
+
+def create_user_repo(shared_db: 'Database | None' = None) -> UserRepoProtocol:  # type: ignore[name-defined]
+    """Factory for a user repository.
+
+    If a shared Database instance is provided and FirebaseUsersDB is importable, returns a FirebaseUsersDB.
+    Otherwise returns a JSON UsersDB.
+    No direct environment access here (env already validated in config module / Database init).
+    """
+    if FirebaseUsersDB and shared_db and Database and isinstance(shared_db, Database):  # type: ignore[arg-type]
+        try:
+            return FirebaseUsersDB(shared_db)  # type: ignore[return-value]
+        except Exception as e:  # pragma: no cover
+            print(f"Firebase users DB init failed, falling back to JSON store: {e}")
+    return UsersDB()
+
+
+# Lazy user repository (set during app lifespan in main). Avoid duplicate init.
+_user_repo: Optional[UserRepoProtocol] = None  # type: ignore
+
+
+def set_user_repo(repo: UserRepoProtocol) -> None:
+    global _user_repo
+    _user_repo = repo
+
+
 router = APIRouter(tags=["auth"])
 
 
-def get_current_user(request: Request) -> dict:
-    print("get_current_user called")
+def get_user_repo() -> UserRepoProtocol:
+    """FastAPI dependency to get current user repository (JSON or Firebase).
+    Falls back to a local UsersDB if lifespan didn't set one (e.g. in unit tests)."""
+    global _user_repo
+    if _user_repo is None:  # fallback lazy init
+        _user_repo = create_user_repo()
+    return _user_repo
+
+
+def get_current_user(request: Request, repo=Depends(get_user_repo)) -> dict:
     user_id = request.session.get("user_id")
-    print(f"user_id from session: {user_id}")
     if not user_id:
-        print("No user_id in session, raising 401")
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
-    user = db.find_by_id(user_id)
-    print(f"user from db: {user}")
+    user = repo.find_by_id(user_id)
     if not user:
-        print("User not found in db, raising 401")
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found")
     return user
 
 
 @router.post("/register", response_model=UserPublic, status_code=status.HTTP_201_CREATED)
-def register(payload: RegisterRequest):
+def register(payload: RegisterRequest, repo=Depends(get_user_repo)):
     email = str(payload.email)
-    existing = db.find_by_email(email)
+    existing = repo.find_by_email(email)
     if existing:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="User already exists")
     try:
-        user = db.create_user(email, payload.password)
+        user = repo.create_user(email, payload.password)
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
     return UserPublic(
@@ -137,12 +186,11 @@ def register(payload: RegisterRequest):
 
 
 @router.post("/login", response_model=UserPublic)
-def login(payload: LoginRequest, request: Request):
+def login(payload: LoginRequest, request: Request, repo=Depends(get_user_repo)):
     email = str(payload.email)
-    user = db.find_by_email(email)
-    if not user or not db.verify_password(payload.password, user):
+    user = repo.find_by_email(email)
+    if not user or not repo.verify_password(payload.password, user):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid credentials")
-    # Establish session
     request.session["user_id"] = user["id"]
     return UserPublic(
         id=user["id"],
@@ -159,7 +207,6 @@ def logout(request: Request):
 
 @router.get("/me", response_model=UserPublic)
 def me(user: dict = Depends(get_current_user)):
-    print(f"Current user: {user}")
     return UserPublic(
         id=user["id"],
         email=user["email"],
@@ -168,6 +215,6 @@ def me(user: dict = Depends(get_current_user)):
 
 
 @router.post("/debug/clear_users")
-def clear_users_debug():
-    users = db.clear_all_users()
+def clear_users_debug(repo=Depends(get_user_repo)):
+    users = repo.clear_all_users()
     return {"message": f"All users have been removed (debug route). {len(users)} users deleted."}

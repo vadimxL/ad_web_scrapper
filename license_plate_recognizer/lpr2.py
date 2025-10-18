@@ -1,9 +1,10 @@
 import time
-
-import requests
-from pprint import pprint
 from os import listdir
 from os.path import isfile
+from pprint import pprint
+
+import requests
+
 
 def main():
     regions = ["il"]  # Change to your country

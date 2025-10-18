@@ -7,7 +7,6 @@ import {
     createBrowserRouter,
     RouterProvider,
 } from "react-router-dom";
-import CriteriaForm from "./components/CriteriaForm";
 import { AuthProvider } from "./context/AuthContext";
 
 const router = createBrowserRouter([

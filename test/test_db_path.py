@@ -1,9 +1,10 @@
 import json
 import unittest
 
-from backend.db import firebase_db
-from backend.scraper import urls, Scraper
 from firebase_admin import db
+
+from backend.db import firebase_db
+from backend.scraper import Scraper, urls
 
 
 class TestScraper(unittest.TestCase):
