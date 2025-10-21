@@ -40,7 +40,7 @@ function Price(params) {
     return null;
 }
 
-function Task({ task }) {
+function Task({ task, onDeleted }) {
     return (
         <Accordion>
             <AccordionSummary expandIcon={<ArrowDownwardIcon/>}>
@@ -54,7 +54,7 @@ function Task({ task }) {
                 <Typography color="primary">Mail:</Typography>
                 <Typography> {task.mail} </Typography>
                 <Price params={task.params}/>
-                <DeleteTask id={task.id} />
+                <DeleteTask id={task.id} onDeleted={onDeleted} />
             </AccordionDetails>
         </Accordion>
     );
@@ -129,7 +129,7 @@ export default function Tasks({ embedded = true, refreshTrigger }) {
             {tasks.length === 0 && (
                 <Typography color="text.secondary">No tasks yet.</Typography>
             )}
-            {tasks.map(t => <Task key={t.id} task={t} />)}
+            {tasks.map(t => <Task key={t.id} task={t} onDeleted={fetchTasks} />)}
         </Box>
     );
 

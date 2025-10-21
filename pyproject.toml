@@ -27,4 +27,4 @@ sort_by_size = true
 
 
 [tool.pylint.'MESSAGES CONTROL']
-disable = ["missing-function-docstring"]
+disable = ["missing-function-docstring", "missing-class-docstring"]

@@ -7,7 +7,7 @@ from datetime import datetime
 from typing import Annotated, List, Optional, Tuple
 
 from fastapi import Depends, FastAPI, HTTPException, Query
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel  # removed EmailStr
 from starlette.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 
@@ -211,7 +211,7 @@ async def update_task(task_id: str,
     return task
 
 # Core logic extracted to avoid calling route function directly
-async def _create_task_logic(email: EmailStr, url: str, user: dict, db_handler: DbHandler) -> models.Task:
+async def _create_task_logic(email: str, url: str, user: dict, db_handler: DbHandler) -> models.Task:
     params: dict = extract_query_params(url)
     manufacturers_en: dict = await get_manufacturers_en()
 
@@ -247,12 +247,12 @@ async def _create_task_logic(email: EmailStr, url: str, user: dict, db_handler: 
 
     # Send confirmation email with alert details
     try:
-        sender_email = EmailStr(os.getenv("SENDER_EMAIL"))
-        sender_pw = os.getenv("EMAIL_PASSWORD")
+        sender_email = os.getenv("SENDER_EMAIL", "")
+        sender_pw = os.getenv("EMAIL_PASSWORD", "")
         mail_sender = EmailSender(sender_email, sender_pw)
         message = html_task_created(task)
         internal_info_logger.info(f"Sending task creation email to {task.mail}")
-        mail_sender.send(message, [EmailStr(task.mail)], f"✅ Alert created: {task.title}")
+        mail_sender.send(message, [task.mail], f"✅ Alert created: {task.title}")
     except Exception as e:
         internal_info_logger.error(f"Error sending task creation email: {e}")
 
@@ -260,12 +260,12 @@ async def _create_task_logic(email: EmailStr, url: str, user: dict, db_handler: 
 
 
 @app.post("/tasks", response_model=models.Task)
-async def create_task(email: EmailStr, url: str, user: UserDep, db_handler: DBHandlerDep) -> models.Task:
+async def create_task(email: str, url: str, user: UserDep, db_handler: DBHandlerDep) -> models.Task:
     return await _create_task_logic(email, url, user, db_handler)
 
 
 class UITask(BaseModel):
-    email: EmailStr
+    email: str
     km_start: int
     km_end: int
     manufacturer: str
@@ -284,13 +284,29 @@ async def create_task_v2(ui_task: UITask, user: UserDep, db_handler: DBHandlerDe
 @app.delete("/tasks/{task_id}")
 async def delete_task(task_id: str, user: UserDep, db_handler: DBHandlerDep):
     """
-    Delete a task
+    Delete a task and notify the recipient via email.
     """
     task: models.Task = db_handler.get_task(task_id)
     if not task:
         return {"message": f"Task: {task_id} not found"}
     if task.owner_id != user["id"]:
         raise HTTPException(status_code=403, detail="Not authorized to delete this task")
+
+    # Attempt to send deletion notification email before deleting.
+    try:
+        sender_email = os.getenv("SENDER_EMAIL", "")
+        sender_pw = os.getenv("EMAIL_PASSWORD", "")
+        mail_sender = EmailSender(sender_email, sender_pw)
+        subject = f"🗑️ Alert deleted: {task.title}"
+        body = (
+            f"<p>The alert <strong>{task.title}</strong> was deleted.</p>"
+            f"<p>If this was a mistake you can recreate it from the criteria form.</p>"
+        )
+        internal_info_logger.info(f"Sending task deletion email to {task.mail}")
+        mail_sender.send(body, [task.mail], subject)
+    except Exception as e:
+        internal_info_logger.error(f"Error sending task deletion email: {e}")
+
     db_handler.delete_task(task_id)
     return {"message": f"Task: {task} deleted"}
 
