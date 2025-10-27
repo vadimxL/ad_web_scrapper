@@ -16,6 +16,7 @@ import Tasks from "./components/Tasks";
 import AdvancedOptions from "./components/AdvancedOptions";
 import { useAuth } from './context/AuthContext';
 import { api } from './api/client';
+import DeletedTasks from './components/DeletedTasks';
 
 axios.defaults.withCredentials = true;
 
@@ -58,6 +59,8 @@ export default function SignUp() {
     const [selectedModels, setSelectedModels] = useState([]);
     const [manufacturers, setManufacturers] = useState([]);
     const [tasksRefreshTrigger, setTasksRefreshTrigger] = useState(0);
+    const [deletedTasksRefreshTrigger, setDeletedTasksRefreshTrigger] = useState(0);
+    const [sellerType, setSellerType] = useState('all'); // NEW state for seller type
 
     const fetchManufacturers = () => {
         api.get('/manufacturers')
@@ -82,17 +85,33 @@ export default function SignUp() {
             year_end: data.year_end,
             km_start: data.kmStart,
             km_end: data.kmEnd,
+            engine_vol_start: data.engine_vol_start,
+            engine_vol_end: data.engine_vol_end,
+            seller_type: sellerType, // propagate seller type to backend
         };
         console.log('Submitting:', requestData);
         try {
             await api.post('/v2/tasks', requestData);
             // Trigger tasks list refresh
             setTasksRefreshTrigger(prev => prev + 1);
+            // Deleted history might also change (e.g., duplicate removal) so refresh it
+            setDeletedTasksRefreshTrigger(prev => prev + 1);
         } catch (error) {
             console.error('Error sending POST request:', error);
         }
     };
 
+    const handleTasksChanged = () => {
+        // when a task is deleted, refresh both active tasks and deleted history
+        setTasksRefreshTrigger(prev => prev + 1);
+        setDeletedTasksRefreshTrigger(prev => prev + 1);
+    };
+
+    const handleRecreatedFromHistory = () => {
+        // when a deleted task is recreated, refresh active tasks and history
+        setTasksRefreshTrigger(prev => prev + 1);
+        setDeletedTasksRefreshTrigger(prev => prev + 1);
+    };
 
     return (
             <QueryClientProvider client={queryClient}>
@@ -114,9 +133,9 @@ export default function SignUp() {
                             </SelectedManufacturersContext.Provider>
                         </ManufacturersContext.Provider>
                         <CssBaseline/>
-                        <AdvancedOptions/>
-                        {/*<CreateTask/>*/}
-                        <Tasks refreshTrigger={tasksRefreshTrigger} />
+                        <AdvancedOptions sellerType={sellerType} setSellerType={setSellerType} />
+                        <Tasks refreshTrigger={tasksRefreshTrigger} onAnyChange={handleTasksChanged} />
+                        <DeletedTasks triggerReload={deletedTasksRefreshTrigger} onRecreatedTask={handleRecreatedFromHistory} />
                         <Copyright sx={{mt: 5}}/>
                     </Container>
                 </ThemeProvider>

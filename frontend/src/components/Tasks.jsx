@@ -16,11 +16,12 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 function ArrowDownwardIcon() { return null; }
 
-function DeleteTask({id, onDeleted}) {
+function DeleteTask({id, onDeleted, onAnyChange}) {
     const deleteTodo = async () => {
         try {
             await api.delete(`/tasks/${id}`);
             if (onDeleted) onDeleted();
+            if (onAnyChange) onAnyChange();
         } catch (_) { /* ignore */ }
     };
     return (
@@ -40,7 +41,19 @@ function Price(params) {
     return null;
 }
 
-function Task({ task, onDeleted }) {
+function EngineVolume(params) {
+    if (params.engineval) {
+        return (
+            <div>
+                <Typography color="primary">Engine Volume Range (cc):</Typography>
+                <Typography>{params.engineval}</Typography>
+            </div>
+        );
+    }
+    return null;
+}
+
+function Task({ task, onDeleted, onAnyChange }) {
     return (
         <Accordion>
             <AccordionSummary expandIcon={<ArrowDownwardIcon/>}>
@@ -54,14 +67,15 @@ function Task({ task, onDeleted }) {
                 <Typography color="primary">Mail:</Typography>
                 <Typography> {task.mail} </Typography>
                 <Price params={task.params}/>
-                <DeleteTask id={task.id} onDeleted={onDeleted} />
+                <EngineVolume {...task.params} />
+                <DeleteTask id={task.id} onDeleted={onDeleted} onAnyChange={onAnyChange} />
             </AccordionDetails>
         </Accordion>
     );
 }
 Task.propTypes = { task: PropTypes.any };
 
-export default function Tasks({ embedded = true, refreshTrigger }) {
+export default function Tasks({ embedded = true, refreshTrigger, onAnyChange }) {
     const [tasks, setTasks] = useState([]);
     const [running, setRunning] = useState(false);
     const [runMessage, setRunMessage] = useState('');
@@ -129,7 +143,7 @@ export default function Tasks({ embedded = true, refreshTrigger }) {
             {tasks.length === 0 && (
                 <Typography color="text.secondary">No tasks yet.</Typography>
             )}
-            {tasks.map(t => <Task key={t.id} task={t} onDeleted={fetchTasks} />)}
+            {tasks.map(t => <Task key={t.id} task={t} onDeleted={fetchTasks} onAnyChange={onAnyChange} />)}
         </Box>
     );
 

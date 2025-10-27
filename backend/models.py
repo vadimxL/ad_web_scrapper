@@ -44,7 +44,7 @@ class Task(BaseModel):
     manufacturers: Optional[List[str]] = None
     car_models: Optional[List[str]] = None
     car_submodels: Optional[List[str]] = None
-    # criteria: CarCriteria
+    deleted_at: Optional[datetime] = None  # timestamp when task was deleted/archived
 
 
 def create_task_from_dict(task_dict: dict) -> Task:

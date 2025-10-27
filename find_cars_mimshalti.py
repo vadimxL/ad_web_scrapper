@@ -361,23 +361,9 @@ def _format_baalut_dt(value: Any) -> str:
     return f"{month}-{year}"
 
 
-def print_ownership_summary(records: List[VehicleRecord], ownership_map: Dict[str, List[OwnershipRecord]], mileage_map: Dict[str, MileageRecord], latest_owner_filter: Optional[str] = None) -> None:
-    """Print ownership history summary sectioned by latest owner.
-
-    Args:
-        records: List of current vehicle records.
-        ownership_map: Mapping plate -> ownership history list.
-        mileage_map: Mapping plate -> mileage record.
-        latest_owner_filter: If provided, only print the section for this latest owner value.
-
-    Behavior:
-        - Determines latest owner per vehicle (by most recent valid baalut_dt).
-        - Groups vehicles by that latest owner.
-        - Sorts each group by descending history length then by plate.
-        - Displays mileage and formatted latest date (MM-YYYY) plus full timeline per vehicle.
-    """
-    # Build summaries per vehicle first
-    summaries: List[Dict[str, Any]] = []
+def print_ownership_summary(records: List[VehicleRecord], ownership_map: Dict[str, List[OwnershipRecord]]) -> None:
+    """Print ownership history summary per vehicle: count and latest ownership (formatted MM-YYYY), plus full history."""
+    print("\nOwnership history summary:")
     for v in records:
         plate = v.get("mispar_rechev", "") or ""
         history = ownership_map.get(str(plate), [])
@@ -395,49 +381,18 @@ def print_ownership_summary(records: List[VehicleRecord], ownership_map: Dict[st
         latest_owner = latest.get("baalut") if latest else "N/A"
         latest_date_raw = latest.get("baalut_dt") if latest else "N/A"
         latest_date_fmt = _format_baalut_dt(latest_date_raw)
-        mileage_val = parse_mileage(mileage_map.get(plate))
-        mileage_str = str(mileage_val) if mileage_val is not None else "N/A"
-        summaries.append({
-            "plate": plate,
-            "count": count,
-            "latest_owner": latest_owner,
-            "latest_date": latest_date_fmt,
-            "mileage": mileage_str,
-            "history": history,
-        })
-
-    # Group by latest owner
-    grouped: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
-    for s in summaries:
-        grouped[s["latest_owner"]].append(s)
-
-    # If filter provided, restrict groups
-    owners_to_print = [latest_owner_filter] if latest_owner_filter else list(grouped.keys())
-    # Stable deterministic order: sort owners by group size desc then lexicographically
-    if not latest_owner_filter:
-        owners_to_print.sort(key=lambda o: (-len(grouped[o]), o))
-
-    print("\nOwnership history summary grouped by latest owner:" + (f" (filter: {latest_owner_filter})" if latest_owner_filter else ""))
-    if latest_owner_filter and latest_owner_filter not in grouped:
-        print(f"(No vehicles found with latest owner '{latest_owner_filter}')")
-        return
-
-    for owner in owners_to_print:
-        vehicles = grouped.get(owner, [])
-        vehicles.sort(key=lambda s: (-s["count"], s["plate"]))
-        print(f"\nLatest Owner: {owner} (vehicles: {len(vehicles)})")
-        for s in vehicles:
-            print(f"Plate: {s['plate']}, history entries: {s['count']}, latest date: {s['latest_date']}, mileage: {s['mileage']}")
-            history = s["history"]
-            if history:
-                print("  Full ownership timeline:")
-                for rec in history:
-                    fmt_dt = _format_baalut_dt(rec.get("baalut_dt"))
-                    owner_entry = rec.get("baalut") or "UNKNOWN"
-                    rank_val = rec.get("rank")
-                    print(f"    {fmt_dt} -> {owner_entry}" + (f" (rank {rank_val})" if rank_val is not None else ""))
-            else:
-                print("  No ownership history records found.")
+        print(f"Plate: {plate}, history entries: {count}, latest owner: {latest_owner}, latest date: {latest_date_fmt}")
+        if history:
+            print("  Full ownership timeline:")
+            for rec in history:
+                raw_dt = rec.get("baalut_dt")
+                fmt_dt = _format_baalut_dt(raw_dt)
+                owner = rec.get("baalut") or "UNKNOWN"
+                rank_val = rec.get("rank")
+                # Removed raw date display per request
+                print(f"    {fmt_dt} -> {owner}" + (f" (rank {rank_val})" if rank_val is not None else ""))
+        else:
+            print("  No ownership history records found.")
 
 
 def main() -> None:
@@ -450,9 +405,8 @@ def main() -> None:
     plates: List[str] = [r.get("mispar_rechev", "") for r in records if r.get("mispar_rechev")]
     mileage_map: Dict[str, MileageRecord] = fetch_mileage_records(plates, session=cached_session)
     ownership_map: Dict[str, List[OwnershipRecord]] = fetch_ownership_records(plates, session=cached_session)
-    # print_records_by_owner(records, owner_type="ליסינג", mileage_map=mileage_map, sort_by_mileage=True, descending=False)
-    # Print grouped ownership summary (all latest owners). To filter a specific latest owner, pass latest_owner_filter="<value>"
-    print_ownership_summary(records, ownership_map, mileage_map, latest_owner_filter=None)
+    print_records_by_owner(records, owner_type="ליסינג", mileage_map=mileage_map, sort_by_mileage=True, descending=False)
+    print_ownership_summary(records, ownership_map)
 
 
 if __name__ == '__main__':
