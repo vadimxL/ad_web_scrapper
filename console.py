@@ -10,6 +10,7 @@ def main():
     year = "2023"  #input textbox
     # month_year_on_the_road = "2022-3"  #input textbox
     # submodel = 'EXECUTIVE'
+    # kod_tozeret = "153"  #input textbox
     license_plate_partial = "X5X30002"  #input textbox
     # full_license_plate = "61010701"
     url = "https://data.gov.il/api/3/action/datastore_search?resource_id=053cea08-09bc-40ec-8f7a-156f0677aff3&limit=99999999"
@@ -19,6 +20,7 @@ def main():
         # 'shnat_yitzur': year,
         # 'moed_aliya_lakvish': month_year_on_the_road,
         # 'ramat_gimur': submodel
+        # 'degem_cd': kod_tozeret,
     }
     params = {'filters': json.dumps(filters), 'q': car_model}
     response = requests.get(url, params=params)

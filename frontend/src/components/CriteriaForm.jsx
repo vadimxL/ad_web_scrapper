@@ -24,12 +24,19 @@ export default function CriteriaForm(props) {
     const currentYear = new Date().getFullYear();
     const [yearEnd, setYearEnd] = React.useState(currentYear);
     const [priceRange, setPriceRange] = React.useState([0, 250000]); // [min, max]
+    // Engine volume range (cc)
+    const [engineVolStart, setEngineVolStart] = React.useState(800);
+    const [engineVolEnd, setEngineVolEnd] = React.useState(4000);
+    // Constants
     const MIN_PRICE = 0;
     const MAX_PRICE = 250000;
     const PRICE_STEP = 1000;
     const MIN_KM = 0;
     const MAX_KM = 150000;
     const KM_STEP = 1000;
+    const MIN_ENGINE_VOL = 600; // cc
+    const MAX_ENGINE_VOL = 6000; // cc
+    const ENGINE_VOL_STEP = 100;
     // Use props for manufacturers/models selection
     const { selectedManufacturers, selectedModels } = props;
 
@@ -66,7 +73,9 @@ export default function CriteriaForm(props) {
                         kmStart,
                         kmEnd,
                         price_min: priceRange[0],
-                        price_max: priceRange[1]
+                        price_max: priceRange[1],
+                        engine_vol_start: engineVolStart,
+                        engine_vol_end: engineVolEnd,
                     });
                 }
             }} sx={{mt: 3}}>
@@ -199,6 +208,57 @@ export default function CriteriaForm(props) {
                                         step={PRICE_STEP}
                                         getAriaLabel={() => 'Price range'}
                                         valueLabelFormat={(v) => `₪ ${v.toLocaleString('he-IL')}`}
+                                        disableSwap
+                                    />
+                                </Box>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    {/* Engine Volume Range Section */}
+                    <Grid item xs={12}>
+                        <Typography variant="subtitle1" align="right" sx={{ fontWeight: 600, mb: 1 }}>נפח מנוע (cc)</Typography>
+                        <Grid container spacing={2} alignItems="center" direction="row-reverse">
+                            <Grid item xs={6}>
+                                <TextField
+                                    fullWidth
+                                    label="Max"
+                                    value={engineVolEnd.toLocaleString('he-IL')}
+                                    onChange={(e) => {
+                                        const raw = e.target.value.replace(/[^0-9]/g,'');
+                                        const val = Math.min(Math.max(parseInt(raw||'0',10), engineVolStart), MAX_ENGINE_VOL);
+                                        setEngineVolEnd(val);
+                                    }}
+                                    InputProps={{
+                                        inputProps: { min: MIN_ENGINE_VOL, max: MAX_ENGINE_VOL, step: ENGINE_VOL_STEP }
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={6}>
+                                <TextField
+                                    fullWidth
+                                    label="Min"
+                                    value={engineVolStart.toLocaleString('he-IL')}
+                                    onChange={(e) => {
+                                        const raw = e.target.value.replace(/[^0-9]/g,'');
+                                        const val = Math.max(Math.min(parseInt(raw||'0',10), engineVolEnd), MIN_ENGINE_VOL);
+                                        setEngineVolStart(val);
+                                    }}
+                                    InputProps={{
+                                        inputProps: { min: MIN_ENGINE_VOL, max: MAX_ENGINE_VOL, step: ENGINE_VOL_STEP }
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Box sx={{ px: 1 }}>
+                                    <Slider
+                                        value={[engineVolStart, engineVolEnd]}
+                                        onChange={(e, newVal) => { setEngineVolStart(newVal[0]); setEngineVolEnd(newVal[1]); }}
+                                        valueLabelDisplay="auto"
+                                        min={MIN_ENGINE_VOL}
+                                        max={MAX_ENGINE_VOL}
+                                        step={ENGINE_VOL_STEP}
+                                        getAriaLabel={() => 'Engine volume range'}
+                                        valueLabelFormat={(v) => v.toLocaleString('he-IL') + ' cc'}
                                         disableSwap
                                     />
                                 </Box>

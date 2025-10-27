@@ -272,19 +272,23 @@ class UITask(BaseModel):
     model: str
     year_start: int
     year_end: int
+    engine_vol_start: int
+    engine_vol_end: int
 
 
 
 @app.post("/v2/tasks", response_model=models.Task)
 async def create_task_v2(ui_task: UITask, user: UserDep, db_handler: DBHandlerDep):
-    url = f"?manufacturer={ui_task.manufacturer}&model={ui_task.model}&year={ui_task.year_start}-{ui_task.year_end}&km={ui_task.km_start}-{ui_task.km_end}"
+    url = (f"?manufacturer={ui_task.manufacturer}&model={ui_task.model}&year={ui_task.year_start}-{ui_task.year_end}"
+           f"&km={ui_task.km_start}-{ui_task.km_end}"
+           f"&engineval={ui_task.engine_vol_start}-{ui_task.engine_vol_end}")
     return await _create_task_logic(ui_task.email, url, user, db_handler)
 
 
 @app.delete("/tasks/{task_id}")
 async def delete_task(task_id: str, user: UserDep, db_handler: DBHandlerDep):
     """
-    Delete a task and notify the recipient via email.
+    Delete a task, archive it (max 5 per user), and notify via email.
     """
     task: models.Task = db_handler.get_task(task_id)
     if not task:
@@ -300,15 +304,22 @@ async def delete_task(task_id: str, user: UserDep, db_handler: DBHandlerDep):
         subject = f"🗑️ Alert deleted: {task.title}"
         body = (
             f"<p>The alert <strong>{task.title}</strong> was deleted.</p>"
-            f"<p>If this was a mistake you can recreate it from the criteria form.</p>"
+            f"<p>If this was a mistake you can recreate it from the criteria form or history.</p>"
         )
         internal_info_logger.info(f"Sending task deletion email to {task.mail}")
         mail_sender.send(body, [task.mail], subject)
     except Exception as e:
         internal_info_logger.error(f"Error sending task deletion email: {e}")
 
+    # Archive then delete
+    db_handler.add_deleted_task(task)
     db_handler.delete_task(task_id)
-    return {"message": f"Task: {task} deleted"}
+    return {"message": f"Task: {task.title} deleted"}
+
+@app.get("/deleted_tasks", response_model=List[models.Task])
+async def list_deleted_tasks(user: UserDep, db_handler: DBHandlerDep) -> List[models.Task]:
+    """Return up to last 5 deleted tasks for the authenticated user."""
+    return db_handler.get_deleted_tasks(user["id"])
 
 
 def get_range(data: str) -> models.Range:
@@ -320,6 +331,6 @@ def get_range(data: str) -> models.Range:
 
 
 @app.post("/debug/clear_tasks")
-def clear_tasks_debug():
-    removed_tasks = DbHandler.clear_all_tasks()
+def clear_tasks_debug(db_handler: DBHandlerDep):
+    removed_tasks = db_handler.clear_all_tasks()
     return {"message": f"All tasks have been removed (debug route). {len(removed_tasks)} tasks deleted."}

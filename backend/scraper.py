@@ -86,8 +86,9 @@ class Scraper:
         return first_page['data']['pagination']['total']
 
     def get_ads(self, page: dict) -> List[dict]:
+        seller_type = 'private'
         try:
-            return page['data']['private']
+            return page['data'][seller_type]
         except KeyError as e:
             self._logger.error(f"Error getting ads from page: {e}")
             return []

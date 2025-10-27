@@ -4,6 +4,8 @@ from logging import Logger
 from random import randint
 from typing import Dict, List, Optional
 
+from firebase_admin.db import Event
+
 from backend import models
 from backend.config import SENDER_EMAIL, SENDER_EMAIL_PW
 from backend.db.db_handler import DbHandler
@@ -73,8 +75,10 @@ class TaskScheduler:
         else:
             self._logger.info(f"Time now: {now}, Task {task_id} will be run tomorrow because it's not between 6 AM and midnight")
 
-    def tasks_changed_listener(self, event):
-        self._logger.info(f"Tasks changed, {event.data=}\n, {event.path=}\n, {event.event_type=}\n")
+    def tasks_changed_listener(self, event: Event) -> None:
+        self._logger.info(f"Tasks changed, event type: {event.event_type}")
+        self._logger.info(f"Tasks changed, event path: {event.path=}")
+        self._logger.info(f"Tasks changed, event data: {event.data=}")
         if event.event_type == 'patch':
             return
         if event.event_type == 'put':

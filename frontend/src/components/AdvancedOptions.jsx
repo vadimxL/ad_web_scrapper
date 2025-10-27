@@ -2,104 +2,56 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
-import FormGroup from '@mui/material/FormGroup';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 
 export default function AdvancedOptions() {
-    const [state, setState] = React.useState({
-        all: true,
-        new_: false,
-        price_update: false,
-        private_: false,
-        dealer: false,
-    });
-
-    const handleChange = (event) => {
-        setState({
-            ...state,
-            [event.target.name]: event.target.checked,
-        });
-    };
-
-    const { all, new_, price_update, private_, dealer} = state;
+    const [adType, setAdType] = React.useState('all');          // סוג מודעות
+    const [sellerType, setSellerType] = React.useState('all');  // סוג מוכר
+    const [ownerType, setOwnerType] = React.useState('all');    // בעלים
 
     return (
         <Box sx={{display: 'flex'}}>
+            {/* Ad Types */}
             <FormControl sx={{m: 3}} component="fieldset" variant="standard">
                 <FormLabel component="legend">סוג מודעות</FormLabel>
-                <FormGroup>
-                    <FormControlLabel
-                        control={
-                            <Checkbox checked={all} onChange={handleChange} name="all"/>
-                        }
-                        label="הכל"
-                    />
-                    <FormControlLabel
-                        control={
-                            <Checkbox checked={new_} onChange={handleChange} name="new"/>
-                        }
-                        label="חדשות"
-                    />
-                    <FormControlLabel
-                        control={
-                            <Checkbox checked={price_update} onChange={handleChange} name="price_update"/>
-                        }
-                        label="עדכון במחיר"
-                    />
-                </FormGroup>
+                <RadioGroup
+                    value={adType}
+                    onChange={(e) => setAdType(e.target.value)}
+                    name="ad-types"
+                >
+                    <FormControlLabel value="all" control={<Radio />} label="הכל" />
+                    <FormControlLabel value="new" control={<Radio />} label="חדשות" />
+                    <FormControlLabel value="price_update" control={<Radio />} label="עדכון במחיר" />
+                </RadioGroup>
             </FormControl>
+            {/* Seller Types */}
             <FormControl sx={{m: 3}} component="fieldset" variant="standard">
                 <FormLabel component="legend">סוג מוכר</FormLabel>
-                <FormGroup>
-                    <FormControlLabel
-                        control={
-                            <Checkbox checked={all} onChange={handleChange} name="all"/>
-                        }
-                        label="הכל"
-                    />
-                    <FormControlLabel
-                        control={
-                            <Checkbox checked={private_} onChange={handleChange} name="private_"/>
-                        }
-                        label="פרטי"
-                    />
-                    <FormControlLabel
-                        control={
-                            <Checkbox checked={dealer} onChange={handleChange} name="dealer"/>
-                        }
-                        label="סוכנות"
-                    />
-                </FormGroup>
+                <RadioGroup
+                    value={sellerType}
+                    onChange={(e) => setSellerType(e.target.value)}
+                    name="seller-types"
+                >
+                    <FormControlLabel value="all" control={<Radio />} label="הכל" />
+                    <FormControlLabel value="private" control={<Radio />} label="פרטי" />
+                    <FormControlLabel value="dealer" control={<Radio />} label="סוכנות" />
+                </RadioGroup>
             </FormControl>
+            {/* Owners */}
             <FormControl sx={{m: 3}} component="fieldset" variant="standard">
                 <FormLabel component="legend">בעלים</FormLabel>
-                <FormGroup>
-                    <FormControlLabel
-                        control={
-                            <Checkbox checked={all} onChange={handleChange} name="all"/>
-                        }
-                        label="הכל"
-                    />
-                    <FormControlLabel
-                        control={
-                            <Checkbox checked={private_} onChange={handleChange} name="private_"/>
-                        }
-                        label="פרטי"
-                    />
-                    <FormControlLabel
-                        control={
-                            <Checkbox checked={dealer} onChange={handleChange} name="dealer"/>
-                        }
-                        label="חברה"
-                    />
-                    <FormControlLabel
-                        control={
-                            <Checkbox checked={dealer} onChange={handleChange} name="dealer"/>
-                        }
-                        label="ליסינג"
-                    />
-                </FormGroup>
+                <RadioGroup
+                    value={ownerType}
+                    onChange={(e) => setOwnerType(e.target.value)}
+                    name="owner-types"
+                >
+                    <FormControlLabel value="all" control={<Radio />} label="הכל" />
+                    <FormControlLabel value="private" control={<Radio />} label="פרטי" />
+                    <FormControlLabel value="company" control={<Radio />} label="חברה" />
+                    <FormControlLabel value="leasing" control={<Radio />} label="ליסינג" />
+                </RadioGroup>
             </FormControl>
         </Box>
     );

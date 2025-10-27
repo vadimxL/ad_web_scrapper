@@ -24,6 +24,7 @@ class Notifier:
             msg = html_criteria_mail(new_ad)
             last_price = new_ad.prices[-1].price
             prev_price = new_ad.prices[-2].price if len(new_ad.prices) > 1 else last_price
+            self._log.info(f'Price changed for {new_ad.id}: {prev_price} ==> {last_price}, prices: {new_ad.prices}')
             arrow = '⬇️' if last_price < prev_price else '⬆️'
             subject = f'{arrow} {new_ad.manufacturer_he} {new_ad.car_model} {new_ad.city}'
             self._email.send(msg, self._recipients, subject)

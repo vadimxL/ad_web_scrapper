@@ -1,6 +1,10 @@
 import json
+from collections.abc import Callable
+from datetime import datetime
 from logging import Logger
 from typing import Dict, List, Optional
+
+from firebase_admin.db import Event
 
 from backend import models
 from backend.car_details import CarDetails
@@ -37,7 +41,7 @@ class DbHandler:
             tasks_list.append(models.create_task_from_dict(task_dict))
         return tasks_list
 
-    def create_listener(self, callback):
+    def create_listener(self, callback: Callable[[Event], None]):
         ref = self._db.reference('tasks')
         listener = ref.listen(callback)
         return listener
@@ -74,6 +78,7 @@ class DbHandler:
         if new_ad.prices and db_ad.prices[-1].price != new_ad.prices[-1].price:
             db_ad.prices.append(new_ad.prices[-1])
             db_ad.price = new_ad.price
+            new_ad.prices = db_ad.prices
             self._logger.info(f"{new_ad.id} is changed, {new_ad.manuf_en}  {new_ad.car_model}, "
                         f"current_price: {new_ad.price}, "
                         f"{new_ad.kilometers} [km], year: {new_ad.year}, hand: {new_ad.hand}")
@@ -124,15 +129,9 @@ class DbHandler:
         except Exception as e:
             self._logger.error(f"Error updating database: {e}")
 
-        db_data_dict = {}
-        try:
-            db_data_dict = {ad: CarDetails(**car_ads_from_db[ad]) for ad in car_ads_from_db}
-        except Exception as e:
-            self._logger.error(f"Error creating CarDetails: {e}")
-            return
         self._logger.info("Handling sold items")
         new_ads: Dict[str, CarDetails] = {ad.id: ad for ad in ads}
-        self.handle_removed_ads(path, new_ads, db_data_dict, notifier)
+        self.handle_removed_ads(path, new_ads, car_ads_from_db, notifier)
 
     def handle_removed_ads(self,
                            path: str,
@@ -166,3 +165,46 @@ class DbHandler:
             print("No tasks to clear.")
             return []
 
+    def add_deleted_task(self, task: models.Task) -> None:
+        """Archive a deleted task under the user, keeping only latest 5."""
+        user_id = task.owner_id or "unknown"
+        ref = self._db.reference('deleted_tasks').child(user_id)
+        # Inject deletion timestamp without mutating original task instance too early
+        task_dict = task.model_dump(mode='json')
+        if 'deleted_at' not in task_dict or not task_dict['deleted_at']:
+            from datetime import datetime
+            task_dict['deleted_at'] = datetime.now().isoformat()
+        ref.child(task.id).set(task_dict)
+        tasks_dict = ref.get() or {}
+        if len(tasks_dict) <= 5:
+            return
+        # Sort by created_at ascending, remove oldest extras
+        def parse_created(tdict: dict):
+            val = tdict.get('created_at')
+            if not val:
+                return datetime.min
+            try:
+                # Handle possible trailing Z
+                return datetime.fromisoformat(val.replace('Z',''))
+            except Exception:
+                return datetime.min
+        sorted_items = sorted(tasks_dict.items(), key=lambda kv: parse_created(kv[1]))
+        excess = len(sorted_items) - 5
+        for i in range(excess):
+            ref.child(sorted_items[i][0]).delete()
+
+    def get_deleted_tasks(self, user_id: str) -> List[models.Task]:
+        ref = self._db.reference('deleted_tasks').child(user_id)
+        tasks_dict = ref.get() or {}
+        # Convert to Task models and sort by created_at desc
+        def parse_created(tdict: dict):
+            val = tdict.get('created_at')
+            if not val:
+                return datetime.min
+            try:
+                return datetime.fromisoformat(val.replace('Z',''))
+            except Exception:
+                return datetime.min
+        task_models = [models.create_task_from_dict(tdict) for tdict in tasks_dict.values()]
+        task_models.sort(key=lambda t: parse_created(t.model_dump(mode='json')), reverse=True)
+        return task_models
