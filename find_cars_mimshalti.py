@@ -361,9 +361,10 @@ def _format_baalut_dt(value: Any) -> str:
     return f"{month}-{year}"
 
 
-def print_ownership_summary(records: List[VehicleRecord], ownership_map: Dict[str, List[OwnershipRecord]]) -> None:
-    """Print ownership history summary per vehicle: count and latest ownership (formatted MM-YYYY), plus full history."""
-    print("\nOwnership history summary:")
+def print_ownership_summary(records: List[VehicleRecord], ownership_map: Dict[str, List[OwnershipRecord]], mileage_map: Dict[str, MileageRecord]) -> None:
+    """Print ownership history summary per vehicle: count, latest ownership (MM-YYYY), mileage, moed_aliya_lakvish, mivchan_acharon_dt, grouped by last owner."""
+    from collections import defaultdict
+    owner_groups = defaultdict(list)
     for v in records:
         plate = v.get("mispar_rechev", "") or ""
         history = ownership_map.get(str(plate), [])
@@ -381,18 +382,34 @@ def print_ownership_summary(records: List[VehicleRecord], ownership_map: Dict[st
         latest_owner = latest.get("baalut") if latest else "N/A"
         latest_date_raw = latest.get("baalut_dt") if latest else "N/A"
         latest_date_fmt = _format_baalut_dt(latest_date_raw)
-        print(f"Plate: {plate}, history entries: {count}, latest owner: {latest_owner}, latest date: {latest_date_fmt}")
-        if history:
-            print("  Full ownership timeline:")
-            for rec in history:
-                raw_dt = rec.get("baalut_dt")
-                fmt_dt = _format_baalut_dt(raw_dt)
-                owner = rec.get("baalut") or "UNKNOWN"
-                rank_val = rec.get("rank")
-                # Removed raw date display per request
-                print(f"    {fmt_dt} -> {owner}" + (f" (rank {rank_val})" if rank_val is not None else ""))
-        else:
-            print("  No ownership history records found.")
+        mileage_val = parse_mileage(mileage_map.get(plate)) if mileage_map else None
+        mileage_str = str(mileage_val) if mileage_val is not None else "N/A"
+        moed_aliya_lakvish = v.get("moed_aliya_lakvish", "N/A")
+        mivchan_acharon_dt = v.get("mivchan_acharon_dt", "N/A")
+        owner_groups[latest_owner].append({
+            "plate": plate,
+            "count": count,
+            "latest_date": latest_date_fmt,
+            "mileage": mileage_str,
+            "moed_aliya_lakvish": moed_aliya_lakvish,
+            "mivchan_acharon_dt": mivchan_acharon_dt,
+            "history": history
+        })
+    print("\nOwnership history summary (grouped by last owner):")
+    for owner, vehicles in owner_groups.items():
+        print(f"\nLast owner: {owner} ({len(vehicles)} vehicles)")
+        for v in vehicles:
+            print(f"  Plate: {v['plate']}, history entries: {v['count']}, latest date: {v['latest_date']}, mileage: {v['mileage']}, moed_aliya_lakvish: {v['moed_aliya_lakvish']}, mivchan_acharon_dt: {v['mivchan_acharon_dt']}")
+            if v['history']:
+                print("    Full ownership timeline:")
+                for rec in v['history']:
+                    raw_dt = rec.get("baalut_dt")
+                    fmt_dt = _format_baalut_dt(raw_dt)
+                    owner_rec = rec.get("baalut") or "UNKNOWN"
+                    rank_val = rec.get("rank")
+                    print(f"      {fmt_dt} -> {owner_rec}" + (f" (rank {rank_val})" if rank_val is not None else ""))
+            else:
+                print("    No ownership history records found.")
 
 
 def main() -> None:
@@ -405,8 +422,8 @@ def main() -> None:
     plates: List[str] = [r.get("mispar_rechev", "") for r in records if r.get("mispar_rechev")]
     mileage_map: Dict[str, MileageRecord] = fetch_mileage_records(plates, session=cached_session)
     ownership_map: Dict[str, List[OwnershipRecord]] = fetch_ownership_records(plates, session=cached_session)
-    print_records_by_owner(records, owner_type="ליסינג", mileage_map=mileage_map, sort_by_mileage=True, descending=False)
-    print_ownership_summary(records, ownership_map)
+    # print_records_by_owner(records, owner_type="ליסינג", mileage_map=mileage_map, sort_by_mileage=True, descending=False)
+    print_ownership_summary(records, ownership_map, mileage_map)
 
 
 if __name__ == '__main__':
